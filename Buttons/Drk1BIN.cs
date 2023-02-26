@@ -33,9 +33,9 @@ namespace Drakengard1and2Extractor
 
                         MainBINReader.BaseStream.Position = 64;
                         var MainBinNameChars = MainBINReader.ReadChars(12);
-                        string MainBinName = string.Join("", MainBinNameChars).Replace("\0", "").Replace("/", "").Replace("|", "").
-                                    Replace("?", "").Replace(":", "").Replace("<", "").Replace(">", "").Replace("*", "").
-                                    Replace("\\", "");
+                        string MainBinName = string.Join("", MainBinNameChars).Replace("\0", "").Replace("/", "").
+                            Replace("|", "").Replace("?", "").Replace(":", "").Replace("<", "").Replace(">", "").
+                            Replace("*", "").Replace("\\", "");
 
                         if (File.Exists(Extract_dir + "/" + MainBinName))
                         {
@@ -82,7 +82,8 @@ namespace Drakengard1and2Extractor
                                     FileMode.OpenOrCreate, FileAccess.ReadWrite))
                                 {
                                     BIN.Seek(fileStart, SeekOrigin.Begin);
-                                    byte[] SplitFilebuffer = new byte[fileSize];
+                                    byte[] SplitFilebuffer = new byte[0];
+                                    SplitFilebuffer = new byte[fileSize];
                                     var SplitFileBytesToRead = BIN.Read(SplitFilebuffer, 0, SplitFilebuffer.Length);
                                     SplitFile.Write(SplitFilebuffer, 0, SplitFileBytesToRead);
 
@@ -123,13 +124,16 @@ namespace Drakengard1and2Extractor
                                                     Lz0Reader.BaseStream.Position = Lz0DataReadStart + 8;
                                                     var UncmpChunkSize = Lz0Reader.ReadUInt32();
 
-                                                    byte[] DeCompressedData = new byte[UncmpChunkSize];
+                                                    byte[] DeCompressedData = new byte[0];
+                                                    DeCompressedData = new byte[UncmpChunkSize];
                                                     using (MemoryStream Lz0DataHolder = new MemoryStream())
                                                     {
                                                         Lz0Stream.Seek(Lz0DataReadStart + 12, SeekOrigin.Begin);
-                                                        byte[] CmpBuffer = new byte[CmpChunkSize];
+                                                        byte[] CmpBuffer = new byte[0];
+                                                        CmpBuffer = new byte[CmpChunkSize];
                                                         var CmpBytesToRead = Lz0Stream.Read(CmpBuffer, 0, CmpBuffer.Length);
                                                         Lz0DataHolder.Write(CmpBuffer, 0, CmpBytesToRead);
+
 
                                                         byte[] CompressedData = Lz0DataHolder.ToArray();
 
@@ -185,10 +189,10 @@ namespace Drakengard1and2Extractor
 
                 CoreForm.AppMsgBox("Extracted " + Path.GetFileName(MainBinFile) + " file", "Success", MessageBoxIcon.Information);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 CoreForm.AppMsgBox(ex.Message, "Error", MessageBoxIcon.Error);
-            }
+            }                                
         }
 
 

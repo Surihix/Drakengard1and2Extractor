@@ -425,6 +425,8 @@ namespace Drakengard1and2Extractor
                     var HeaderChars = ExtnCheckReader.ReadChars(4);
                     HeaderVar = string.Join("", HeaderChars);
                 }
+
+                ExtnCheck.Dispose();
             }
         }
 
