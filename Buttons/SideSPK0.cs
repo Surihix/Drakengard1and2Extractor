@@ -159,6 +159,7 @@ namespace Drakengard1and2Extractor
                                                 using (BinaryReader ImgReader = new BinaryReader(ImgStream))
                                                 {
 
+
                                                     var CurrentPixel = 0;
                                                     var GetColorIndex = 0;
                                                     var red = 0;
@@ -167,49 +168,51 @@ namespace Drakengard1and2Extractor
                                                     var alpha = 0;
                                                     var color = new Color();
                                                     var IncreaseAlphaVal = (int)Spk0AlphaCompNumericUpDown.Value;
-                                                    Bitmap FinalImage = new Bitmap((int)Width, (int)Height);
-                                                    for (int y = 0; y < Height; y++)
-                                                        for (int x = 0; x < Width; x++)
-                                                        {
-                                                            CurrentPixel = (y * (int)Width) + x;
-                                                            ImgReader.BaseStream.Position = CurrentPixel;
-                                                            GetColorIndex = ImgReader.ReadByte();
-
-                                                            var ColorIndex = GetColorIndex * 4;
-
-                                                            ColorReader.BaseStream.Position = ColorIndex;
-                                                            red = ColorReader.ReadByte();
-                                                            green = ColorReader.ReadByte();
-                                                            blue = ColorReader.ReadByte();
-                                                            alpha = ColorReader.ReadByte();
-
-                                                            if (SaveAsFormat.Contains("Portable Network Graphics (.png)"))
+                                                    using (Bitmap FinalImage = new Bitmap((int)Width, (int)Height))
+                                                    {
+                                                        for (int y = 0; y < Height; y++)
+                                                            for (int x = 0; x < Width; x++)
                                                             {
-                                                                alpha += IncreaseAlphaVal;
+                                                                CurrentPixel = (y * (int)Width) + x;
+                                                                ImgReader.BaseStream.Position = CurrentPixel;
+                                                                GetColorIndex = ImgReader.ReadByte();
 
-                                                                if (IncreaseAlphaVal > 0)
+                                                                var ColorIndex = GetColorIndex * 4;
+
+                                                                ColorReader.BaseStream.Position = ColorIndex;
+                                                                red = ColorReader.ReadByte();
+                                                                green = ColorReader.ReadByte();
+                                                                blue = ColorReader.ReadByte();
+                                                                alpha = ColorReader.ReadByte();
+
+                                                                if (SaveAsFormat.Contains("Portable Network Graphics (.png)"))
                                                                 {
-                                                                    if (alpha > 128)
+                                                                    alpha += IncreaseAlphaVal;
+
+                                                                    if (IncreaseAlphaVal > 0)
                                                                     {
-                                                                        alpha = 128;
+                                                                        if (alpha > 128)
+                                                                        {
+                                                                            alpha = 128;
+                                                                        }
                                                                     }
                                                                 }
+
+                                                                color = Color.FromArgb(alpha, red, green, blue);
+                                                                FinalImage.SetPixel(x, y, color);
                                                             }
+                                                        switch (SaveAsFormat)
+                                                        {
+                                                            case "Bitmap (.bmp)":
+                                                                FinalImage.Save(ExtractDir + "/" + "GRF1_img_" + ImgCount + 
+                                                                    ".bmp", ImageFormat.Bmp);
+                                                                break;
 
-                                                            color = Color.FromArgb(alpha, red, green, blue);
-                                                            FinalImage.SetPixel(x, y, color);
+                                                            case "Portable Network Graphics (.png)":
+                                                                FinalImage.Save(ExtractDir + "/" + "GRF1_img_" + ImgCount + 
+                                                                    ".png", ImageFormat.Png);
+                                                                break;
                                                         }
-                                                    switch (SaveAsFormat)
-                                                    {
-                                                        case "Bitmap (.bmp)":
-                                                            FinalImage.Save(ExtractDir + "/" + "GRF1_img_" + ImgCount + ".bmp",
-                                                                ImageFormat.Bmp);
-                                                            break;
-
-                                                        case "Portable Network Graphics (.png)":
-                                                            FinalImage.Save(ExtractDir + "/" + "GRF1_img_" + ImgCount + ".png",
-                                                                ImageFormat.Png);
-                                                            break;
                                                     }
                                                 }
                                             }

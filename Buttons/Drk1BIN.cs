@@ -28,9 +28,6 @@ namespace Drakengard1and2Extractor
                         MainBINReader.BaseStream.Position = 40;
                         var BinDataStart = MainBINReader.ReadUInt32();
 
-                        MainBINReader.BaseStream.Position = 44;
-                        var BinSize = MainBINReader.ReadUInt32();
-
                         MainBINReader.BaseStream.Position = 64;
                         var MainBinNameChars = MainBINReader.ReadChars(12);
                         string MainBinName = string.Join("", MainBinNameChars).Replace("\0", "").Replace("/", "").
@@ -46,9 +43,7 @@ namespace Drakengard1and2Extractor
                             FileAccess.ReadWrite))
                         {
                             MainBIN.Seek(BinDataStart, SeekOrigin.Begin);
-                            byte[] BinBuffer = new byte[BinSize];
-                            var BytesToRead = MainBIN.Read(BinBuffer, 0, BinBuffer.Length);
-                            BIN.Write(BinBuffer, 0, BytesToRead);
+                            MainBIN.CopyTo(BIN);
 
 
                             uint IntialOffsetPos = 132;
@@ -193,6 +188,12 @@ namespace Drakengard1and2Extractor
             {
                 CoreForm.AppMsgBox(ex.Message, "Error", MessageBoxIcon.Error);
             }                                
+        }
+
+
+        public static void Test()
+        {
+
         }
 
 
