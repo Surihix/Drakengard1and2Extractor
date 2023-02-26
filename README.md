@@ -3,7 +3,6 @@
 <br>
 
 # Special Thanks
-Mugi
+Joschka
 <br>TopazTK
 <br>Kizari
-<br>Joschka
