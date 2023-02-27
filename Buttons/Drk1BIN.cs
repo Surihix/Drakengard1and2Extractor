@@ -191,12 +191,6 @@ namespace Drakengard1and2Extractor
         }
 
 
-        public static void Test()
-        {
-
-        }
-
-
         private static void GetFileHeader(BinaryReader ReaderName, ref string RExtVar)
         {
             ReaderName.BaseStream.Position = 0;
