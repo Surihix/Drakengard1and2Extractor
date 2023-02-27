@@ -9,6 +9,6 @@ Use the minilz0.dll files included in the libraries folder along with the *MiniL
 
 # Special Thanks
 [**Joschuka**](https://github.com/Joschuka)
-<br>[**TopazTK**](https://github.com/TopazTK)
 <br>[**Kizari**](https://github.com/Kizari)
 <br>[**Tanuj**](https://github.com/Cyraphim)
+<br>[**TopazTK**](https://github.com/TopazTK)
