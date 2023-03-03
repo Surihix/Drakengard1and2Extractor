@@ -199,7 +199,7 @@
             this.Versionlabel.Name = "Versionlabel";
             this.Versionlabel.Size = new System.Drawing.Size(28, 13);
             this.Versionlabel.TabIndex = 6;
-            this.Versionlabel.Text = "v2.0";
+            this.Versionlabel.Text = "v2.1";
             // 
             // StatusLabel
             // 
@@ -234,6 +234,7 @@
             this.Controls.Add(this.StatusListBox);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
             this.Name = "CoreForm";
             this.Text = "Drakengard 1 & 2 - File Extractor";
             this.BINFileExtGrp.ResumeLayout(false);
