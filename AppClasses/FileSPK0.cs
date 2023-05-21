@@ -4,16 +4,17 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Windows.Forms;
 
-namespace Drakengard1and2Extractor
+namespace Drakengard1and2Extractor.AppClasses
 {
-    public partial class SideSPK0 : Form
+    public partial class FileSPK0 : Form
     {
         private readonly string Spk0FileVar;
-        public SideSPK0(string Spk0File)
+        public FileSPK0(string Spk0File)
         {
             try
             {
-                this.Spk0FileVar = Spk0File;
+                Spk0FileVar = Spk0File;
+
                 InitializeComponent();
 
                 Spk0SaveAsComboBox.SelectedItem = "Bitmap (.bmp)";
@@ -21,7 +22,7 @@ namespace Drakengard1and2Extractor
             }
             catch (Exception ex)
             {
-                CoreForm.AppMsgBox(ex.Message, "Error", MessageBoxIcon.Error);
+                CmnMethods.AppMsgBox(ex.Message, "Error", MessageBoxIcon.Error);
             }
         }
 
@@ -118,17 +119,7 @@ namespace Drakengard1and2Extractor
                                 byte[] PalBuffer = new byte[PalSize];
                                 GRF1Stream.Read(PalBuffer, 0, PalBuffer.Length);
 
-                                uint[] newPalette = new uint[256];
-                                uint[] origPalette = new uint[256];
-                                Buffer.BlockCopy(PalBuffer, 0, origPalette, 0, PalBuffer.Length);
-                                for (uint k = 0; k < 8; k++)
-                                    for (uint j = 0; j < 2; j++)
-                                        for (uint i = 0; i < 8; i++)
-                                        {
-                                            newPalette[k * 32 + j * 16 + i] = origPalette[k * 32 + 8 * j + i];
-                                            newPalette[k * 32 + j * 16 + i + 8] = origPalette[k * 32 + 8 * j + 16 + i];
-                                        }
-                                Buffer.BlockCopy(newPalette, 0, PalBuffer, 0, PalBuffer.Length);
+                                CmnMethods.MugiSwizzle(ref PalBuffer);
 
                                 using (MemoryStream ProcessedPalette = new MemoryStream())
                                 {
@@ -236,7 +227,7 @@ namespace Drakengard1and2Extractor
                     }
                 }
 
-                CoreForm.AppMsgBox("Converted " + Path.GetFileName(Spk0FileVar) + " file", "Success", MessageBoxIcon.Information);
+                CmnMethods.AppMsgBox("Converted " + Path.GetFileName(Spk0FileVar) + " file", "Success", MessageBoxIcon.Information);
 
                 Spk0SaveAsComboBox.Enabled = true;
                 ConvertSPK0ImgBtn.Enabled = true;
@@ -251,7 +242,7 @@ namespace Drakengard1and2Extractor
             }
             catch (Exception ex)
             {
-                CoreForm.AppMsgBox(ex.Message, "Error", MessageBoxIcon.Error);
+                CmnMethods.AppMsgBox(ex.Message, "Error", MessageBoxIcon.Error);
             }
         }
     }

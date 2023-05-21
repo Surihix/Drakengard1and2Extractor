@@ -1,6 +1,6 @@
-﻿namespace Drakengard1and2Extractor
+﻿namespace Drakengard1and2Extractor.AppClasses
 {
-    partial class SideZIM
+    partial class FileZIM
     {
         /// <summary>
         /// Required designer variable.

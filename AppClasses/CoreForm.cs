@@ -1,10 +1,10 @@
 ﻿using System;
-using System.IO;
-using System.Threading;
-using System.Windows.Forms;
 using System.Diagnostics;
+using System.IO;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
-namespace Drakengard1and2Extractor
+namespace Drakengard1and2Extractor.AppClasses
 {
     public partial class CoreForm : Form
     {
@@ -13,15 +13,12 @@ namespace Drakengard1and2Extractor
             InitializeComponent();
             if (!File.Exists("minilzo.dll"))
             {
-                AppMsgBox("Missing minilz0.dll file.\nPlease check if this dll file is present next to the exe file.", "Error",
-                    MessageBoxIcon.Error);
+                CmnMethods.AppMsgBox("Missing minilz0.dll file.\nPlease check if this dll file is present next to the exe file.", "Error", MessageBoxIcon.Error);
                 Environment.Exit(0);
             }
             if (!File.Exists("AppHelp.txt"))
             {
-                AppMsgBox("The AppHelp.txt file is missing" +
-                    "\nPlease ensure that this file is present next to the app to use the Help option.", "Warning", 
-                    MessageBoxIcon.Warning);
+                CmnMethods.AppMsgBox("The AppHelp.txt file is missing\nPlease ensure that this file is present next to the app to use the Help option.", "Warning", MessageBoxIcon.Warning);
             }
 
             Drk1RadioButton.Checked = true;
@@ -75,28 +72,27 @@ namespace Drakengard1and2Extractor
                         {
                             StatusMsg("Error: Unable to detect fpk header");
                             StatusMsg("");
-                            AppMsgBox("Unable to detect fpk header", "Error", MessageBoxIcon.Error);
+                            CmnMethods.AppMsgBox("Unable to detect fpk header", "Error", MessageBoxIcon.Error);
                             StatusMsg("Extraction has completed");
                             EnableButtons();
                             return;
                         }
                         else
                         {
-                            new Thread(t =>
+                            Task.Run(() =>
                             {
                                 try
                                 {
-                                    StatusListBox.BeginInvoke((Action)(() => StatusMsg("Extracting files from " + mbin_file +
-                                        "....")));
+                                    StatusListBox.BeginInvoke((Action)(() => StatusMsg("Extracting files from " + mbin_file + "....")));
                                     Drk1BIN.ExtractBin(mbin_file);
                                 }
                                 finally
                                 {
                                     StatusListBox.BeginInvoke((Action)(() => StatusMsg("")));
                                     StatusListBox.BeginInvoke((Action)(() => StatusMsg("Extraction has completed")));
-                                    StatusListBox.BeginInvoke((Action)(() => EnableButtons()));
+                                    BeginInvoke(new Action(() => EnableButtons()));
                                 }
-                            }).Start();
+                            });
                         }
                     }
 
@@ -112,19 +108,18 @@ namespace Drakengard1and2Extractor
                         {
                             StatusMsg("Error: Unable to detect dpk header");
                             StatusMsg("");
-                            AppMsgBox("Unable to detect dpk header", "Error", MessageBoxIcon.Error);
+                            CmnMethods.AppMsgBox("Unable to detect dpk header", "Error", MessageBoxIcon.Error);
                             StatusMsg("Extraction has completed");
                             EnableButtons();
                             return;
                         }
                         else
                         {
-                            new Thread(t =>
+                            Task.Run(() =>
                             {
                                 try
                                 {
-                                    StatusListBox.BeginInvoke((Action)(() => StatusMsg("Extracting files from " + mbin_file +
-                                        "....")));
+                                    StatusListBox.BeginInvoke((Action)(() => StatusMsg("Extracting files from " + mbin_file + "....")));
                                     Drk2BIN.ExtractBin(mbin_file);
                                 }
                                 finally
@@ -132,16 +127,16 @@ namespace Drakengard1and2Extractor
                                     StatusListBox.BeginInvoke((Action)(() => StatusMsg("")));
                                     StatusListBox.BeginInvoke((Action)(() => StatusMsg("Extraction has completed")));
                                     StatusListBox.BeginInvoke((Action)(() => StatusMsg("")));
-                                    StatusListBox.BeginInvoke((Action)(() => EnableButtons()));
+                                    BeginInvoke(new Action(() => EnableButtons()));
                                 }
-                            }).Start();
+                            });
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                AppMsgBox(ex.Message, "Error", MessageBoxIcon.Error);
+                CmnMethods.AppMsgBox(ex.Message, "Error", MessageBoxIcon.Error);
             }
         }
 
@@ -172,34 +167,34 @@ namespace Drakengard1and2Extractor
                     {
                         StatusMsg("Error: Unable to detect fpk header");
                         StatusMsg("");
-                        AppMsgBox("Unable to detect fpk header", "Error", MessageBoxIcon.Error);
+                        CmnMethods.AppMsgBox("Unable to detect fpk header", "Error", MessageBoxIcon.Error);
                         StatusMsg("Extraction has completed");
                         EnableButtons();
                         return;
                     }
                     else
                     {
-                        new Thread(t =>
+                        Task.Run(() =>
                         {
                             try
                             {
                                 StatusListBox.BeginInvoke((Action)(() => StatusMsg("Extracting files from " + fpk_file + "....")));
-                                SideFPK.ExtractFPK(fpk_file);
+                                FileFPK.ExtractFPK(fpk_file);
                             }
                             finally
                             {
                                 StatusListBox.BeginInvoke((Action)(() => StatusMsg("")));
                                 StatusListBox.BeginInvoke((Action)(() => StatusMsg("Extraction has completed")));
                                 StatusListBox.BeginInvoke((Action)(() => StatusMsg("")));
-                                StatusListBox.BeginInvoke((Action)(() => EnableButtons()));
+                                BeginInvoke(new Action(() => EnableButtons()));
                             }
-                        }).Start();
+                        });
                     }
                 }
             }
             catch (Exception ex)
             {
-                AppMsgBox(ex.Message, "Error", MessageBoxIcon.Error);
+                CmnMethods.AppMsgBox(ex.Message, "Error", MessageBoxIcon.Error);
             }
         }
 
@@ -228,34 +223,34 @@ namespace Drakengard1and2Extractor
                     {
                         StatusMsg("Error: Unable to detect dpk header");
                         StatusMsg("");
-                        AppMsgBox("Unable to detect dpk header", "Error", MessageBoxIcon.Error);
+                        CmnMethods.AppMsgBox("Unable to detect dpk header", "Error", MessageBoxIcon.Error);
                         StatusMsg("Extraction has completed");
                         EnableButtons();
                         return;
                     }
                     else
                     {
-                        new Thread(t =>
+                        Task.Run(() =>
                         {
                             try
                             {
                                 StatusListBox.BeginInvoke((Action)(() => StatusMsg("Extracting files from " + dpk_file + "....")));
-                                SideDPK.ExtractDPK(dpk_file);
+                                FileDPK.ExtractDPK(dpk_file);
                             }
                             finally
                             {
                                 StatusListBox.BeginInvoke((Action)(() => StatusMsg("")));
                                 StatusListBox.BeginInvoke((Action)(() => StatusMsg("Extraction has completed")));
                                 StatusListBox.BeginInvoke((Action)(() => StatusMsg("")));
-                                StatusListBox.BeginInvoke((Action)(() => EnableButtons()));
+                                BeginInvoke(new Action(() => EnableButtons()));
                             }
-                        }).Start();
+                        });
                     }
                 }
             }
             catch (Exception ex)
             {
-                AppMsgBox(ex.Message, "Error", MessageBoxIcon.Error);
+                CmnMethods.AppMsgBox(ex.Message, "Error", MessageBoxIcon.Error);
             }
         }
 
@@ -285,19 +280,19 @@ namespace Drakengard1and2Extractor
                     {
                         StatusMsg("Error: Unable to detect zim header");
                         StatusMsg("");
-                        AppMsgBox("Unable to detect zim header", "Error", MessageBoxIcon.Error);
+                        CmnMethods.AppMsgBox("Unable to detect zim header", "Error", MessageBoxIcon.Error);
                         StatusMsg("Conversion has completed");
                         EnableButtons();
                         return;
                     }
                     else
                     {
-                        new Thread(t =>
+                        Task.Run(() =>
                         {
                             try
                             {
                                 StatusListBox.BeginInvoke((Action)(() => StatusMsg("Converting " + zim_file + "....")));
-                                SideZIM ConverterWindow = new SideZIM(zim_file);
+                                FileZIM ConverterWindow = new FileZIM(zim_file);
                                 ConverterWindow.ShowDialog();
                             }
                             finally
@@ -305,23 +300,22 @@ namespace Drakengard1and2Extractor
                                 StatusListBox.BeginInvoke((Action)(() => StatusMsg("")));
                                 StatusListBox.BeginInvoke((Action)(() => StatusMsg("Conversion has completed")));
                                 StatusListBox.BeginInvoke((Action)(() => StatusMsg("")));
-                                StatusListBox.BeginInvoke((Action)(() => EnableButtons()));
+                                BeginInvoke(new Action(() => EnableButtons()));
                             }
-                        }).Start();
+                        });
                     }
                 }
             }
             catch (Exception ex)
             {
-                AppMsgBox(ex.Message, "Error", MessageBoxIcon.Error);
+                CmnMethods.AppMsgBox(ex.Message, "Error", MessageBoxIcon.Error);
             }
         }
 
 
         private void ConvertSPK0Btn_MouseHover(object sender, EventArgs e)
         {
-            SPK0toolTip.Show("Extracts a .spk0 file and converts the images inside the file to bmp or png formats",
-                ConvertSPK0Btn);
+            SPK0toolTip.Show("Extracts a .spk0 file and converts the images inside the file to bmp or png formats", ConvertSPK0Btn);
         }
         private void ConvertSPK0Btn_Click(object sender, EventArgs e)
         {
@@ -344,19 +338,19 @@ namespace Drakengard1and2Extractor
                     {
                         StatusMsg("Error: Unable to detect spk0 header");
                         StatusMsg("");
-                        AppMsgBox("Unable to detect spk0 header", "Error", MessageBoxIcon.Error);
+                        CmnMethods.AppMsgBox("Unable to detect spk0 header", "Error", MessageBoxIcon.Error);
                         StatusMsg("Conversion has completed");
                         EnableButtons();
                         return;
                     }
                     else
                     {
-                        new Thread(t =>
+                        Task.Run(() =>
                         {
                             try
                             {
                                 StatusListBox.BeginInvoke((Action)(() => StatusMsg("Converting " + spk0_file + "....")));
-                                SideSPK0 ConverterWindow = new SideSPK0(spk0_file);
+                                FileSPK0 ConverterWindow = new FileSPK0(spk0_file);
                                 ConverterWindow.ShowDialog();
                             }
                             finally
@@ -364,16 +358,15 @@ namespace Drakengard1and2Extractor
                                 StatusListBox.BeginInvoke((Action)(() => StatusMsg("")));
                                 StatusListBox.BeginInvoke((Action)(() => StatusMsg("Conversion has completed")));
                                 StatusListBox.BeginInvoke((Action)(() => StatusMsg("")));
-                                StatusListBox.BeginInvoke((Action)(() => EnableButtons()));
+                                BeginInvoke(new Action(() => EnableButtons()));
                             }
-
-                        }).Start();
+                        });
                     }
                 }
             }
             catch (Exception ex)
             {
-                AppMsgBox(ex.Message, "Error", MessageBoxIcon.Error);
+                CmnMethods.AppMsgBox(ex.Message, "Error", MessageBoxIcon.Error);
             }
         }
 
@@ -431,12 +424,6 @@ namespace Drakengard1and2Extractor
         }
 
 
-        public static void AppMsgBox(string Msg, string MsgHeader, MessageBoxIcon MsgType)
-        {
-            MessageBox.Show(Msg, MsgHeader, MessageBoxButtons.OK, MsgType);
-        }
-
-
         private void EnableButtons()
         {
             ExtBinBtn.Enabled = true;
@@ -467,7 +454,7 @@ namespace Drakengard1and2Extractor
             }
             catch (Exception ex)
             {
-                AppMsgBox(ex.Message, "Error", MessageBoxIcon.Error);
+                CmnMethods.AppMsgBox(ex.Message, "Error", MessageBoxIcon.Error);
             }
         }
     }

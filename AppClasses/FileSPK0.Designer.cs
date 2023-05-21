@@ -1,6 +1,6 @@
-﻿namespace Drakengard1and2Extractor
+﻿namespace Drakengard1and2Extractor.AppClasses
 {
-    partial class SideSPK0
+    partial class FileSPK0
     {
         /// <summary>
         /// Required designer variable.

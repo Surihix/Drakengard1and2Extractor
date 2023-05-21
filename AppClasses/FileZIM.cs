@@ -4,16 +4,16 @@ using System.Drawing.Imaging;
 using System.IO;
 using System.Windows.Forms;
 
-namespace Drakengard1and2Extractor
+namespace Drakengard1and2Extractor.AppClasses
 {
-    public partial class SideZIM : Form
+    public partial class FileZIM : Form
     {
         private readonly string ZimFileVar;
-        public SideZIM(string ZimFile)
+        public FileZIM(string ZimFile)
         {
             try
             {
-                this.ZimFileVar = ZimFile;
+                ZimFileVar = ZimFile;
 
                 var BppValue = 0;
                 using (FileStream GetBppStream = new FileStream(ZimFile, FileMode.Open, FileAccess.Read))
@@ -26,8 +26,7 @@ namespace Drakengard1and2Extractor
                 }
                 if (BppValue == 64)
                 {
-                    CoreForm.AppMsgBox("Detected 4bpp image\nDo not use the Alpha Compensation setting when saving the image " +
-                        "in png format.", "Warning", MessageBoxIcon.Warning);
+                    CmnMethods.AppMsgBox("Detected 4bpp image\nDo not use the Alpha Compensation setting when saving the image in png format.", "Warning", MessageBoxIcon.Warning);
                 }
 
                 InitializeComponent();
@@ -37,7 +36,7 @@ namespace Drakengard1and2Extractor
             }
             catch (Exception ex)
             {
-                CoreForm.AppMsgBox(ex.Message, "Error", MessageBoxIcon.Error);
+                CmnMethods.AppMsgBox(ex.Message, "Error", MessageBoxIcon.Error);
             }
         }
 
@@ -114,19 +113,8 @@ namespace Drakengard1and2Extractor
 
                             if (BppFlag == 48)
                             {
-                                uint[] newPalette = new uint[256];
-                                uint[] origPalette = new uint[256];
-                                Buffer.BlockCopy(Pal_Buffer, 0, origPalette, 0, Pal_Buffer.Length);
-                                for (uint k = 0; k < 8; k++)
-                                    for (uint j = 0; j < 2; j++)
-                                        for (uint i = 0; i < 8; i++)
-                                        {
-                                            newPalette[k * 32 + j * 16 + i] = origPalette[k * 32 + 8 * j + i];
-                                            newPalette[k * 32 + j * 16 + i + 8] = origPalette[k * 32 + 8 * j + 16 + i];
-                                        }
-                                Buffer.BlockCopy(newPalette, 0, Pal_Buffer, 0, Pal_Buffer.Length);
+                                CmnMethods.MugiSwizzle(ref Pal_Buffer);
                             }
-
 
                             using (MemoryStream ProcessedPalette = new MemoryStream())
                             {
@@ -294,7 +282,7 @@ namespace Drakengard1and2Extractor
                     }
                 }
 
-                CoreForm.AppMsgBox("Converted " + Path.GetFileName(ZimFileVar) + " file", "Success", MessageBoxIcon.Information);
+                CmnMethods.AppMsgBox("Converted " + Path.GetFileName(ZimFileVar) + " file", "Success", MessageBoxIcon.Information);
 
                 ZimSaveAsComboBox.Enabled = true;
                 ConvertZIMImgBtn.Enabled = true;
@@ -307,7 +295,7 @@ namespace Drakengard1and2Extractor
             }
             catch (Exception ex)
             {
-                CoreForm.AppMsgBox(ex.Message, "Error", MessageBoxIcon.Error);
+                CmnMethods.AppMsgBox(ex.Message, "Error", MessageBoxIcon.Error);
                 Close();
             }
         }

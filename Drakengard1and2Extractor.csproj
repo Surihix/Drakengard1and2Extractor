@@ -95,41 +95,42 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Buttons\AppAbout.cs">
+    <Compile Include="AppClasses\AppAbout.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Buttons\AppAbout.Designer.cs">
+    <Compile Include="AppClasses\AppAbout.Designer.cs">
       <DependentUpon>AppAbout.cs</DependentUpon>
     </Compile>
-    <Compile Include="Buttons\Drk1BIN.cs" />
-    <Compile Include="Buttons\Drk2BIN.cs" />
-    <Compile Include="Buttons\SideSPK0.cs">
+    <Compile Include="AppClasses\CmnMethods.cs" />
+    <Compile Include="AppClasses\Drk1BIN.cs" />
+    <Compile Include="AppClasses\Drk2BIN.cs" />
+    <Compile Include="AppClasses\FileSPK0.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Buttons\SideSPK0.Designer.cs">
-      <DependentUpon>SideSPK0.cs</DependentUpon>
+    <Compile Include="AppClasses\FileSPK0.Designer.cs">
+      <DependentUpon>FileSPK0.cs</DependentUpon>
     </Compile>
-    <Compile Include="Buttons\SideZIM.cs">
+    <Compile Include="AppClasses\FileZIM.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Buttons\SideZIM.Designer.cs">
-      <DependentUpon>SideZIM.cs</DependentUpon>
+    <Compile Include="AppClasses\FileZIM.Designer.cs">
+      <DependentUpon>FileZIM.cs</DependentUpon>
     </Compile>
     <Compile Include="Libraries\MiniLz0Lib.cs" />
-    <Compile Include="Buttons\SideDPK.cs" />
-    <Compile Include="Buttons\SideFPK.cs" />
-    <Compile Include="CoreForm.cs">
+    <Compile Include="AppClasses\FileDPK.cs" />
+    <Compile Include="AppClasses\FileFPK.cs" />
+    <Compile Include="AppClasses\CoreForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="CoreForm.Designer.cs">
+    <Compile Include="AppClasses\CoreForm.Designer.cs">
       <DependentUpon>CoreForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Buttons\AppAbout.resx">
+    <EmbeddedResource Include="AppClasses\AppAbout.resx">
       <DependentUpon>AppAbout.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="CoreForm.resx">
+    <EmbeddedResource Include="AppClasses\CoreForm.resx">
       <DependentUpon>CoreForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
@@ -137,11 +138,11 @@
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Buttons\SideSPK0.resx">
-      <DependentUpon>SideSPK0.cs</DependentUpon>
+    <EmbeddedResource Include="AppClasses\FileSPK0.resx">
+      <DependentUpon>FileSPK0.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Buttons\SideZIM.resx">
-      <DependentUpon>SideZIM.cs</DependentUpon>
+    <EmbeddedResource Include="AppClasses\FileZIM.resx">
+      <DependentUpon>FileZIM.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -163,8 +164,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="app_icon.ico" />
-    <Content Include="Images\about_img.png" />
-    <Content Include="Images\app_img.png" />
+    <Content Include="images\about_img.png" />
+    <Content Include="images\app_img.png" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

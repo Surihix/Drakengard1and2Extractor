@@ -1,4 +1,4 @@
-﻿namespace Drakengard1and2Extractor
+﻿namespace Drakengard1and2Extractor.AppClasses
 {
     partial class CoreForm
     {
