@@ -37,8 +37,8 @@ namespace Drakengard1and2Extractor.AppClasses
 
         public static void ModifyString(ref string readStringLetters)
         {
-            readStringLetters.Replace("\0", "").Replace("/", "").Replace("|", "").Replace("?", "").Replace(":", "").
-                Replace("<", "").Replace(">", "").Replace("*", "").Replace("\\", "").Replace("0eng", "0eng.fpk").
+            readStringLetters.Replace("\0", "").Replace("|", "").Replace("?", "").Replace(":", "").
+                Replace("<", "").Replace(">", "").Replace("*", "").Replace("0eng", "0eng.fpk").
                 Replace("0jpn", "0jpn.fpk").Replace("1uk", "1uk.fpk").Replace("2fre", "2fre.fpk").Replace("3ger", "3ger.fpk").
                 Replace("4ita", "4ita.fpk").Replace("5spa", "5spa.fpk");
         }

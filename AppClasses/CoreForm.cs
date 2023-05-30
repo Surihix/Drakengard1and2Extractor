@@ -87,7 +87,7 @@ namespace Drakengard1and2Extractor.AppClasses
                             {
                                 try
                                 {
-                                    StatusListBox.BeginInvoke((Action)(() => StatusMsg("Extracting files from " + mbin_file + "....")));
+                                    StatusListBox.BeginInvoke((Action)(() => StatusMsg("Extracting files from " + Path.GetFileName(mbin_file) + "....")));
                                     Drk1BIN.ExtractBin(mbin_file);
                                 }
                                 finally
@@ -123,7 +123,7 @@ namespace Drakengard1and2Extractor.AppClasses
                             {
                                 try
                                 {
-                                    StatusListBox.BeginInvoke((Action)(() => StatusMsg("Extracting files from " + mbin_file + "....")));
+                                    StatusListBox.BeginInvoke((Action)(() => StatusMsg("Extracting files from " + Path.GetFileName(mbin_file) + "....")));
                                     Drk2BIN.ExtractBin(mbin_file);
                                 }
                                 finally
@@ -182,7 +182,7 @@ namespace Drakengard1and2Extractor.AppClasses
                         {
                             try
                             {
-                                StatusListBox.BeginInvoke((Action)(() => StatusMsg("Extracting files from " + fpk_file + "....")));
+                                StatusListBox.BeginInvoke((Action)(() => StatusMsg("Extracting files from " + Path.GetFileName(fpk_file) + "....")));
                                 FileFPK.ExtractFPK(fpk_file);
                             }
                             finally
@@ -238,7 +238,7 @@ namespace Drakengard1and2Extractor.AppClasses
                         {
                             try
                             {
-                                StatusListBox.BeginInvoke((Action)(() => StatusMsg("Extracting files from " + dpk_file + "....")));
+                                StatusListBox.BeginInvoke((Action)(() => StatusMsg("Extracting files from " + Path.GetFileName(dpk_file) + "....")));
                                 FileDPK.ExtractDPK(dpk_file);
                             }
                             finally
@@ -295,7 +295,7 @@ namespace Drakengard1and2Extractor.AppClasses
                         {
                             try
                             {
-                                StatusListBox.BeginInvoke((Action)(() => StatusMsg("Converting " + zim_file + "....")));
+                                StatusListBox.BeginInvoke((Action)(() => StatusMsg("Converting " + Path.GetFileName(zim_file) + "....")));
                                 FileZIM ConverterWindow = new FileZIM(zim_file);
                                 ConverterWindow.ShowDialog();
                             }
@@ -319,7 +319,7 @@ namespace Drakengard1and2Extractor.AppClasses
 
         private void ConvertSPK0Btn_MouseHover(object sender, EventArgs e)
         {
-            SPK0toolTip.Show("Extracts a .spk0 file and converts the images inside the file to bmp, png or dds formats", ConvertSPK0Btn);
+            SPK0toolTip.Show("Extracts a .spk0 file and converts the images inside the file to bmp, dds or png formats", ConvertSPK0Btn);
         }
         private void ConvertSPK0Btn_Click(object sender, EventArgs e)
         {
@@ -353,7 +353,7 @@ namespace Drakengard1and2Extractor.AppClasses
                         {
                             try
                             {
-                                StatusListBox.BeginInvoke((Action)(() => StatusMsg("Converting " + spk0_file + "....")));
+                                StatusListBox.BeginInvoke((Action)(() => StatusMsg("Converting " + Path.GetFileName(spk0_file) + "....")));
                                 FileSPK0 ConverterWindow = new FileSPK0(spk0_file);
                                 ConverterWindow.ShowDialog();
                             }
