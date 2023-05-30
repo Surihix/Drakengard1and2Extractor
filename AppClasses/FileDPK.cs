@@ -43,7 +43,7 @@ namespace Drakengard1and2Extractor.AppClasses
                         {
                             using (BinaryReader SplitFileReader = new BinaryReader(SplitFile))
                             {
-                                GetFileHeader(SplitFileReader, ref RExt);
+                                CmnMethods.GetFileHeader(SplitFileReader, ref RExt);
                             }
                         }
                         File.Move(CurrentFile, CurrentFile + RExt);
@@ -57,52 +57,6 @@ namespace Drakengard1and2Extractor.AppClasses
             }
 
             CmnMethods.AppMsgBox("Extracted " + Path.GetFileName(DpkFile) + " file", "Success", MessageBoxIcon.Information);
-        }
-
-
-        private static void GetFileHeader(BinaryReader ReaderName, ref string RExtVar)
-        {
-            ReaderName.BaseStream.Position = 0;
-            var FoundExt = ReaderName.ReadChars(4);
-            string RealExt = string.Join("", FoundExt).Replace("\0", "");
-
-            switch (RealExt)
-            {
-                case "fpk":
-                    RExtVar = ".fpk";
-                    break;
-                case "dpk":
-                    RExtVar = ".dpk";
-                    break;
-                case "wZIM":
-                    RExtVar = ".zim";
-                    break;
-                case "V3a":
-                    RExtVar = ".lz0";
-                    break;
-                case "KPS_":
-                    RExtVar = ".kps";
-                    break;
-                case "kvm1":
-                    RExtVar = ".kvm";
-                    break;
-                case "SPK0":
-                    RExtVar = ".spk0";
-                    break;
-                case "EVMT":
-                    RExtVar = ".emt";
-                    break;
-                case "DCMR":
-                    RExtVar = ".dcmr";
-                    break;
-                case "DLGT":
-                    RExtVar = ".dlgt";
-                    break;
-            }
-            if (RealExt.StartsWith("bh"))
-            {
-                RExtVar = ".hi4";
-            }
         }
     }
 }

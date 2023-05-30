@@ -1,5 +1,4 @@
-﻿using System;
-using System.IO;
+﻿using System.IO;
 using System.Windows.Forms;
 
 namespace Drakengard1and2Extractor.AppClasses
@@ -36,25 +35,57 @@ namespace Drakengard1and2Extractor.AppClasses
             file
         }
 
-        public static void MugiSwizzle(ref byte[] palBufferVar)
+        public static void ModifyString(ref string readStringLetters)
         {
-            uint[] newPalette = new uint[256];
-            uint[] origPalette = new uint[256];
-            Buffer.BlockCopy(palBufferVar, 0, origPalette, 0, palBufferVar.Length);
+            readStringLetters.Replace("\0", "").Replace("/", "").Replace("|", "").Replace("?", "").Replace(":", "").
+                Replace("<", "").Replace(">", "").Replace("*", "").Replace("\\", "").Replace("0eng", "0eng.fpk").
+                Replace("0jpn", "0jpn.fpk").Replace("1uk", "1uk.fpk").Replace("2fre", "2fre.fpk").Replace("3ger", "3ger.fpk").
+                Replace("4ita", "4ita.fpk").Replace("5spa", "5spa.fpk");
+        }
 
-            for (uint k = 0; k < 8; k++)
+        public static void GetFileHeader(BinaryReader ReaderName, ref string RExtVar)
+        {
+            ReaderName.BaseStream.Position = 0;
+            var FoundExt = ReaderName.ReadChars(4);
+            string RealExt = string.Join("", FoundExt).Replace("\0", "");
+
+            switch (RealExt)
             {
-                for (uint j = 0; j < 2; j++)
-                {
-                    for (uint i = 0; i < 8; i++)
-                    {
-                        newPalette[k * 32 + j * 16 + i] = origPalette[k * 32 + 8 * j + i];
-                        newPalette[k * 32 + j * 16 + i + 8] = origPalette[k * 32 + 8 * j + 16 + i];
-                    }
-                }
+                case "fpk":
+                    RExtVar = ".fpk";
+                    break;
+                case "dpk":
+                    RExtVar = ".dpk";
+                    break;
+                case "wZIM":
+                    RExtVar = ".zim";
+                    break;
+                case "V3a":
+                    RExtVar = ".lz0";
+                    break;
+                case "KPS_":
+                    RExtVar = ".kps";
+                    break;
+                case "kvm1":
+                    RExtVar = ".kvm";
+                    break;
+                case "SPK0":
+                    RExtVar = ".spk0";
+                    break;
+                case "EVMT":
+                    RExtVar = ".emt";
+                    break;
+                case "DCMR":
+                    RExtVar = ".dcmr";
+                    break;
+                case "DLGT":
+                    RExtVar = ".dlgt";
+                    break;
             }
-
-            Buffer.BlockCopy(newPalette, 0, palBufferVar, 0, palBufferVar.Length);
+            if (RealExt.StartsWith("bh"))
+            {
+                RExtVar = ".hi4";
+            }
         }
     }
 }

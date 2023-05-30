@@ -25,9 +25,8 @@ namespace Drakengard1and2Extractor.AppClasses
 
                     MainBINReader.BaseStream.Position = 64;
                     var MainBinNameChars = MainBINReader.ReadChars(12);
-                    string MainBinName = string.Join("", MainBinNameChars).Replace("\0", "").Replace("/", "").
-                        Replace("|", "").Replace("?", "").Replace(":", "").Replace("<", "").Replace(">", "").
-                        Replace("*", "").Replace("\\", "");
+                    string MainBinName = string.Join("", MainBinNameChars).Replace("\0", "");
+                    CmnMethods.ModifyString(ref MainBinName);
 
                     CmnMethods.FileDirectoryExistsDel(Extract_dir + "/" + MainBinName, CmnMethods.DelSwitch.file);
 
@@ -51,11 +50,9 @@ namespace Drakengard1and2Extractor.AppClasses
                             MainBINReader.BaseStream.Position = IntialOffsetPos + 8;
                             var extnChar = MainBINReader.ReadChars(4);
                             Array.Reverse(extnChar);
-                            string fileExt = string.Join("", extnChar).Replace("\0", "").Replace("/", "").Replace("|", "").
-                                Replace("?", "").Replace(":", "").Replace("<", "").Replace(">", "").Replace("*", "").
-                                Replace("\\", "").Replace("0eng", "0eng.fpk").Replace("0jpn", "0jpn.fpk").
-                                Replace("1uk", "1uk.fpk").Replace("2fre", "2fre.fpk").Replace("3ger", "3ger.fpk").
-                                Replace("4ita", "4ita.fpk").Replace("5spa", "5spa.fpk");
+
+                            string fileExt = string.Join("", extnChar).Replace("\0", "");
+                            CmnMethods.ModifyString(ref fileExt);
                             string fExt = "." + fileExt;
 
                             if (MainBinFile.Contains("image.bin") || MainBinFile.Contains("IMAGE.BIN"))
@@ -76,7 +73,7 @@ namespace Drakengard1and2Extractor.AppClasses
                                 {
                                     using (BinaryReader SplitFileReader = new BinaryReader(SplitFile))
                                     {
-                                        GetFileHeader(SplitFileReader, ref RExt);
+                                        CmnMethods.GetFileHeader(SplitFileReader, ref RExt);
                                     }
                                 }
                             }
@@ -117,7 +114,6 @@ namespace Drakengard1and2Extractor.AppClasses
                                                     var CmpBytesToRead = Lz0Stream.Read(CmpBuffer, 0, CmpBuffer.Length);
                                                     Lz0DataHolder.Write(CmpBuffer, 0, CmpBytesToRead);
 
-
                                                     byte[] CompressedData = Lz0DataHolder.ToArray();
                                                     MiniLz0Lib.Decompress(ref CompressedData, UncmpChunkSize, ref DeCompressedData);
 
@@ -147,7 +143,7 @@ namespace Drakengard1and2Extractor.AppClasses
                                     {
                                         using (BinaryReader DcmpFileReader = new BinaryReader(Dcmplz0File))
                                         {
-                                            GetFileHeader(DcmpFileReader, ref RExt);
+                                            CmnMethods.GetFileHeader(DcmpFileReader, ref RExt);
                                         }
                                     }
 
@@ -167,33 +163,6 @@ namespace Drakengard1and2Extractor.AppClasses
             }
 
             CmnMethods.AppMsgBox("Extracted " + Path.GetFileName(MainBinFile) + " file", "Success", MessageBoxIcon.Information);
-        }
-
-
-        private static void GetFileHeader(BinaryReader ReaderName, ref string RExtVar)
-        {
-            ReaderName.BaseStream.Position = 0;
-            var FoundExt = ReaderName.ReadChars(4);
-            string RealExt = string.Join("", FoundExt).Replace("\0", "");
-
-            switch (RealExt)
-            {
-                case "fpk":
-                    RExtVar = ".fpk";
-                    break;
-                case "wZIM":
-                    RExtVar = ".zim";
-                    break;
-                case "V3a":
-                    RExtVar = ".lz0";
-                    break;
-                case "KPS_":
-                    RExtVar = ".kps";
-                    break;
-                case "SPK0":
-                    RExtVar = ".spk0";
-                    break;
-            }
         }
     }
 }

@@ -1,6 +1,5 @@
-﻿using System;
-using System.Drawing;
-using System.Drawing.Imaging;
+﻿using Drakengard1and2Extractor.Libraries;
+using System;
 using System.IO;
 using System.Windows.Forms;
 
@@ -9,15 +8,15 @@ namespace Drakengard1and2Extractor.AppClasses
     public partial class FileSPK0 : Form
     {
         private readonly string Spk0FileVar;
-        public FileSPK0(string Spk0File)
+        public FileSPK0(string spk0File)
         {
             try
             {
-                Spk0FileVar = Spk0File;
+                Spk0FileVar = spk0File;
 
                 InitializeComponent();
 
-                Spk0SaveAsComboBox.SelectedItem = "Bitmap (.bmp)";
+                Spk0SaveAsComboBox.SelectedIndex = 0;
                 Spk0AlphaCompNumericUpDown.Enabled = false;
             }
             catch (Exception ex)
@@ -29,13 +28,11 @@ namespace Drakengard1and2Extractor.AppClasses
 
         private void Spk0SaveAsComboBox_SelectionChangeCommitted(object sender, EventArgs e)
         {
-            var SelectedFormat = Spk0SaveAsComboBox.SelectedItem.ToString();
-
-            if (SelectedFormat.Contains("Bitmap (.bmp)"))
+            if (Spk0SaveAsComboBox.SelectedIndex.Equals(0))
             {
                 Spk0AlphaCompNumericUpDown.Enabled = false;
             }
-            if (SelectedFormat.Contains("Portable Network Graphics (.png)"))
+            if (Spk0SaveAsComboBox.SelectedIndex.Equals(1))
             {
                 Spk0AlphaCompNumericUpDown.Enabled = true;
             }
@@ -47,168 +44,131 @@ namespace Drakengard1and2Extractor.AppClasses
             try
             {
                 ConvertSPK0ImgBtn.Text = "Converting...";
-                var SaveAsFormat = Spk0SaveAsComboBox.SelectedItem.ToString();
 
                 Spk0SaveAsComboBox.Enabled = false;
                 ConvertSPK0ImgBtn.Enabled = false;
 
-                if (SaveAsFormat.Contains("Portable Network Graphics (.png)"))
+                if (Spk0SaveAsComboBox.SelectedIndex.Equals(1))
                 {
                     Spk0AlphaCompNumericUpDown.Enabled = false;
                 }
 
-                var SPK0FileDir = Path.GetFullPath(Spk0FileVar);
-                var ExtractDir = Path.GetDirectoryName(SPK0FileDir) + "/" + Path.GetFileName(Spk0FileVar) + "_extracted";
+                var spk0FileDir = Path.GetFullPath(Spk0FileVar);
+                var extractDir = Path.GetDirectoryName(spk0FileDir) + "/" + Path.GetFileName(Spk0FileVar) + "_extracted";
 
-                if (Directory.Exists(ExtractDir))
+                if (Directory.Exists(extractDir))
                 {
-                    Directory.Delete(ExtractDir, true);
+                    Directory.Delete(extractDir, true);
                 }
-                Directory.CreateDirectory(ExtractDir);
+                Directory.CreateDirectory(extractDir);
 
 
-                using (FileStream SPKOStream = new FileStream(Spk0FileVar, FileMode.Open, FileAccess.Read))
+                using (FileStream spk0Stream = new FileStream(Spk0FileVar, FileMode.Open, FileAccess.Read))
                 {
-                    using (BinaryReader SPK0Reader = new BinaryReader(SPKOStream))
+                    using (BinaryReader spk0Reader = new BinaryReader(spk0Stream))
                     {
-                        SPK0Reader.BaseStream.Position = 24;
-                        var DLS0SubChunkPos = SPK0Reader.ReadUInt32();
+                        spk0Reader.BaseStream.Position = 24;
+                        var dls0SubChunkPos = spk0Reader.ReadUInt32();
 
-                        SPK0Reader.BaseStream.Position = 40;
-                        var DMT0Size = SPK0Reader.ReadUInt32();
-                        var GRF1SubChunkPos = DMT0Size + 32;
+                        spk0Reader.BaseStream.Position = 40;
+                        var dmt0Size = spk0Reader.ReadUInt32();
+                        var grf1SubChunkPos = dmt0Size + 32;
 
-                        SPK0Reader.BaseStream.Position = DLS0SubChunkPos;
-                        var GRF1EndPos = SPK0Reader.BaseStream.Position;
-                        var GRF1Size = GRF1EndPos - DMT0Size - 32;
-                        var DLS0Size = SPKOStream.Length - GRF1EndPos;
+                        spk0Reader.BaseStream.Position = dls0SubChunkPos;
+                        var grf1EndPos = spk0Reader.BaseStream.Position;
+                        var grf1Size = grf1EndPos - dmt0Size - 32;
+                        var dls0Size = spk0Stream.Length - grf1EndPos;
 
 
-                        using (FileStream DMT0Stream = new FileStream(ExtractDir + "/" + "DMT0", FileMode.OpenOrCreate,
+                        using (FileStream dmt0Stream = new FileStream(extractDir + "/" + "DMT0", FileMode.OpenOrCreate,
                             FileAccess.Write))
                         {
-                            SPKOStream.Seek(32, SeekOrigin.Begin);
-                            byte[] DMT0Buffer = new byte[DMT0Size];
-                            var DMT0DataRead = SPKOStream.Read(DMT0Buffer, 0, DMT0Buffer.Length);
-                            DMT0Stream.Write(DMT0Buffer, 0, DMT0DataRead);
+                            spk0Stream.Seek(32, SeekOrigin.Begin);
+                            byte[] dmt0Buffer = new byte[dmt0Size];
+                            var dmt0DataToCopy = spk0Stream.Read(dmt0Buffer, 0, dmt0Buffer.Length);
+                            dmt0Stream.Write(dmt0Buffer, 0, dmt0DataToCopy);
                         }
 
 
-                        using (FileStream GRF1Stream = new FileStream(ExtractDir + "/" + "GRF1", FileMode.OpenOrCreate,
+                        using (FileStream grf1Stream = new FileStream(extractDir + "/" + "GRF1", FileMode.OpenOrCreate,
                             FileAccess.ReadWrite))
                         {
-                            SPKOStream.Seek(GRF1SubChunkPos, SeekOrigin.Begin);
-                            byte[] GRF1Buffer = new byte[GRF1Size];
-                            var GRF1DataRead = SPKOStream.Read(GRF1Buffer, 0, GRF1Buffer.Length);
-                            GRF1Stream.Write(GRF1Buffer, 0, GRF1DataRead);
+                            spk0Stream.Seek(grf1SubChunkPos, SeekOrigin.Begin);
+                            byte[] grf1Buffer = new byte[grf1Size];
+                            var grf1DataToCopy = spk0Stream.Read(grf1Buffer, 0, grf1Buffer.Length);
+                            grf1Stream.Write(grf1Buffer, 0, grf1DataToCopy);
 
-                            using (BinaryReader GRF1Reader = new BinaryReader(GRF1Stream))
+                            using (BinaryReader grf1Reader = new BinaryReader(grf1Stream))
                             {
-                                GRF1Reader.BaseStream.Position = 4;
-                                var TotalImgCount = GRF1Reader.ReadUInt32();
+                                grf1Reader.BaseStream.Position = 4;
+                                var totalImgCount = grf1Reader.ReadUInt32();
 
-                                GRF1Reader.BaseStream.Position = 24;
-                                var ImgPalPos = GRF1Reader.ReadUInt32();
+                                grf1Reader.BaseStream.Position = 24;
+                                var imgPalPos = grf1Reader.ReadUInt32();
 
-                                GRF1Reader.BaseStream.Position = ImgPalPos + 96;
-                                var PalX = GRF1Reader.ReadUInt32();
-                                var PalY = GRF1Reader.ReadUInt32();
-                                var PalSize = (PalX * 2) * (PalY * 2);
+                                grf1Reader.BaseStream.Position = imgPalPos + 96;
+                                var palDim1 = grf1Reader.ReadUInt32();
+                                var palDim2 = grf1Reader.ReadUInt32();
+                                var palSize = (palDim1 * 2) * (palDim2 * 2);
 
-                                GRF1Stream.Seek(ImgPalPos + 144, SeekOrigin.Begin);
-                                byte[] PalBuffer = new byte[PalSize];
-                                GRF1Stream.Read(PalBuffer, 0, PalBuffer.Length);
+                                grf1Stream.Seek(imgPalPos + 144, SeekOrigin.Begin);
+                                byte[] palBuffer = new byte[palSize];
+                                grf1Stream.Read(palBuffer, 0, palBuffer.Length);
 
-                                CmnMethods.MugiSwizzle(ref PalBuffer);
+                                PS2UnSwizzlers.UnSwizzlePalette(ref palBuffer);
 
-                                using (MemoryStream ProcessedPalette = new MemoryStream())
+                                using (MemoryStream paletteStream = new MemoryStream())
                                 {
-                                    ProcessedPalette.Write(PalBuffer, 0, PalBuffer.Length);
+                                    paletteStream.Write(palBuffer, 0, palBuffer.Length);
 
-                                    using (BinaryReader ColorReader = new BinaryReader(ProcessedPalette))
+                                    using (BinaryReader paletteReader = new BinaryReader(paletteStream))
                                     {
 
-                                        var ReadImgPosStart = 20;
-                                        var ImgCount = 1;
-                                        for (int im = 0; im < TotalImgCount; im++)
+                                        var imgReadPosStart = 20;
+                                        var imgFCount = 1;
+                                        for (int i = 0; i < totalImgCount; i++)
                                         {
-                                            GRF1Reader.BaseStream.Position = ReadImgPosStart;
-                                            var ImgStartPos = GRF1Reader.ReadUInt32();
+                                            grf1Reader.BaseStream.Position = imgReadPosStart;
+                                            var imgStartPos = grf1Reader.ReadUInt32();
 
-                                            GRF1Reader.BaseStream.Position = ImgStartPos + 96;
-                                            var Width = GRF1Reader.ReadUInt32();
-                                            var Height = GRF1Reader.ReadUInt32();
-                                            var ImgSize = Width * Height;
+                                            grf1Reader.BaseStream.Position = imgStartPos + 96;
+                                            var width = grf1Reader.ReadUInt32();
+                                            var height = grf1Reader.ReadUInt32();
+                                            var imgSize = width * height;
 
-                                            using (MemoryStream ImgStream = new MemoryStream())
+                                            using (MemoryStream pixelsStream = new MemoryStream())
                                             {
-                                                GRF1Stream.Seek(ImgStartPos + 144, SeekOrigin.Begin);
-                                                byte[] ImgBuffer = new byte[ImgSize];
-                                                var ImgDataRead = GRF1Stream.Read(ImgBuffer, 0, ImgBuffer.Length);
-                                                ImgStream.Write(ImgBuffer, 0, ImgDataRead);
+                                                grf1Stream.Seek(imgStartPos + 144, SeekOrigin.Begin);
+                                                byte[] pixelsBuffer = new byte[imgSize];
+                                                var pixelDataToCopy = grf1Stream.Read(pixelsBuffer, 0, pixelsBuffer.Length);
+                                                pixelsStream.Write(pixelsBuffer, 0, pixelDataToCopy);
 
-                                                using (BinaryReader ImgReader = new BinaryReader(ImgStream))
+                                                using (BinaryReader pixelsReader = new BinaryReader(pixelsStream))
                                                 {
 
-
-                                                    var CurrentPixel = 0;
-                                                    var GetColorIndex = 0;
-                                                    var red = 0;
-                                                    var green = 0;
-                                                    var blue = 0;
-                                                    var alpha = 0;
-                                                    var color = new Color();
-                                                    var IncreaseAlphaVal = (int)Spk0AlphaCompNumericUpDown.Value;
-                                                    using (Bitmap FinalImage = new Bitmap((int)Width, (int)Height))
+                                                    string outImgPath;
+                                                    switch (Spk0SaveAsComboBox.SelectedIndex)
                                                     {
-                                                        for (int y = 0; y < Height; y++)
-                                                            for (int x = 0; x < Width; x++)
-                                                            {
-                                                                CurrentPixel = (y * (int)Width) + x;
-                                                                ImgReader.BaseStream.Position = CurrentPixel;
-                                                                GetColorIndex = ImgReader.ReadByte();
+                                                        case 0:
+                                                            outImgPath = extractDir + "/" + "GRF1_img_" + imgFCount + ".bmp";
+                                                            ImageWriters.BmpPng((ushort)height, (ushort)width, (int)Spk0AlphaCompNumericUpDown.Value, pixelsReader, paletteReader, ImageWriters.SaveAs.bmp, outImgPath);
+                                                            break;
 
-                                                                var ColorIndex = GetColorIndex * 4;
+                                                        case 1:
+                                                            outImgPath = extractDir + "/" + "GRF1_img_" + imgFCount + ".dds";
+                                                            ImageWriters.DDS(outImgPath, height, width, (int)Spk0AlphaCompNumericUpDown.Value, pixelsReader, paletteReader);
+                                                            break;
 
-                                                                ColorReader.BaseStream.Position = ColorIndex;
-                                                                red = ColorReader.ReadByte();
-                                                                green = ColorReader.ReadByte();
-                                                                blue = ColorReader.ReadByte();
-                                                                alpha = ColorReader.ReadByte();
-
-                                                                if (SaveAsFormat.Contains("Portable Network Graphics (.png)"))
-                                                                {
-                                                                    alpha += IncreaseAlphaVal;
-
-                                                                    if (IncreaseAlphaVal > 0)
-                                                                    {
-                                                                        if (alpha > 128)
-                                                                        {
-                                                                            alpha = 128;
-                                                                        }
-                                                                    }
-                                                                }
-
-                                                                color = Color.FromArgb(alpha, red, green, blue);
-                                                                FinalImage.SetPixel(x, y, color);
-                                                            }
-                                                        switch (SaveAsFormat)
-                                                        {
-                                                            case "Bitmap (.bmp)":
-                                                                FinalImage.Save(ExtractDir + "/" + "GRF1_img_" + ImgCount + 
-                                                                    ".bmp", ImageFormat.Bmp);
-                                                                break;
-
-                                                            case "Portable Network Graphics (.png)":
-                                                                FinalImage.Save(ExtractDir + "/" + "GRF1_img_" + ImgCount + 
-                                                                    ".png", ImageFormat.Png);
-                                                                break;
-                                                        }
+                                                        case 2:
+                                                            outImgPath = extractDir + "/" + "GRF1_img_" + imgFCount + ".png";
+                                                            ImageWriters.BmpPng((ushort)height, (ushort)width, (int)Spk0AlphaCompNumericUpDown.Value, pixelsReader, paletteReader, ImageWriters.SaveAs.png, outImgPath);
+                                                            break;
                                                     }
                                                 }
                                             }
-                                            ImgCount++;
-                                            ReadImgPosStart += 32;
+
+                                            imgFCount++;
+                                            imgReadPosStart += 32;
                                         }
                                     }
                                 }
@@ -216,13 +176,13 @@ namespace Drakengard1and2Extractor.AppClasses
                         }
 
 
-                        using (FileStream DLS0Stream = new FileStream(ExtractDir + "/" + "DLS0", FileMode.OpenOrCreate,
+                        using (FileStream dls0Stream = new FileStream(extractDir + "/" + "DLS0", FileMode.OpenOrCreate,
                             FileAccess.Write))
                         {
-                            SPKOStream.Seek(DLS0SubChunkPos, SeekOrigin.Begin);
-                            byte[] DLS0Buffer = new byte[DLS0Size];
-                            var DLS0DataRead = SPKOStream.Read(DLS0Buffer, 0, DLS0Buffer.Length);
-                            DLS0Stream.Write(DLS0Buffer, 0, DLS0DataRead);
+                            spk0Stream.Seek(dls0SubChunkPos, SeekOrigin.Begin);
+                            byte[] dls0Buffer = new byte[dls0Size];
+                            var dls0DataToCopy = spk0Stream.Read(dls0Buffer, 0, dls0Buffer.Length);
+                            dls0Stream.Write(dls0Buffer, 0, dls0DataToCopy);
                         }
                     }
                 }
@@ -232,13 +192,12 @@ namespace Drakengard1and2Extractor.AppClasses
                 Spk0SaveAsComboBox.Enabled = true;
                 ConvertSPK0ImgBtn.Enabled = true;
 
-                if (SaveAsFormat.Contains("Portable Network Graphics (.png)"))
+                if (Spk0SaveAsComboBox.SelectedIndex.Equals(1) || Spk0SaveAsComboBox.SelectedIndex.Equals(2))
                 {
                     Spk0AlphaCompNumericUpDown.Enabled = true;
                 }
 
                 ConvertSPK0ImgBtn.Text = "Convert";
-
             }
             catch (Exception ex)
             {

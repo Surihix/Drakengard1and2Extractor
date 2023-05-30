@@ -35,11 +35,10 @@ namespace Drakengard1and2Extractor.AppClasses
                     {
                         SubBinName.Append(BinNameChars);
                     }
-                    SubBinName.ToString();
+                    var convertedSubBinName = SubBinName.ToString();
 
-                    CmnMethods.FileDirectoryExistsDel(Extract_dir + "/" + SubBinName, CmnMethods.DelSwitch.file);
-
-                    SubBinName.Replace("\0", "").Replace("/", "").Replace("|", "").Replace("?", "").Replace(":", "").Replace("<", "").Replace(">", "").Replace("*", "").Replace("\\", "");
+                    CmnMethods.ModifyString(ref convertedSubBinName);
+                    CmnMethods.FileDirectoryExistsDel(Extract_dir + "/" + convertedSubBinName, CmnMethods.DelSwitch.file);
 
                     using (FileStream SubBIN = new FileStream(Extract_dir + "/" + SubBinName, FileMode.OpenOrCreate, FileAccess.ReadWrite))
                     {
@@ -64,9 +63,9 @@ namespace Drakengard1and2Extractor.AppClasses
                             FpkReader.BaseStream.Position = IntialOffsetPos + 8;
                             var extnChar = FpkReader.ReadChars(4);
                             Array.Reverse(extnChar);
-                            string fileExt = string.Join("", extnChar).Replace("\0", "").Replace("/", "").Replace("|", "").
-                                Replace("?", "").Replace(":", "").Replace("<", "").Replace(">", "").Replace("*", "").
-                                Replace("\\", "");
+
+                            string fileExt = string.Join("", extnChar).Replace("\0", "");
+                            CmnMethods.ModifyString(ref fileExt);
                             string fExt = "." + fileExt;
 
                             using (FileStream SplitFile = new FileStream(Extract_dir + "/" + fname + $"{FileCount}" + fExt, FileMode.OpenOrCreate, FileAccess.ReadWrite))
@@ -78,7 +77,7 @@ namespace Drakengard1and2Extractor.AppClasses
 
                                 using (BinaryReader SplitFileReader = new BinaryReader(SplitFile))
                                 {
-                                    GetFileHeader(SplitFileReader, ref RExt);
+                                    CmnMethods.GetFileHeader(SplitFileReader, ref RExt);
                                 }
                             }
 
@@ -99,7 +98,7 @@ namespace Drakengard1and2Extractor.AppClasses
                                     {
                                         using (BinaryReader ExtnReader = new BinaryReader(ExtnStream))
                                         {
-                                            GetFileHeader(ExtnReader, ref AdjExt);
+                                            CmnMethods.GetFileHeader(ExtnReader, ref AdjExt);
                                         }
                                     }
 
@@ -165,7 +164,7 @@ namespace Drakengard1and2Extractor.AppClasses
                                     {
                                         using (BinaryReader DcmpFileReader = new BinaryReader(Dcmplz0File))
                                         {
-                                            GetFileHeader(DcmpFileReader, ref RExt);
+                                            CmnMethods.GetFileHeader(DcmpFileReader, ref RExt);
                                         }
 
                                         File.Move(CurrentOutDecmpLz0File, CurrentProperFileExtn + RExt);
@@ -185,52 +184,6 @@ namespace Drakengard1and2Extractor.AppClasses
             }
 
             CmnMethods.AppMsgBox("Extracted " + Path.GetFileName(FpkFile) + " file", "Success", MessageBoxIcon.Information);
-        }
-
-
-        private static void GetFileHeader(BinaryReader ReaderName, ref string RExtVar)
-        {
-            ReaderName.BaseStream.Position = 0;
-            var FoundExt = ReaderName.ReadChars(4);
-            string RealExt = string.Join("", FoundExt).Replace("\0", "");
-
-            switch (RealExt)
-            {
-                case "fpk":
-                    RExtVar = ".fpk";
-                    break;
-                case "dpk":
-                    RExtVar = ".dpk";
-                    break;
-                case "wZIM":
-                    RExtVar = ".zim";
-                    break;
-                case "V3a":
-                    RExtVar = ".lz0";
-                    break;
-                case "KPS_":
-                    RExtVar = ".kps";
-                    break;
-                case "kvm1":
-                    RExtVar = ".kvm";
-                    break;
-                case "SPK0":
-                    RExtVar = ".spk0";
-                    break;
-                case "EVMT":
-                    RExtVar = ".emt";
-                    break;
-                case "DCMR":
-                    RExtVar = ".dcmr";
-                    break;
-                case "DLGT":
-                    RExtVar = ".dlgt";
-                    break;
-            }
-            if (RealExt.StartsWith("bh"))
-            {
-                RExtVar = ".hi4";
-            }
         }
     }
 }

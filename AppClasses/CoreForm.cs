@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MiniLz0;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
@@ -16,6 +17,9 @@ namespace Drakengard1and2Extractor.AppClasses
                 CmnMethods.AppMsgBox("Missing minilz0.dll file.\nPlease check if this dll file is present next to the exe file.", "Error", MessageBoxIcon.Error);
                 Environment.Exit(0);
             }
+
+            MiniLz0Lib.ChecklzoDll();
+
             if (!File.Exists("AppHelp.txt"))
             {
                 CmnMethods.AppMsgBox("The AppHelp.txt file is missing\nPlease ensure that this file is present next to the app to use the Help option.", "Warning", MessageBoxIcon.Warning);
@@ -257,7 +261,7 @@ namespace Drakengard1and2Extractor.AppClasses
 
         private void ConvertZIMBtn_MouseHover(object sender, EventArgs e)
         {
-            ZIMtoolTip.Show("Convert a .zim image file to bmp or png formats", ConvertZIMBtn);
+            ZIMtoolTip.Show("Convert a .zim image file to bmp, png or dds formats", ConvertZIMBtn);
         }
         private void ConvertZIMBtn_Click(object sender, EventArgs e)
         {
@@ -315,7 +319,7 @@ namespace Drakengard1and2Extractor.AppClasses
 
         private void ConvertSPK0Btn_MouseHover(object sender, EventArgs e)
         {
-            SPK0toolTip.Show("Extracts a .spk0 file and converts the images inside the file to bmp or png formats", ConvertSPK0Btn);
+            SPK0toolTip.Show("Extracts a .spk0 file and converts the images inside the file to bmp, png or dds formats", ConvertSPK0Btn);
         }
         private void ConvertSPK0Btn_Click(object sender, EventArgs e)
         {

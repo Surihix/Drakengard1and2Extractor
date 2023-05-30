@@ -1,6 +1,5 @@
-﻿using System;
-using System.Drawing;
-using System.Drawing.Imaging;
+﻿using Drakengard1and2Extractor.Libraries;
+using System;
 using System.IO;
 using System.Windows.Forms;
 
@@ -15,265 +14,148 @@ namespace Drakengard1and2Extractor.AppClasses
             {
                 ZimFileVar = ZimFile;
 
-                var BppValue = 0;
-                using (FileStream GetBppStream = new FileStream(ZimFile, FileMode.Open, FileAccess.Read))
+                var bppValue = 0;
+                using (FileStream fs = new FileStream(ZimFile, FileMode.Open, FileAccess.Read))
                 {
-                    using (BinaryReader GetBppReader = new BinaryReader(GetBppStream))
+                    using (BinaryReader br = new BinaryReader(fs))
                     {
-                        GetBppReader.BaseStream.Position = 82;
-                        BppValue = GetBppReader.ReadByte();
+                        br.BaseStream.Position = 82;
+                        bppValue = br.ReadByte();
                     }
                 }
-                if (BppValue == 64)
+
+                if (bppValue == 64)
                 {
-                    CmnMethods.AppMsgBox("Detected 4bpp image\nDo not use the Alpha Compensation setting when saving the image in png format.", "Warning", MessageBoxIcon.Warning);
+                    CmnMethods.AppMsgBox("Detected 4bpp image.\nDo not use the alpha compensation setting when saving the image in png or dds formats.", "Warning", MessageBoxIcon.Warning);
                 }
 
                 InitializeComponent();
 
-                ZimSaveAsComboBox.SelectedItem = "Bitmap (.bmp)";
+                ZimSaveAsComboBox.SelectedIndex = 0;
                 ZimAlphaCompNumericUpDown.Enabled = false;
             }
             catch (Exception ex)
             {
-                CmnMethods.AppMsgBox(ex.Message, "Error", MessageBoxIcon.Error);
+                CmnMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
             }
         }
 
+
         private void ZimSaveAsComboBox_SelectionChangeCommitted(object sender, EventArgs e)
         {
-            var SelectedFormat = ZimSaveAsComboBox.SelectedItem.ToString();
-
-            if (SelectedFormat.Contains("Bitmap (.bmp)"))
+            if (ZimSaveAsComboBox.SelectedIndex.Equals(0))
             {
                 ZimAlphaCompNumericUpDown.Enabled = false;
             }
-            if (SelectedFormat.Contains("Portable Network Graphics (.png)"))
+            if (ZimSaveAsComboBox.SelectedIndex.Equals(1) || ZimSaveAsComboBox.SelectedIndex.Equals(2))
             {
                 ZimAlphaCompNumericUpDown.Enabled = true;
             }
         }
 
+
+        private void UnSwizzleCheckBox_MouseHover(object sender, EventArgs e)
+        {
+            UnSwizzleChkBoxToolTip.Show("Warning: Use this option only when the converted image looks corrupt.", UnSwizzleCheckBox);
+        }
+
+
         private void ConvertZIMImgBtn_Click(object sender, EventArgs e)
         {
             try
             {
-                var SaveAsFormat = ZimSaveAsComboBox.SelectedItem.ToString();
+                ConvertZIMImgBtn.Text = "Converting...";
 
                 ZimSaveAsComboBox.Enabled = false;
                 ConvertZIMImgBtn.Enabled = false;
-                if (SaveAsFormat.Contains("Portable Network Graphics (.png)"))
+                UnSwizzleCheckBox.Enabled = false;
+
+                if (ZimSaveAsComboBox.SelectedIndex.Equals(1) || ZimSaveAsComboBox.SelectedIndex.Equals(2))
                 {
                     ZimAlphaCompNumericUpDown.Enabled = false;
                 }
 
-                var ZIMFileDir = Path.GetFullPath(ZimFileVar);
-                var Extract_dir = Path.GetDirectoryName(ZIMFileDir) + "/";
+                var zimFileDir = Path.GetFullPath(ZimFileVar);
+                var extractDir = Path.GetDirectoryName(zimFileDir) + "/";
 
-                using (FileStream ZIMStream = new FileStream(ZimFileVar, FileMode.Open, FileAccess.Read))
+                using (FileStream zimStream = new FileStream(ZimFileVar, FileMode.Open, FileAccess.Read))
                 {
-                    using (BinaryReader ZIMReader = new BinaryReader(ZIMStream))
+                    using (BinaryReader zimReader = new BinaryReader(zimStream))
                     {
-                        ZIMReader.BaseStream.Position = 44;
-                        var Width = ZIMReader.ReadUInt16();
-                        var Height = ZIMReader.ReadUInt16();
+                        zimReader.BaseStream.Position = 44;
+                        var width = zimReader.ReadUInt16();
+                        var height = zimReader.ReadUInt16();
 
-                        ZIMReader.BaseStream.Position = 72;
-                        var PaletteSection = ZIMReader.ReadUInt32();
+                        zimReader.BaseStream.Position = 52;
+                        var imgSize = zimReader.ReadUInt32();
 
-                        ZIMReader.BaseStream.Position = 82;
-                        var BppFlag = ZIMReader.ReadByte();
+                        zimReader.BaseStream.Position = 72;
+                        var paletteSection = zimReader.ReadUInt32();
+                        var palSize = zimReader.ReadUInt32();
 
-                        ZIMReader.BaseStream.Position = PaletteSection + 96;
-                        var PalDimW = ZIMReader.ReadUInt32();
-                        var PalDimH = ZIMReader.ReadUInt32();
+                        zimReader.BaseStream.Position = 82;
+                        var bppFlag = zimReader.ReadByte();
 
-                        PalDimW *= 2;
-                        PalDimH *= 2;
-                        var PalSize = PalDimW * PalDimH;
+                        zimStream.Seek(352, SeekOrigin.Begin);
 
-                        if (BppFlag == 64)
+
+                        using (MemoryStream pixelsStream = new MemoryStream())
                         {
-                            Width /= 2;
-                        }
-                        var ImageSize = Width * Height;
+                            byte[] pixelsBuffer = new byte[imgSize];
+                            var pixelDataToCopy = zimStream.Read(pixelsBuffer, 0, pixelsBuffer.Length);
 
-                        ZIMStream.Seek(352, SeekOrigin.Begin);
-
-
-                        using (MemoryStream ImgStream = new MemoryStream())
-                        {
-                            byte[] IMG_buffer = new byte[ImageSize];
-                            var IMGbytesToRead = ZIMStream.Read(IMG_buffer, 0, IMG_buffer.Length);
-                            ImgStream.Write(IMG_buffer, 0, IMGbytesToRead);
-
-                            ZIMStream.Seek(PaletteSection + 160, SeekOrigin.Begin);
-                            byte[] Pal_Buffer = new byte[PalSize];
-                            var PalBytesToRead = ZIMStream.Read(Pal_Buffer, 0, Pal_Buffer.Length);
-
-                            if (BppFlag == 48)
+                            if (UnSwizzleCheckBox.Checked.Equals(true) && bppFlag == 48)
                             {
-                                CmnMethods.MugiSwizzle(ref Pal_Buffer);
+                                PS2UnSwizzlers.UnSwizzlePixels(ref pixelsBuffer, width, height);
                             }
 
-                            using (MemoryStream ProcessedPalette = new MemoryStream())
+                            if (bppFlag == 64)
                             {
-                                ProcessedPalette.Write(Pal_Buffer, 0, Pal_Buffer.Length);
+                                byte[] convertedPixels = ConvertPixelsTo8Bpp(pixelsBuffer);
+                                pixelsStream.Write(convertedPixels, 0, convertedPixels.Length);
+                            }
+                            else
+                            {
+                                pixelsStream.Write(pixelsBuffer, 0, pixelDataToCopy);
+                            }
 
-                                using (BinaryReader ColorReader = new BinaryReader(ProcessedPalette))
+
+                            using (MemoryStream paletteStream = new MemoryStream())
+                            {
+                                zimStream.Seek(paletteSection + 160, SeekOrigin.Begin);
+                                byte[] paletteBuffer = new byte[palSize];
+                                var paletteDataToCopy = zimStream.Read(paletteBuffer, 0, paletteBuffer.Length);
+
+                                if (bppFlag == 48)
                                 {
-                                    using (BinaryReader ImgReader = new BinaryReader(ImgStream))
+                                    PS2UnSwizzlers.UnSwizzlePalette(ref paletteBuffer);
+                                }
+                                paletteStream.Write(paletteBuffer, 0, paletteBuffer.Length);
+
+                                using (BinaryReader pixelsReader = new BinaryReader(pixelsStream))
+                                {
+                                    using (BinaryReader paletteReader = new BinaryReader(paletteStream))
                                     {
-                                        var CurrentPixel = 0;
-                                        var GetColorIndex = 0;
-                                        var Pixel1 = 0;
-                                        var Pixel2 = 0;
-                                        var red = 0;
-                                        var green = 0;
-                                        var blue = 0;
-                                        var alpha = 0;
-                                        var color = new Color();
-                                        var IncreaseAlphaVal = (int)ZimAlphaCompNumericUpDown.Value;
-                                        using (Bitmap FinalImage = new Bitmap(Width, Height))
+                                        string outImgPath;
+                                        switch (ZimSaveAsComboBox.SelectedIndex)
                                         {
-                                            switch (BppFlag)
-                                            {
-                                                case 48:
-                                                    for (int y = 0; y < Height; y++)
-                                                        for (int x = 0; x < Width; x++)
-                                                        {
-                                                            CurrentPixel = (y * Width) + x;
-                                                            ImgReader.BaseStream.Position = CurrentPixel;
-                                                            GetColorIndex = ImgReader.ReadByte();
+                                            case 0:
+                                                outImgPath = extractDir + Path.GetFileNameWithoutExtension(ZimFileVar) + ".bmp";
+                                                IfOutImgFileExistsDel(outImgPath);
+                                                ImageWriters.BmpPng(height, width, (int)ZimAlphaCompNumericUpDown.Value, pixelsReader, paletteReader, ImageWriters.SaveAs.bmp, outImgPath);
+                                                break;
 
-                                                            var ColorIndex = GetColorIndex * 4;
+                                            case 1:
+                                                outImgPath = extractDir + Path.GetFileNameWithoutExtension(ZimFileVar) + ".dds";
+                                                IfOutImgFileExistsDel(outImgPath);
+                                                ImageWriters.DDS(outImgPath, height, width, (int)ZimAlphaCompNumericUpDown.Value, pixelsReader, paletteReader);
+                                                break;
 
-                                                            ColorReader.BaseStream.Position = ColorIndex;
-                                                            red = ColorReader.ReadByte();
-                                                            green = ColorReader.ReadByte();
-                                                            blue = ColorReader.ReadByte();
-                                                            alpha = ColorReader.ReadByte();
-
-                                                            switch (SaveAsFormat)
-                                                            {
-                                                                case "Portable Network Graphics (.png)":
-
-                                                                    alpha += IncreaseAlphaVal;
-
-                                                                    if (IncreaseAlphaVal > 0)
-                                                                    {
-                                                                        if (alpha > 255)
-                                                                        {
-                                                                            alpha = 255;
-                                                                        }
-                                                                    }
-
-                                                                    color = Color.FromArgb(alpha, red, green, blue);
-                                                                    FinalImage.SetPixel(x, y, color);
-                                                                    break;
-
-                                                                case "Bitmap (.bmp)":
-
-                                                                    color = Color.FromArgb(red, green, blue);
-                                                                    FinalImage.SetPixel(x, y, color);
-                                                                    break;
-                                                            }
-                                                        }
-                                                    if (SaveAsFormat.Contains("Portable Network Graphics (.png)"))
-                                                    {
-                                                        FinalImage.Save(Extract_dir + Path.GetFileNameWithoutExtension(ZimFileVar) +
-                                                            ".png", ImageFormat.Png);
-                                                    }
-                                                    else
-                                                    {
-                                                        FinalImage.Save(Extract_dir + Path.GetFileNameWithoutExtension(ZimFileVar) +
-                                                            ".bmp", ImageFormat.Bmp);
-                                                    }
-                                                    break;
-
-
-                                                case 64:
-                                                    for (int y = 0; y < Height; y++)
-                                                        for (int x = 0; x < Width; x++)
-                                                        {
-                                                            CurrentPixel = (y * Width) + x;
-                                                            ImgReader.BaseStream.Position = CurrentPixel;
-                                                            GetColorIndex = ImgReader.ReadByte();
-
-                                                            Pixel1 = GetColorIndex >> 4;
-                                                            Pixel2 = GetColorIndex & 0xF;
-
-                                                            Pixel1 *= 4;
-                                                            Pixel2 *= 4;
-
-                                                            ColorReader.BaseStream.Position = Pixel1;
-                                                            red = ColorReader.ReadByte();
-                                                            green = ColorReader.ReadByte();
-                                                            blue = ColorReader.ReadByte();
-                                                            alpha = ColorReader.ReadByte();
-
-                                                            switch (SaveAsFormat)
-                                                            {
-                                                                case "Portable Network Graphics (.png)":
-
-                                                                    alpha += IncreaseAlphaVal;
-
-                                                                    if (IncreaseAlphaVal > 0)
-                                                                    {
-                                                                        if (alpha > 255)
-                                                                        {
-                                                                            alpha = 255;
-                                                                        }
-                                                                    }
-
-                                                                    color = Color.FromArgb(alpha, red, green, blue);
-                                                                    FinalImage.SetPixel(x, y, color);
-
-                                                                    CurrentPixel += 1;
-                                                                    ImgReader.BaseStream.Position = CurrentPixel;
-
-                                                                    ColorReader.BaseStream.Position = Pixel2;
-                                                                    red = ColorReader.ReadByte();
-                                                                    green = ColorReader.ReadByte();
-                                                                    blue = ColorReader.ReadByte();
-                                                                    alpha = ColorReader.ReadByte();
-
-                                                                    color = Color.FromArgb(alpha, red, green, blue);
-                                                                    FinalImage.SetPixel(x, y, color);
-                                                                    break;
-
-                                                                case "Bitmap (.bmp)":
-
-                                                                    color = Color.FromArgb(red, green, blue);
-                                                                    FinalImage.SetPixel(x, y, color);
-
-                                                                    CurrentPixel += 1;
-                                                                    ImgReader.BaseStream.Position = CurrentPixel;
-
-                                                                    ColorReader.BaseStream.Position = Pixel2;
-                                                                    red = ColorReader.ReadByte();
-                                                                    green = ColorReader.ReadByte();
-                                                                    blue = ColorReader.ReadByte();
-
-                                                                    color = Color.FromArgb(red, green, blue);
-                                                                    FinalImage.SetPixel(x, y, color);
-                                                                    break;
-                                                            }
-                                                        }
-                                                    if (SaveAsFormat.Contains("Portable Network Graphics (.png)"))
-                                                    {
-                                                        FinalImage.Save(Extract_dir + 
-                                                            Path.GetFileNameWithoutExtension(ZimFileVar) + ".png", 
-                                                            ImageFormat.Png);
-                                                    }
-                                                    else
-                                                    {
-                                                        FinalImage.Save(Extract_dir + 
-                                                            Path.GetFileNameWithoutExtension(ZimFileVar) + ".bmp", 
-                                                            ImageFormat.Bmp);
-                                                    }
-                                                    break;
-                                            }
+                                            case 2:
+                                                outImgPath = extractDir + Path.GetFileNameWithoutExtension(ZimFileVar) + ".png";
+                                                IfOutImgFileExistsDel(outImgPath);
+                                                ImageWriters.BmpPng(height, width, (int)ZimAlphaCompNumericUpDown.Value, pixelsReader, paletteReader, ImageWriters.SaveAs.png, outImgPath);
+                                                break;
                                         }
                                     }
                                 }
@@ -286,17 +168,74 @@ namespace Drakengard1and2Extractor.AppClasses
 
                 ZimSaveAsComboBox.Enabled = true;
                 ConvertZIMImgBtn.Enabled = true;
+                UnSwizzleCheckBox.Enabled = true;
 
-                if (SaveAsFormat.Contains("Portable Network Graphics (.png)"))
+                if (ZimSaveAsComboBox.SelectedIndex.Equals(1) || ZimSaveAsComboBox.SelectedIndex.Equals(2))
                 {
                     ZimAlphaCompNumericUpDown.Enabled = true;
                 }
 
+                ConvertZIMImgBtn.Text = "Convert";
             }
             catch (Exception ex)
             {
-                CmnMethods.AppMsgBox(ex.Message, "Error", MessageBoxIcon.Error);
+                CmnMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
                 Close();
+            }
+        }
+        private void ConvertZIMImgBtn_MouseHover(object sender, EventArgs e)
+        {
+            ConvertZimImgBtnToolTip.Show("Converts and saves the image file to one of the selected formats", ConvertZIMImgBtn);
+        }
+
+
+        private byte[] ConvertPixelsTo8Bpp(byte[] pixelsBufferVar)
+        {
+            using (MemoryStream pixels4bpp = new MemoryStream())
+            {
+                pixels4bpp.Write(pixelsBufferVar, 0, pixelsBufferVar.Length);
+
+                using (MemoryStream convertedPixelData = new MemoryStream())
+                {
+                    using (BinaryWriter convertedPixelDataWriter = new BinaryWriter(convertedPixelData))
+                    {
+                        using (BinaryReader pixels4bppReader = new BinaryReader(pixels4bpp))
+                        {
+                            uint readPos = 0;
+                            byte pixelBits;
+                            int pixelBit1;
+                            int pixelBit2;
+                            uint writePos = 0;
+                            for (int c = 0; c < pixels4bpp.Length; c++)
+                            {
+                                pixels4bppReader.BaseStream.Position = readPos;
+                                pixelBits = pixels4bppReader.ReadByte();
+
+                                pixelBit1 = pixelBits >> 4;
+                                pixelBit2 = pixelBits & 0xF;
+
+                                convertedPixelDataWriter.BaseStream.Position = writePos;
+                                convertedPixelDataWriter.Write((byte)pixelBit1);
+                                convertedPixelDataWriter.Write((byte)pixelBit2);
+
+                                readPos++;
+                                writePos += 2;
+                            }
+
+                            byte[] convertedPixelsVar = convertedPixelData.ToArray();
+                            return convertedPixelsVar;
+                        }
+                    }
+                }
+            }
+        }
+
+
+        static void IfOutImgFileExistsDel(string outImgFileName)
+        {
+            if (File.Exists(outImgFileName))
+            {
+                File.Delete(outImgFileName);
             }
         }
     }
