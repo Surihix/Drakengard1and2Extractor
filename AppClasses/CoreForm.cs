@@ -39,29 +39,29 @@ namespace Drakengard1and2Extractor.AppClasses
 
         private void ExtBinBtn_MouseHover(object sender, EventArgs e)
         {
-            BINtoolTip.Show("Extract a compatible .BIN file", ExtBinBtn);
+            BINtoolTip.Show("Extract a compatible .BIN file.", ExtBinBtn);
         }
         public void ExtBinBtn_Click(object sender, EventArgs e)
         {
             try
             {
-                OpenFileDialog Bin_Select = new OpenFileDialog();
+                OpenFileDialog binSelect = new OpenFileDialog();
                 if (Drk1RadioButton.Checked == true)
                 {
-                    Bin_Select.Filter = "Drakengard 1 BIN files" + $"|*.bin";
+                    binSelect.Filter = "Drakengard 1 BIN files" + $"|*.bin";
                 }
                 if (Drk2RadioButton.Checked == true)
                 {
-                    Bin_Select.Filter = "Drakengard 2 BIN files" + $"|*.bin";
+                    binSelect.Filter = "Drakengard 2 BIN files" + $"|*.bin";
                 }
 
-                Bin_Select.RestoreDirectory = true;
+                binSelect.RestoreDirectory = true;
 
-                if (Bin_Select.ShowDialog() == DialogResult.OK)
+                if (binSelect.ShowDialog() == DialogResult.OK)
                 {
                     StatusListBox.Items.Clear();
 
-                    string mbin_file = Bin_Select.FileName;
+                    string mbinFile = binSelect.FileName;
 
                     if (Drk1RadioButton.Checked == true)
                     {
@@ -69,10 +69,10 @@ namespace Drakengard1and2Extractor.AppClasses
                         StatusMsg("");
                         DisableButtons();
 
-                        var Header = "";
-                        HeaderCheck(mbin_file, ref Header);
+                        var readHeader = "";
+                        CmnMethods.HeaderCheck(mbinFile, ref readHeader);
 
-                        if (!Header.StartsWith("fpk"))
+                        if (!readHeader.StartsWith("fpk"))
                         {
                             StatusMsg("Error: Unable to detect fpk header");
                             StatusMsg("");
@@ -87,8 +87,8 @@ namespace Drakengard1and2Extractor.AppClasses
                             {
                                 try
                                 {
-                                    StatusListBox.BeginInvoke((Action)(() => StatusMsg("Extracting files from " + Path.GetFileName(mbin_file) + "....")));
-                                    Drk1BIN.ExtractBin(mbin_file);
+                                    StatusListBox.BeginInvoke((Action)(() => StatusMsg("Extracting files from " + Path.GetFileName(mbinFile) + "....")));
+                                    Drk1BIN.ExtractBin(mbinFile);
                                 }
                                 finally
                                 {
@@ -106,9 +106,9 @@ namespace Drakengard1and2Extractor.AppClasses
                         StatusMsg("");
                         DisableButtons();
 
-                        var Header = "";
-                        HeaderCheck(mbin_file, ref Header);
-                        if (!Header.StartsWith("dpk"))
+                        var readHeader = "";
+                        CmnMethods.HeaderCheck(mbinFile, ref readHeader);
+                        if (!readHeader.StartsWith("dpk"))
                         {
                             StatusMsg("Error: Unable to detect dpk header");
                             StatusMsg("");
@@ -123,8 +123,8 @@ namespace Drakengard1and2Extractor.AppClasses
                             {
                                 try
                                 {
-                                    StatusListBox.BeginInvoke((Action)(() => StatusMsg("Extracting files from " + Path.GetFileName(mbin_file) + "....")));
-                                    Drk2BIN.ExtractBin(mbin_file);
+                                    StatusListBox.BeginInvoke((Action)(() => StatusMsg("Extracting files from " + Path.GetFileName(mbinFile) + "....")));
+                                    Drk2BIN.ExtractBin(mbinFile);
                                 }
                                 finally
                                 {
@@ -147,27 +147,27 @@ namespace Drakengard1and2Extractor.AppClasses
 
         private void ExtFpkBtn_MouseHover(object sender, EventArgs e)
         {
-            FPKtoolTip.Show("Extract a .fpk file", ExtFpkBtn);
+            FPKtoolTip.Show("Extract a .fpk file.", ExtFpkBtn);
 
         }
         private void ExtFpkBtn_Click(object sender, EventArgs e)
         {
             try
             {
-                OpenFileDialog fpk_select = new OpenFileDialog();
-                fpk_select.Filter = "FPK type files (*.fpk)" + $"|*.fpk";
-                fpk_select.RestoreDirectory = true;
+                OpenFileDialog fpkSelect = new OpenFileDialog();
+                fpkSelect.Filter = "FPK type files (*.fpk)" + $"|*.fpk";
+                fpkSelect.RestoreDirectory = true;
 
-                if (fpk_select.ShowDialog() == DialogResult.OK)
+                if (fpkSelect.ShowDialog() == DialogResult.OK)
                 {
                     StatusListBox.Items.Clear();
-                    string fpk_file = fpk_select.FileName;
+                    string fpkFile = fpkSelect.FileName;
 
-                    var Header = "";
-                    HeaderCheck(fpk_file, ref Header);
+                    var readHeader = "";
+                    CmnMethods.HeaderCheck(fpkFile, ref readHeader);
                     DisableButtons();
 
-                    if (!Header.StartsWith("fpk"))
+                    if (!readHeader.StartsWith("fpk"))
                     {
                         StatusMsg("Error: Unable to detect fpk header");
                         StatusMsg("");
@@ -182,8 +182,8 @@ namespace Drakengard1and2Extractor.AppClasses
                         {
                             try
                             {
-                                StatusListBox.BeginInvoke((Action)(() => StatusMsg("Extracting files from " + Path.GetFileName(fpk_file) + "....")));
-                                FileFPK.ExtractFPK(fpk_file);
+                                StatusListBox.BeginInvoke((Action)(() => StatusMsg("Extracting files from " + Path.GetFileName(fpkFile) + "....")));
+                                FileFPK.ExtractFPK(fpkFile, true);
                             }
                             finally
                             {
@@ -205,25 +205,25 @@ namespace Drakengard1and2Extractor.AppClasses
 
         private void ExtDpkBtn_MouseHover(object sender, EventArgs e)
         {
-            DPKtoolTip.Show("Extract a .dpk file from Drakengard 2", ExtDpkBtn);
+            DPKtoolTip.Show("Extract a .dpk file from Drakengard 2.", ExtDpkBtn);
         }
         private void ExtDpkBtn_Click(object sender, EventArgs e)
         {
             try
             {
-                OpenFileDialog dpk_select = new OpenFileDialog();
-                dpk_select.Filter = "DPK type files (*.dpk)" + $"|*.dpk";
-                dpk_select.RestoreDirectory = true;
+                OpenFileDialog dpkSelect = new OpenFileDialog();
+                dpkSelect.Filter = "DPK type files (*.dpk)" + $"|*.dpk";
+                dpkSelect.RestoreDirectory = true;
 
-                if (dpk_select.ShowDialog() == DialogResult.OK)
+                if (dpkSelect.ShowDialog() == DialogResult.OK)
                 {
                     StatusListBox.Items.Clear();
-                    string dpk_file = dpk_select.FileName;
+                    string dpkFile = dpkSelect.FileName;
 
-                    var Header = "";
-                    HeaderCheck(dpk_file, ref Header);
+                    var readHeader = "";
+                    CmnMethods.HeaderCheck(dpkFile, ref readHeader);
 
-                    if (!Header.StartsWith("dpk"))
+                    if (!readHeader.StartsWith("dpk"))
                     {
                         StatusMsg("Error: Unable to detect dpk header");
                         StatusMsg("");
@@ -238,8 +238,8 @@ namespace Drakengard1and2Extractor.AppClasses
                         {
                             try
                             {
-                                StatusListBox.BeginInvoke((Action)(() => StatusMsg("Extracting files from " + Path.GetFileName(dpk_file) + "....")));
-                                FileDPK.ExtractDPK(dpk_file);
+                                StatusListBox.BeginInvoke((Action)(() => StatusMsg("Extracting files from " + Path.GetFileName(dpkFile) + "....")));
+                                FileDPK.ExtractDPK(dpkFile, true);
                             }
                             finally
                             {
@@ -259,28 +259,39 @@ namespace Drakengard1and2Extractor.AppClasses
         }
 
 
+        private void BatchModeBtn_MouseHover(object sender, EventArgs e)
+        {
+            BatchModeToolTip.Show("Batch extracts all FPK or DPK files present in a directory.", BatchModeBtn);
+        }
+        private void BatchModeBtn_Click(object sender, EventArgs e)
+        {
+            BatchMode batchMode = new BatchMode();
+            batchMode.ShowDialog();
+        }
+
+
         private void ConvertZIMBtn_MouseHover(object sender, EventArgs e)
         {
-            ZIMtoolTip.Show("Convert a .zim image file to bmp, png or dds formats", ConvertZIMBtn);
+            ZIMtoolTip.Show("Convert a .zim image file to bmp, dds or png formats.", ConvertZIMBtn);
         }
         private void ConvertZIMBtn_Click(object sender, EventArgs e)
         {
             try
             {
-                OpenFileDialog zim_select = new OpenFileDialog();
-                zim_select.Filter = "ZIM type files (*.zim)" + $"|*.zim";
-                zim_select.RestoreDirectory = true;
+                OpenFileDialog zimSelect = new OpenFileDialog();
+                zimSelect.Filter = "ZIM type files (*.zim)" + $"|*.zim";
+                zimSelect.RestoreDirectory = true;
 
-                if (zim_select.ShowDialog() == DialogResult.OK)
+                if (zimSelect.ShowDialog() == DialogResult.OK)
                 {
                     StatusListBox.Items.Clear();
-                    string zim_file = zim_select.FileName;
+                    string zimFile = zimSelect.FileName;
 
-                    var Header = "";
-                    HeaderCheck(zim_file, ref Header);
+                    var readHeader = "";
+                    CmnMethods.HeaderCheck(zimFile, ref readHeader);
                     DisableButtons();
 
-                    if (!Header.StartsWith("wZIM"))
+                    if (!readHeader.StartsWith("wZIM"))
                     {
                         StatusMsg("Error: Unable to detect zim header");
                         StatusMsg("");
@@ -295,9 +306,9 @@ namespace Drakengard1and2Extractor.AppClasses
                         {
                             try
                             {
-                                StatusListBox.BeginInvoke((Action)(() => StatusMsg("Converting " + Path.GetFileName(zim_file) + "....")));
-                                FileZIM ConverterWindow = new FileZIM(zim_file);
-                                ConverterWindow.ShowDialog();
+                                StatusListBox.BeginInvoke((Action)(() => StatusMsg("Converting " + Path.GetFileName(zimFile) + "....")));
+                                FileZIM converterWindow = new FileZIM(zimFile);
+                                converterWindow.ShowDialog();
                             }
                             finally
                             {
@@ -319,26 +330,26 @@ namespace Drakengard1and2Extractor.AppClasses
 
         private void ConvertSPK0Btn_MouseHover(object sender, EventArgs e)
         {
-            SPK0toolTip.Show("Extracts a .spk0 file and converts the images inside the file to bmp, dds or png formats", ConvertSPK0Btn);
+            SPK0toolTip.Show("Extracts a .spk0 file and converts the images inside the file to bmp, dds or png formats.", ConvertSPK0Btn);
         }
         private void ConvertSPK0Btn_Click(object sender, EventArgs e)
         {
             try
             {
-                OpenFileDialog spk0_select = new OpenFileDialog();
-                spk0_select.Filter = "SPK0 type files (*.spk0)" + $"|*.spk0";
-                spk0_select.RestoreDirectory = true;
+                OpenFileDialog spk0Select = new OpenFileDialog();
+                spk0Select.Filter = "SPK0 type files (*.spk0)" + $"|*.spk0";
+                spk0Select.RestoreDirectory = true;
 
-                if (spk0_select.ShowDialog() == DialogResult.OK)
+                if (spk0Select.ShowDialog() == DialogResult.OK)
                 {
                     StatusListBox.Items.Clear();
-                    string spk0_file = spk0_select.FileName;
+                    string spk0File = spk0Select.FileName;
 
-                    var Header = "";
-                    HeaderCheck(spk0_file, ref Header);
+                    var readHeader = "";
+                    CmnMethods.HeaderCheck(spk0File, ref readHeader);
                     DisableButtons();
 
-                    if (!Header.StartsWith("SPK0"))
+                    if (!readHeader.StartsWith("SPK0"))
                     {
                         StatusMsg("Error: Unable to detect spk0 header");
                         StatusMsg("");
@@ -353,9 +364,9 @@ namespace Drakengard1and2Extractor.AppClasses
                         {
                             try
                             {
-                                StatusListBox.BeginInvoke((Action)(() => StatusMsg("Converting " + Path.GetFileName(spk0_file) + "....")));
-                                FileSPK0 ConverterWindow = new FileSPK0(spk0_file);
-                                ConverterWindow.ShowDialog();
+                                StatusListBox.BeginInvoke((Action)(() => StatusMsg("Converting " + Path.GetFileName(spk0File) + "....")));
+                                FileSPK0 converterWindow = new FileSPK0(spk0File);
+                                converterWindow.ShowDialog();
                             }
                             finally
                             {
@@ -410,23 +421,6 @@ namespace Drakengard1and2Extractor.AppClasses
             Drk1RadioButton.Enabled = false;
             Drk2RadioButton.Enabled = false;
         }
-
-
-        private static void HeaderCheck(string FileName, ref string HeaderVar)
-        {
-            using (FileStream ExtnCheck = new FileStream(FileName, FileMode.Open, FileAccess.Read))
-            {
-                using (BinaryReader ExtnCheckReader = new BinaryReader(ExtnCheck))
-                {
-                    ExtnCheckReader.BaseStream.Position = 0;
-                    var HeaderChars = ExtnCheckReader.ReadChars(4);
-                    HeaderVar = string.Join("", HeaderChars);
-                }
-
-                ExtnCheck.Dispose();
-            }
-        }
-
 
         private void EnableButtons()
         {

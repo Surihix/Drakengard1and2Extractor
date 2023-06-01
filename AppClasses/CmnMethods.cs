@@ -10,6 +10,21 @@ namespace Drakengard1and2Extractor.AppClasses
             MessageBox.Show(Msg, MsgHeader, MessageBoxButtons.OK, MsgType);
         }
 
+        public static void HeaderCheck(string FileName, ref string HeaderVar)
+        {
+            using (FileStream ExtnCheck = new FileStream(FileName, FileMode.Open, FileAccess.Read))
+            {
+                using (BinaryReader ExtnCheckReader = new BinaryReader(ExtnCheck))
+                {
+                    ExtnCheckReader.BaseStream.Position = 0;
+                    var HeaderChars = ExtnCheckReader.ReadChars(4);
+                    HeaderVar = string.Join("", HeaderChars);
+                }
+
+                ExtnCheck.Dispose();
+            }
+        }
+
         public static void FileDirectoryExistsDel(string fileOrFolderVar, DelSwitch delSwitchVar)
         {
             switch (delSwitchVar)
@@ -80,6 +95,9 @@ namespace Drakengard1and2Extractor.AppClasses
                     break;
                 case "DLGT":
                     RExtVar = ".dlgt";
+                    break;
+                case "pBAX":
+                    RExtVar = ".hd2";
                     break;
             }
             if (RealExt.StartsWith("bh"))

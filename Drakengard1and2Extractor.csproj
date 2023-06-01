@@ -114,6 +114,12 @@
     <Compile Include="AppClasses\AppAbout.Designer.cs">
       <DependentUpon>AppAbout.cs</DependentUpon>
     </Compile>
+    <Compile Include="AppClasses\BatchMode.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AppClasses\BatchMode.Designer.cs">
+      <DependentUpon>BatchMode.cs</DependentUpon>
+    </Compile>
     <Compile Include="AppClasses\CmnMethods.cs" />
     <Compile Include="AppClasses\Drk1BIN.cs" />
     <Compile Include="AppClasses\Drk2BIN.cs" />
@@ -129,6 +135,7 @@
     <Compile Include="AppClasses\FileZIM.Designer.cs">
       <DependentUpon>FileZIM.cs</DependentUpon>
     </Compile>
+    <Compile Include="Libraries\FolderPicker.cs" />
     <Compile Include="Libraries\ImageWriters.cs" />
     <Compile Include="Libraries\MiniLz0Lib.cs" />
     <Compile Include="AppClasses\FileDPK.cs" />
@@ -144,6 +151,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="AppClasses\AppAbout.resx">
       <DependentUpon>AppAbout.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="AppClasses\BatchMode.resx">
+      <DependentUpon>BatchMode.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="AppClasses\CoreForm.resx">
       <DependentUpon>CoreForm.cs</DependentUpon>

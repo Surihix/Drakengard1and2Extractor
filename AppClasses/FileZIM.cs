@@ -8,14 +8,15 @@ namespace Drakengard1and2Extractor.AppClasses
     public partial class FileZIM : Form
     {
         private readonly string ZimFileVar;
-        public FileZIM(string ZimFile)
+
+        public FileZIM(string zimFile)
         {
             try
             {
-                ZimFileVar = ZimFile;
+                ZimFileVar = zimFile;
 
                 var bppValue = 0;
-                using (FileStream fs = new FileStream(ZimFile, FileMode.Open, FileAccess.Read))
+                using (FileStream fs = new FileStream(zimFile, FileMode.Open, FileAccess.Read))
                 {
                     using (BinaryReader br = new BinaryReader(fs))
                     {

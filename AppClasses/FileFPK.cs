@@ -8,7 +8,7 @@ namespace Drakengard1and2Extractor.AppClasses
 {
     public class FileFPK
     {
-        public static void ExtractFPK(string fpkFile)
+        public static void ExtractFPK(string fpkFile, bool isSingleFile)
         {
             var extractDir = Path.GetFullPath(fpkFile) + "_extracted";
             CmnMethods.FileDirectoryExistsDel(extractDir, CmnMethods.DelSwitch.folder);
@@ -37,7 +37,7 @@ namespace Drakengard1and2Extractor.AppClasses
 
                         uint intialOffset = 132;
                         var fName = "FILE_";
-                        var rExt = "";
+                        var rExtn = "";
                         int fileCount = 1;
                         for (int f = 0; f < entries; f++)
                         {
@@ -51,18 +51,18 @@ namespace Drakengard1and2Extractor.AppClasses
                             var extnChar = fpkReader.ReadChars(4);
                             Array.Reverse(extnChar);
 
-                            string fileExt = string.Join("", extnChar).Replace("\0", "");
-                            CmnMethods.ModifyString(ref fileExt);
+                            string fileExtn = string.Join("", extnChar).Replace("\0", "");
+                            CmnMethods.ModifyString(ref fileExtn);
 
-                            switch (fileExt.StartsWith("/") || fileExt.StartsWith("\\"))
+                            switch (fileExtn.StartsWith("/") || fileExtn.StartsWith("\\"))
                             {
                                 case true:
                                     break;
 
                                 case false:
-                                    string fExt = "." + fileExt;
+                                    string fExtn = "." + fileExtn;
 
-                                    using (FileStream outFileStream = new FileStream(extractDir + "/" + fName + $"{fileCount}" + fExt, FileMode.OpenOrCreate, FileAccess.ReadWrite))
+                                    using (FileStream outFileStream = new FileStream(extractDir + "/" + fName + $"{fileCount}" + fExtn, FileMode.OpenOrCreate, FileAccess.ReadWrite))
                                     {
                                         fpkDataStream.Seek(outFileStart, SeekOrigin.Begin);
                                         byte[] outFilebuffer = new byte[outFileSize];
@@ -71,37 +71,37 @@ namespace Drakengard1and2Extractor.AppClasses
 
                                         using (BinaryReader outFileReader = new BinaryReader(outFileStream))
                                         {
-                                            CmnMethods.GetFileHeader(outFileReader, ref rExt);
+                                            CmnMethods.GetFileHeader(outFileReader, ref rExtn);
                                         }
                                     }
 
-                                    File.Move(extractDir + "/" + fName + $"{fileCount}" + fExt, extractDir + "/" + fName + $"{fileCount}" + fExt + rExt);
+                                    File.Move(extractDir + "/" + fName + $"{fileCount}" + fExtn, extractDir + "/" + fName + $"{fileCount}" + fExtn + rExtn);
 
-                                    string[] knownExtArray = { ".fpk", ".dpk", ".zim", ".lz0", ".kps", ".kvm", ".spk0", ".emt", ".dcmr", ".dlgt", ".hi4" };
+                                    string[] knownExtnArray = { ".fpk", ".dpk", ".zim", ".lz0", ".kps", ".kvm", ".spk0", ".emt", ".dcmr", ".dlgt", ".hi4", ".hd2"};
 
-                                    if (knownExtArray.Contains(rExt))
+                                    if (knownExtnArray.Contains(rExtn))
                                     {
-                                        if (!rExt.Contains(".lz0"))
+                                        if (!rExtn.Contains(".lz0"))
                                         {
-                                            var outFileNameWithoutExtn = Path.GetFileNameWithoutExtension(extractDir + "/" + fName + $"{fileCount}" + fExt + rExt);
-                                            File.Move(extractDir + "/" + fName + $"{fileCount}" + fExt + rExt, extractDir + "/" + outFileNameWithoutExtn);
+                                            var outFileNameWithoutExtn = Path.GetFileNameWithoutExtension(extractDir + "/" + fName + $"{fileCount}" + fExtn + rExtn);
+                                            File.Move(extractDir + "/" + fName + $"{fileCount}" + fExtn + rExtn, extractDir + "/" + outFileNameWithoutExtn);
 
-                                            var outFileNameProperExt = Path.GetFileNameWithoutExtension(extractDir + "/" + outFileNameWithoutExtn);
-                                            var adjExt = "";
+                                            var outFileNameProperExtn = Path.GetFileNameWithoutExtension(extractDir + "/" + outFileNameWithoutExtn);
+                                            var adjExtn = "";
                                             using (FileStream extnStream = new FileStream(extractDir + "/" + outFileNameWithoutExtn, FileMode.Open, FileAccess.Read))
                                             {
                                                 using (BinaryReader extnReader = new BinaryReader(extnStream))
                                                 {
-                                                    CmnMethods.GetFileHeader(extnReader, ref adjExt);
+                                                    CmnMethods.GetFileHeader(extnReader, ref adjExtn);
                                                 }
                                             }
 
-                                            File.Move(extractDir + "/" + outFileNameWithoutExtn, extractDir + "/" + outFileNameProperExt + adjExt);
+                                            File.Move(extractDir + "/" + outFileNameWithoutExtn, extractDir + "/" + outFileNameProperExtn + adjExtn);
                                         }
                                         else
                                         {
-                                            var outLzoFile = extractDir + "/" + fName + $"{fileCount}" + fExt + rExt;
-                                            var outDcmpLzoFile = extractDir + "/" + Path.GetFileNameWithoutExtension(extractDir + "/" + fName + $"{fileCount}" + fExt + rExt);
+                                            var outLzoFile = extractDir + "/" + fName + $"{fileCount}" + fExtn + rExtn;
+                                            var outDcmpLzoFile = extractDir + "/" + Path.GetFileNameWithoutExtension(extractDir + "/" + fName + $"{fileCount}" + fExtn + rExtn);
 
                                             using (FileStream lzoStream = new FileStream(outLzoFile, FileMode.Open, FileAccess.Read))
                                             {
@@ -151,21 +151,21 @@ namespace Drakengard1and2Extractor.AppClasses
 
                                             File.Delete(outLzoFile);
 
-                                            using (FileStream dcmplzoFile = new FileStream(outDcmpLzoFile, FileMode.Open, FileAccess.Read))
+                                            using (FileStream dcmpLzoFile = new FileStream(outDcmpLzoFile, FileMode.Open, FileAccess.Read))
                                             {
-                                                using (BinaryReader dcmpFileReader = new BinaryReader(dcmplzoFile))
+                                                using (BinaryReader dcmpFileReader = new BinaryReader(dcmpLzoFile))
                                                 {
-                                                    CmnMethods.GetFileHeader(dcmpFileReader, ref rExt);
+                                                    CmnMethods.GetFileHeader(dcmpFileReader, ref rExtn);
                                                 }
 
-                                                File.Move(outDcmpLzoFile, extractDir + "/" + fName + $"{fileCount}" + rExt);
+                                                File.Move(outDcmpLzoFile, extractDir + "/" + fName + $"{fileCount}" + rExtn);
                                             }
                                         }
                                     }
                                     break;
                             }
 
-                            rExt = "";
+                            rExtn = "";
 
                             intialOffset += 16;
                             fileCount++;
@@ -176,7 +176,10 @@ namespace Drakengard1and2Extractor.AppClasses
                 }
             }
 
-            CmnMethods.AppMsgBox("Extracted " + Path.GetFileName(fpkFile) + " file", "Success", MessageBoxIcon.Information);
+            if (isSingleFile.Equals(true))
+            {
+                CmnMethods.AppMsgBox("Extracted " + Path.GetFileName(fpkFile) + " file", "Success", MessageBoxIcon.Information);
+            }
         }
     }
 }

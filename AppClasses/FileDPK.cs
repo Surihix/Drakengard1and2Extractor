@@ -5,58 +5,61 @@ namespace Drakengard1and2Extractor.AppClasses
 {
     public class FileDPK
     {
-        public static void ExtractDPK(string DpkFile)
+        public static void ExtractDPK(string dpkFile, bool isSingleFile)
         {
-            var Extract_dir = Path.GetFullPath(DpkFile) + "_extracted";
-            CmnMethods.FileDirectoryExistsDel(Extract_dir, CmnMethods.DelSwitch.folder);
-            Directory.CreateDirectory(Extract_dir);
+            var extractDir = Path.GetFullPath(dpkFile) + "_extracted";
+            CmnMethods.FileDirectoryExistsDel(extractDir, CmnMethods.DelSwitch.folder);
+            Directory.CreateDirectory(extractDir);
 
-            using (FileStream DpkStream = new FileStream(DpkFile, FileMode.Open, FileAccess.Read))
+            using (FileStream dpkStream = new FileStream(dpkFile, FileMode.Open, FileAccess.Read))
             {
-                using (BinaryReader DpkReader = new BinaryReader(DpkStream))
+                using (BinaryReader dpkReader = new BinaryReader(dpkStream))
                 {
-                    DpkReader.BaseStream.Position = 16;
-                    var Entries = DpkReader.ReadUInt32();
-                    int FileCount = 1;
+                    dpkReader.BaseStream.Position = 16;
+                    var entries = dpkReader.ReadUInt32();
+                    int fileCount = 1;
 
 
-                    int IntialOffsetPos = 48;
+                    int intialOffset = 48;
                     string fname = "FILE_";
-                    string RExt = "";
-                    for (int f = 0; f < Entries; f++)
+                    string rExtn = "";
+                    for (int f = 0; f < entries; f++)
                     {
-                        DpkReader.BaseStream.Position = IntialOffsetPos;
-                        var fileSize = DpkReader.ReadUInt32();
-                        DpkReader.BaseStream.Position = IntialOffsetPos + 8;
-                        var fileStart = DpkReader.ReadUInt32();
+                        dpkReader.BaseStream.Position = intialOffset;
+                        var fileSize = dpkReader.ReadUInt32();
+                        dpkReader.BaseStream.Position = intialOffset + 8;
+                        var fileStart = dpkReader.ReadUInt32();
 
-                        DpkStream.Seek(fileStart, SeekOrigin.Begin);
-                        using (FileStream SplitFileOut = new FileStream(Extract_dir + "/" + fname + $"{FileCount}", FileMode.OpenOrCreate, FileAccess.ReadWrite))
+                        dpkStream.Seek(fileStart, SeekOrigin.Begin);
+                        using (FileStream outFileStream = new FileStream(extractDir + "/" + fname + $"{fileCount}", FileMode.OpenOrCreate, FileAccess.ReadWrite))
                         {
-                            byte[] SplitFileBuffer = new byte[fileSize];
-                            var BytesToRead = DpkStream.Read(SplitFileBuffer, 0, SplitFileBuffer.Length);
-                            SplitFileOut.Write(SplitFileBuffer, 0, BytesToRead);
+                            byte[] outFilebuffer = new byte[fileSize];
+                            var outFileDataToCopy = dpkStream.Read(outFilebuffer, 0, outFilebuffer.Length);
+                            outFileStream.Write(outFilebuffer, 0, outFileDataToCopy);
                         }
 
-                        var CurrentFile = Extract_dir + "/" + fname + $"{FileCount}";
-                        using (FileStream SplitFile = new FileStream(CurrentFile, FileMode.Open, FileAccess.Read))
+                        var currentFile = extractDir + "/" + fname + $"{fileCount}";
+                        using (FileStream extractedOutFileStream = new FileStream(currentFile, FileMode.Open, FileAccess.Read))
                         {
-                            using (BinaryReader SplitFileReader = new BinaryReader(SplitFile))
+                            using (BinaryReader extractedOutFileReader = new BinaryReader(extractedOutFileStream))
                             {
-                                CmnMethods.GetFileHeader(SplitFileReader, ref RExt);
+                                CmnMethods.GetFileHeader(extractedOutFileReader, ref rExtn);
                             }
                         }
-                        File.Move(CurrentFile, CurrentFile + RExt);
+                        File.Move(currentFile, currentFile + rExtn);
 
-                        RExt = "";
+                        rExtn = "";
 
-                        IntialOffsetPos += 32;
-                        FileCount++;
+                        intialOffset += 32;
+                        fileCount++;
                     }
                 }
             }
 
-            CmnMethods.AppMsgBox("Extracted " + Path.GetFileName(DpkFile) + " file", "Success", MessageBoxIcon.Information);
+            if (isSingleFile.Equals(true))
+            {
+                CmnMethods.AppMsgBox("Extracted " + Path.GetFileName(dpkFile) + " file", "Success", MessageBoxIcon.Information);
+            }
         }
     }
 }

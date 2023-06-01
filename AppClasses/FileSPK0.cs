@@ -8,6 +8,7 @@ namespace Drakengard1and2Extractor.AppClasses
     public partial class FileSPK0 : Form
     {
         private readonly string Spk0FileVar;
+
         public FileSPK0(string spk0File)
         {
             try
