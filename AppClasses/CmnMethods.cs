@@ -5,23 +5,23 @@ namespace Drakengard1and2Extractor.AppClasses
 {
     internal class CmnMethods
     {
-        public static void AppMsgBox(string Msg, string MsgHeader, MessageBoxIcon MsgType)
+        public static void AppMsgBox(string msg, string msgHeader, MessageBoxIcon msgType)
         {
-            MessageBox.Show(Msg, MsgHeader, MessageBoxButtons.OK, MsgType);
+            MessageBox.Show(msg, msgHeader, MessageBoxButtons.OK, msgType);
         }
 
-        public static void HeaderCheck(string FileName, ref string HeaderVar)
+        public static void HeaderCheck(string fileName, ref string headerVar)
         {
-            using (FileStream ExtnCheck = new FileStream(FileName, FileMode.Open, FileAccess.Read))
+            using (FileStream extnCheck = new FileStream(fileName, FileMode.Open, FileAccess.Read))
             {
-                using (BinaryReader ExtnCheckReader = new BinaryReader(ExtnCheck))
+                using (BinaryReader extnCheckReader = new BinaryReader(extnCheck))
                 {
-                    ExtnCheckReader.BaseStream.Position = 0;
-                    var HeaderChars = ExtnCheckReader.ReadChars(4);
-                    HeaderVar = string.Join("", HeaderChars);
+                    extnCheckReader.BaseStream.Position = 0;
+                    var headerChars = extnCheckReader.ReadChars(4);
+                    headerVar = string.Join("", headerChars);
                 }
 
-                ExtnCheck.Dispose();
+                extnCheck.Dispose();
             }
         }
 
@@ -58,51 +58,51 @@ namespace Drakengard1and2Extractor.AppClasses
                 Replace("4ita", "4ita.fpk").Replace("5spa", "5spa.fpk");
         }
 
-        public static void GetFileHeader(BinaryReader ReaderName, ref string RExtVar)
+        public static void GetFileHeader(BinaryReader readerName, ref string rExtnVar)
         {
-            ReaderName.BaseStream.Position = 0;
-            var FoundExt = ReaderName.ReadChars(4);
-            string RealExt = string.Join("", FoundExt).Replace("\0", "");
+            readerName.BaseStream.Position = 0;
+            var foundExtn = readerName.ReadChars(4);
+            string realExtn = string.Join("", foundExtn).Replace("\0", "");
 
-            switch (RealExt)
+            switch (realExtn)
             {
                 case "fpk":
-                    RExtVar = ".fpk";
+                    rExtnVar = ".fpk";
                     break;
                 case "dpk":
-                    RExtVar = ".dpk";
+                    rExtnVar = ".dpk";
                     break;
                 case "wZIM":
-                    RExtVar = ".zim";
+                    rExtnVar = ".zim";
                     break;
                 case "V3a":
-                    RExtVar = ".lz0";
+                    rExtnVar = ".lz0";
                     break;
                 case "KPS_":
-                    RExtVar = ".kps";
+                    rExtnVar = ".kps";
                     break;
                 case "kvm1":
-                    RExtVar = ".kvm";
+                    rExtnVar = ".kvm";
                     break;
                 case "SPK0":
-                    RExtVar = ".spk0";
+                    rExtnVar = ".spk0";
                     break;
                 case "EVMT":
-                    RExtVar = ".emt";
+                    rExtnVar = ".emt";
                     break;
                 case "DCMR":
-                    RExtVar = ".dcmr";
+                    rExtnVar = ".dcmr";
                     break;
                 case "DLGT":
-                    RExtVar = ".dlgt";
+                    rExtnVar = ".dlgt";
                     break;
                 case "pBAX":
-                    RExtVar = ".hd2";
+                    rExtnVar = ".hd2";
                     break;
             }
-            if (RealExt.StartsWith("bh"))
+            if (realExtn.StartsWith("bh"))
             {
-                RExtVar = ".hi4";
+                rExtnVar = ".hi4";
             }
         }
     }

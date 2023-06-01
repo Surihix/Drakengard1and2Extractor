@@ -46,7 +46,7 @@
             this.AboutWindowBtn.Location = new System.Drawing.Point(111, 267);
             this.AboutWindowBtn.Name = "AboutWindowBtn";
             this.AboutWindowBtn.Size = new System.Drawing.Size(75, 23);
-            this.AboutWindowBtn.TabIndex = 0;
+            this.AboutWindowBtn.TabIndex = 2;
             this.AboutWindowBtn.Text = "OK";
             this.AboutWindowBtn.UseVisualStyleBackColor = true;
             this.AboutWindowBtn.Click += new System.EventHandler(this.AboutWindowBtn_Click);
@@ -58,7 +58,7 @@
             this.Creditlabel1.Location = new System.Drawing.Point(8, 17);
             this.Creditlabel1.Name = "Creditlabel1";
             this.Creditlabel1.Size = new System.Drawing.Size(144, 15);
-            this.Creditlabel1.TabIndex = 2;
+            this.Creditlabel1.TabIndex = 0;
             this.Creditlabel1.Text = "App Programmer : Surihix";
             // 
             // Creditlabel2
@@ -68,7 +68,7 @@
             this.Creditlabel2.Location = new System.Drawing.Point(8, 48);
             this.Creditlabel2.Name = "Creditlabel2";
             this.Creditlabel2.Size = new System.Drawing.Size(132, 15);
-            this.Creditlabel2.TabIndex = 3;
+            this.Creditlabel2.TabIndex = 1;
             this.Creditlabel2.Text = "Minilzo Library : Bartz24";
             // 
             // Creditlabel3
@@ -78,7 +78,7 @@
             this.Creditlabel3.Location = new System.Drawing.Point(8, 67);
             this.Creditlabel3.Name = "Creditlabel3";
             this.Creditlabel3.Size = new System.Drawing.Size(142, 15);
-            this.Creditlabel3.TabIndex = 4;
+            this.Creditlabel3.TabIndex = 2;
             this.Creditlabel3.Text = "PS2 Palette Swizzle : Mugi";
             // 
             // AppAboutPictureBox
@@ -97,7 +97,7 @@
             this.CreditLabel4.Location = new System.Drawing.Point(8, 86);
             this.CreditLabel4.Name = "CreditLabel4";
             this.CreditLabel4.Size = new System.Drawing.Size(173, 15);
-            this.CreditLabel4.TabIndex = 5;
+            this.CreditLabel4.TabIndex = 3;
             this.CreditLabel4.Text = "Folder Picker : Simon Mourier ";
             // 
             // groupBox1
@@ -109,7 +109,7 @@
             this.groupBox1.Location = new System.Drawing.Point(12, 140);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(273, 110);
-            this.groupBox1.TabIndex = 6;
+            this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Credits :";
             // 
@@ -117,10 +117,10 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(89, 61);
+            this.label1.Location = new System.Drawing.Point(88, 61);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(197, 15);
-            this.label1.TabIndex = 7;
+            this.label1.TabIndex = 0;
             this.label1.Text = "Drakengard 1 and 2 - File Extractor";
             // 
             // AppAbout

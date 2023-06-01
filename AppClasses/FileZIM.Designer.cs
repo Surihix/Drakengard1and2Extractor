@@ -45,7 +45,7 @@
             this.ConvertZIMImgBtn.Location = new System.Drawing.Point(229, 45);
             this.ConvertZIMImgBtn.Name = "ConvertZIMImgBtn";
             this.ConvertZIMImgBtn.Size = new System.Drawing.Size(75, 23);
-            this.ConvertZIMImgBtn.TabIndex = 1;
+            this.ConvertZIMImgBtn.TabIndex = 2;
             this.ConvertZIMImgBtn.Text = "Convert";
             this.ConvertZIMImgBtn.UseVisualStyleBackColor = true;
             this.ConvertZIMImgBtn.Click += new System.EventHandler(this.ConvertZIMImgBtn_Click);
@@ -69,7 +69,7 @@
             this.ZimAlphaCompLabel.Location = new System.Drawing.Point(12, 80);
             this.ZimAlphaCompLabel.Name = "ZimAlphaCompLabel";
             this.ZimAlphaCompLabel.Size = new System.Drawing.Size(143, 13);
-            this.ZimAlphaCompLabel.TabIndex = 6;
+            this.ZimAlphaCompLabel.TabIndex = 3;
             this.ZimAlphaCompLabel.Text = "Alpha Compensation (0-128):";
             // 
             // UnSwizzleCheckBox
@@ -78,7 +78,7 @@
             this.UnSwizzleCheckBox.Location = new System.Drawing.Point(15, 107);
             this.UnSwizzleCheckBox.Name = "UnSwizzleCheckBox";
             this.UnSwizzleCheckBox.Size = new System.Drawing.Size(155, 17);
-            this.UnSwizzleCheckBox.TabIndex = 8;
+            this.UnSwizzleCheckBox.TabIndex = 5;
             this.UnSwizzleCheckBox.Text = "Unswizzle 8bpp image data";
             this.UnSwizzleCheckBox.UseVisualStyleBackColor = true;
             this.UnSwizzleCheckBox.MouseHover += new System.EventHandler(this.UnSwizzleCheckBox_MouseHover);
@@ -94,7 +94,7 @@
             this.ZimSaveAsComboBox.Location = new System.Drawing.Point(13, 46);
             this.ZimSaveAsComboBox.Name = "ZimSaveAsComboBox";
             this.ZimSaveAsComboBox.Size = new System.Drawing.Size(209, 21);
-            this.ZimSaveAsComboBox.TabIndex = 9;
+            this.ZimSaveAsComboBox.TabIndex = 1;
             this.ZimSaveAsComboBox.SelectionChangeCommitted += new System.EventHandler(this.ZimSaveAsComboBox_SelectionChangeCommitted);
             // 
             // ZimSaveAsLabel
@@ -103,7 +103,7 @@
             this.ZimSaveAsLabel.Location = new System.Drawing.Point(12, 29);
             this.ZimSaveAsLabel.Name = "ZimSaveAsLabel";
             this.ZimSaveAsLabel.Size = new System.Drawing.Size(82, 13);
-            this.ZimSaveAsLabel.TabIndex = 10;
+            this.ZimSaveAsLabel.TabIndex = 0;
             this.ZimSaveAsLabel.Text = "Save Image As:";
             // 
             // FileZIM

@@ -41,7 +41,7 @@
             this.ConvertSPK0ImgBtn.Location = new System.Drawing.Point(229, 45);
             this.ConvertSPK0ImgBtn.Name = "ConvertSPK0ImgBtn";
             this.ConvertSPK0ImgBtn.Size = new System.Drawing.Size(75, 23);
-            this.ConvertSPK0ImgBtn.TabIndex = 0;
+            this.ConvertSPK0ImgBtn.TabIndex = 2;
             this.ConvertSPK0ImgBtn.Text = "Convert";
             this.ConvertSPK0ImgBtn.UseVisualStyleBackColor = true;
             this.ConvertSPK0ImgBtn.Click += new System.EventHandler(this.ConvertSPK0ImgBtn_Click);
@@ -66,7 +66,7 @@
             this.Spk0SaveAsLabel.Location = new System.Drawing.Point(12, 29);
             this.Spk0SaveAsLabel.Name = "Spk0SaveAsLabel";
             this.Spk0SaveAsLabel.Size = new System.Drawing.Size(87, 13);
-            this.Spk0SaveAsLabel.TabIndex = 2;
+            this.Spk0SaveAsLabel.TabIndex = 0;
             this.Spk0SaveAsLabel.Text = "Save Images As:";
             // 
             // Spk0AlphaCompNumericUpDown
@@ -79,7 +79,7 @@
             0});
             this.Spk0AlphaCompNumericUpDown.Name = "Spk0AlphaCompNumericUpDown";
             this.Spk0AlphaCompNumericUpDown.Size = new System.Drawing.Size(44, 20);
-            this.Spk0AlphaCompNumericUpDown.TabIndex = 3;
+            this.Spk0AlphaCompNumericUpDown.TabIndex = 4;
             // 
             // Spk0AlphaCompLabel
             // 
@@ -87,7 +87,7 @@
             this.Spk0AlphaCompLabel.Location = new System.Drawing.Point(12, 80);
             this.Spk0AlphaCompLabel.Name = "Spk0AlphaCompLabel";
             this.Spk0AlphaCompLabel.Size = new System.Drawing.Size(143, 13);
-            this.Spk0AlphaCompLabel.TabIndex = 4;
+            this.Spk0AlphaCompLabel.TabIndex = 3;
             this.Spk0AlphaCompLabel.Text = "Alpha Compensation (0-128):";
             // 
             // FileSPK0

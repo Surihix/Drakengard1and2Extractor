@@ -65,7 +65,7 @@
             this.StatusListBox.Location = new System.Drawing.Point(12, 118);
             this.StatusListBox.Name = "StatusListBox";
             this.StatusListBox.Size = new System.Drawing.Size(194, 56);
-            this.StatusListBox.TabIndex = 2;
+            this.StatusListBox.TabIndex = 3;
             // 
             // label1
             // 
@@ -73,7 +73,7 @@
             this.label1.Location = new System.Drawing.Point(13, 102);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(40, 13);
-            this.label1.TabIndex = 3;
+            this.label1.TabIndex = 2;
             this.label1.Text = "Status:";
             // 
             // BatchMode

@@ -67,7 +67,7 @@
             this.StatusListBox.Location = new System.Drawing.Point(12, 405);
             this.StatusListBox.Name = "StatusListBox";
             this.StatusListBox.Size = new System.Drawing.Size(356, 69);
-            this.StatusListBox.TabIndex = 0;
+            this.StatusListBox.TabIndex = 5;
             // 
             // BINFileExtGrp
             // 
@@ -76,7 +76,7 @@
             this.BINFileExtGrp.Location = new System.Drawing.Point(12, 141);
             this.BINFileExtGrp.Name = "BINFileExtGrp";
             this.BINFileExtGrp.Size = new System.Drawing.Size(168, 79);
-            this.BINFileExtGrp.TabIndex = 2;
+            this.BINFileExtGrp.TabIndex = 0;
             this.BINFileExtGrp.TabStop = false;
             this.BINFileExtGrp.Text = "Game Selection :";
             // 
@@ -110,7 +110,7 @@
             this.ExtBinBtn.Location = new System.Drawing.Point(29, 56);
             this.ExtBinBtn.Name = "ExtBinBtn";
             this.ExtBinBtn.Size = new System.Drawing.Size(103, 39);
-            this.ExtBinBtn.TabIndex = 2;
+            this.ExtBinBtn.TabIndex = 0;
             this.ExtBinBtn.Text = "Extract BIN";
             this.ExtBinBtn.UseVisualStyleBackColor = true;
             this.ExtBinBtn.Click += new System.EventHandler(this.ExtBinBtn_Click);
@@ -124,7 +124,7 @@
             this.FileExtGrp.Location = new System.Drawing.Point(201, 141);
             this.FileExtGrp.Name = "FileExtGrp";
             this.FileExtGrp.Size = new System.Drawing.Size(168, 130);
-            this.FileExtGrp.TabIndex = 3;
+            this.FileExtGrp.TabIndex = 1;
             this.FileExtGrp.TabStop = false;
             this.FileExtGrp.Text = "File Extraction :";
             // 
@@ -133,7 +133,7 @@
             this.BatchModeBtn.Location = new System.Drawing.Point(46, 90);
             this.BatchModeBtn.Name = "BatchModeBtn";
             this.BatchModeBtn.Size = new System.Drawing.Size(84, 28);
-            this.BatchModeBtn.TabIndex = 4;
+            this.BatchModeBtn.TabIndex = 2;
             this.BatchModeBtn.Text = "Batch Mode";
             this.BatchModeBtn.UseVisualStyleBackColor = true;
             this.BatchModeBtn.Click += new System.EventHandler(this.BatchModeBtn_Click);
@@ -166,7 +166,7 @@
             this.ConvertSPK0Btn.Location = new System.Drawing.Point(45, 53);
             this.ConvertSPK0Btn.Name = "ConvertSPK0Btn";
             this.ConvertSPK0Btn.Size = new System.Drawing.Size(84, 28);
-            this.ConvertSPK0Btn.TabIndex = 3;
+            this.ConvertSPK0Btn.TabIndex = 1;
             this.ConvertSPK0Btn.Text = "Convert SPK0";
             this.ConvertSPK0Btn.UseVisualStyleBackColor = true;
             this.ConvertSPK0Btn.Click += new System.EventHandler(this.ConvertSPK0Btn_Click);
@@ -177,7 +177,7 @@
             this.ConvertZIMBtn.Location = new System.Drawing.Point(45, 19);
             this.ConvertZIMBtn.Name = "ConvertZIMBtn";
             this.ConvertZIMBtn.Size = new System.Drawing.Size(84, 28);
-            this.ConvertZIMBtn.TabIndex = 2;
+            this.ConvertZIMBtn.TabIndex = 0;
             this.ConvertZIMBtn.Text = "Convert ZIM";
             this.ConvertZIMBtn.UseVisualStyleBackColor = true;
             this.ConvertZIMBtn.Click += new System.EventHandler(this.ConvertZIMBtn_Click);
@@ -190,7 +190,7 @@
             this.AboutlinkLabel.Location = new System.Drawing.Point(14, 482);
             this.AboutlinkLabel.Name = "AboutlinkLabel";
             this.AboutlinkLabel.Size = new System.Drawing.Size(38, 15);
-            this.AboutlinkLabel.TabIndex = 4;
+            this.AboutlinkLabel.TabIndex = 6;
             this.AboutlinkLabel.TabStop = true;
             this.AboutlinkLabel.Text = "About";
             this.AboutlinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.AboutlinkLabel_LinkClicked);
@@ -202,7 +202,7 @@
             this.HelpLinkLabel.Location = new System.Drawing.Point(335, 482);
             this.HelpLinkLabel.Name = "HelpLinkLabel";
             this.HelpLinkLabel.Size = new System.Drawing.Size(33, 15);
-            this.HelpLinkLabel.TabIndex = 5;
+            this.HelpLinkLabel.TabIndex = 8;
             this.HelpLinkLabel.TabStop = true;
             this.HelpLinkLabel.Text = "Help";
             this.HelpLinkLabel.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.HelpLinkLabel_LinkClicked);
@@ -213,7 +213,7 @@
             this.Versionlabel.Location = new System.Drawing.Point(172, 484);
             this.Versionlabel.Name = "Versionlabel";
             this.Versionlabel.Size = new System.Drawing.Size(28, 13);
-            this.Versionlabel.TabIndex = 6;
+            this.Versionlabel.TabIndex = 7;
             this.Versionlabel.Text = "v2.1";
             // 
             // StatusLabel
@@ -222,7 +222,7 @@
             this.StatusLabel.Location = new System.Drawing.Point(14, 391);
             this.StatusLabel.Name = "StatusLabel";
             this.StatusLabel.Size = new System.Drawing.Size(40, 13);
-            this.StatusLabel.TabIndex = 7;
+            this.StatusLabel.TabIndex = 4;
             this.StatusLabel.Text = "Status:";
             // 
             // AppPictureBox
@@ -241,7 +241,7 @@
             this.ImgConvertersGroupBox.Location = new System.Drawing.Point(202, 288);
             this.ImgConvertersGroupBox.Name = "ImgConvertersGroupBox";
             this.ImgConvertersGroupBox.Size = new System.Drawing.Size(167, 95);
-            this.ImgConvertersGroupBox.TabIndex = 8;
+            this.ImgConvertersGroupBox.TabIndex = 3;
             this.ImgConvertersGroupBox.TabStop = false;
             this.ImgConvertersGroupBox.Text = "Convert Images :";
             // 
@@ -251,7 +251,7 @@
             this.BinExtractionGroupBox.Location = new System.Drawing.Point(12, 235);
             this.BinExtractionGroupBox.Name = "BinExtractionGroupBox";
             this.BinExtractionGroupBox.Size = new System.Drawing.Size(168, 148);
-            this.BinExtractionGroupBox.TabIndex = 9;
+            this.BinExtractionGroupBox.TabIndex = 2;
             this.BinExtractionGroupBox.TabStop = false;
             this.BinExtractionGroupBox.Text = "BIN Extraction :";
             // 

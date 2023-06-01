@@ -29,6 +29,7 @@ namespace Drakengard1and2Extractor.AppClasses
         {
             var currentWindow = (BatchMode)Application.OpenForms[1];
             var fpkDirSelect = new FolderPicker();
+            fpkDirSelect.Title = "Select a folder that has fpk files";
 
             if (fpkDirSelect.ShowDialog(currentWindow.Handle) == true)
             {
@@ -75,6 +76,7 @@ namespace Drakengard1and2Extractor.AppClasses
         {
             var currentWindow = (BatchMode)Application.OpenForms[1];
             var dpkDirSelect = new FolderPicker();
+            dpkDirSelect.Title = "Select a folder that has dpk files";
 
             if (dpkDirSelect.ShowDialog(currentWindow.Handle) == true)
             {
