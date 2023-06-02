@@ -6,177 +6,169 @@ using System.Windows.Forms;
 
 namespace Drakengard1and2Extractor.Tools
 {
-    public class FileFPK
+    internal class FileFPK
     {
         public static void ExtractFPK(string fpkFile, bool isSingleFile)
         {
-            var extractDir = Path.GetFullPath(fpkFile) + "_extracted";
-            CmnMethods.FileDirectoryExistsDel(extractDir, CmnMethods.DelSwitch.folder);
-            Directory.CreateDirectory(extractDir);
-
-            using (FileStream fpkStream = new FileStream(fpkFile, FileMode.Open, FileAccess.Read))
+            try
             {
-                using (BinaryReader fpkReader = new BinaryReader(fpkStream))
+                var extractDir = Path.GetFullPath(fpkFile) + "_extracted";
+                CmnMethods.FileDirectoryExistsDel(extractDir, CmnMethods.DelSwitch.folder);
+                Directory.CreateDirectory(extractDir);
+
+                using (FileStream fpkStream = new FileStream(fpkFile, FileMode.Open, FileAccess.Read))
                 {
-                    fpkReader.BaseStream.Position = 8;
-                    var entries = fpkReader.ReadUInt32();
-
-                    fpkReader.BaseStream.Position = 40;
-                    var fpkDataStart = fpkReader.ReadUInt32();
-                    var fpkDataSize = fpkReader.ReadUInt32();
-
-                    CmnMethods.FileDirectoryExistsDel(extractDir + "/_.archive", CmnMethods.DelSwitch.file);
-
-                    using (FileStream fpkDataStream = new FileStream(extractDir + "/_.archive", FileMode.OpenOrCreate, FileAccess.ReadWrite))
+                    using (BinaryReader fpkReader = new BinaryReader(fpkStream))
                     {
-                        fpkStream.Seek(fpkDataStart, SeekOrigin.Begin);
-                        byte[] fpkDataBuffer = new byte[fpkDataSize];
-                        var fpkDataToCopy = fpkStream.Read(fpkDataBuffer, 0, fpkDataBuffer.Length);
-                        fpkDataStream.Write(fpkDataBuffer, 0, fpkDataToCopy);
+                        fpkReader.BaseStream.Position = 8;
+                        var entries = fpkReader.ReadUInt32();
 
+                        fpkReader.BaseStream.Position = 40;
+                        var fpkDataStart = fpkReader.ReadUInt32();
+                        var fpkDataSize = fpkReader.ReadUInt32();
 
-                        uint intialOffset = 132;
-                        var fName = "FILE_";
-                        var rExtn = "";
-                        int fileCount = 1;
-                        for (int f = 0; f < entries; f++)
+                        CmnMethods.FileDirectoryExistsDel(extractDir + "/_.archive", CmnMethods.DelSwitch.file);
+
+                        using (FileStream fpkDataStream = new FileStream(extractDir + "/_.archive", FileMode.OpenOrCreate, FileAccess.ReadWrite))
                         {
-                            fpkReader.BaseStream.Position = intialOffset;
-                            var outFileStart = fpkReader.ReadUInt32();
+                            fpkStream.CopyTo(fpkDataStream, fpkDataStart, fpkDataSize);
 
-                            fpkReader.BaseStream.Position = intialOffset + 4;
-                            var outFileSize = fpkReader.ReadUInt32();
 
-                            fpkReader.BaseStream.Position = intialOffset + 8;
-                            var extnChar = fpkReader.ReadChars(4);
-                            Array.Reverse(extnChar);
-
-                            string fileExtn = string.Join("", extnChar).Replace("\0", "");
-                            var fExtn = "." + CmnMethods.ModifyString(fileExtn);
-
-                            switch (fileExtn.StartsWith("/") || fileExtn.StartsWith("\\"))
+                            uint intialOffset = 132;
+                            var fName = "FILE_";
+                            var rExtn = "";
+                            var fileCount = 1;
+                            for (int f = 0; f < entries; f++)
                             {
-                                case true:
-                                    break;
+                                fpkReader.BaseStream.Position = intialOffset;
+                                var outFileStart = fpkReader.ReadUInt32();
+                                var outFileSize = fpkReader.ReadUInt32();
+                                var extnChar = fpkReader.ReadChars(4);
+                                Array.Reverse(extnChar);
 
-                                case false:
-                                    using (FileStream outFileStream = new FileStream(extractDir + "/" + fName + $"{fileCount}" + fExtn, FileMode.OpenOrCreate, FileAccess.ReadWrite))
-                                    {
-                                        fpkDataStream.Seek(outFileStart, SeekOrigin.Begin);
-                                        byte[] outFilebuffer = new byte[outFileSize];
-                                        var outFileDataToCopy = fpkDataStream.Read(outFilebuffer, 0, outFilebuffer.Length);
-                                        outFileStream.Write(outFilebuffer, 0, outFileDataToCopy);
+                                var fileExtn = string.Join("", extnChar).Replace("\0", "");
+                                var fExtn = "." + CmnMethods.ModifyString(fileExtn);
 
-                                        using (BinaryReader outFileReader = new BinaryReader(outFileStream))
+                                switch (fileExtn.StartsWith("/") || fileExtn.StartsWith("\\"))
+                                {
+                                    case true:
+                                        break;
+
+                                    case false:
+                                        using (FileStream outFileStream = new FileStream(extractDir + "/" + fName + $"{fileCount}" + fExtn, FileMode.OpenOrCreate, FileAccess.ReadWrite))
                                         {
-                                            CmnMethods.GetFileHeader(outFileReader, ref rExtn);
-                                        }
-                                    }
+                                            fpkDataStream.CopyTo(outFileStream, outFileStart, outFileSize);
 
-                                    File.Move(extractDir + "/" + fName + $"{fileCount}" + fExtn, extractDir + "/" + fName + $"{fileCount}" + fExtn + rExtn);
-
-                                    string[] knownExtnArray = { ".fpk", ".dpk", ".zim", ".lz0", ".kps", ".kvm", ".spk0", ".emt", ".dcmr", ".dlgt", ".hi4", ".hd2"};
-
-                                    if (knownExtnArray.Contains(rExtn))
-                                    {
-                                        if (!rExtn.Contains(".lz0"))
-                                        {
-                                            var outFileNameWithoutExtn = Path.GetFileNameWithoutExtension(extractDir + "/" + fName + $"{fileCount}" + fExtn + rExtn);
-                                            File.Move(extractDir + "/" + fName + $"{fileCount}" + fExtn + rExtn, extractDir + "/" + outFileNameWithoutExtn);
-
-                                            var outFileNameProperExtn = Path.GetFileNameWithoutExtension(extractDir + "/" + outFileNameWithoutExtn);
-                                            var adjExtn = "";
-                                            using (FileStream extnStream = new FileStream(extractDir + "/" + outFileNameWithoutExtn, FileMode.Open, FileAccess.Read))
+                                            using (BinaryReader outFileReader = new BinaryReader(outFileStream))
                                             {
-                                                using (BinaryReader extnReader = new BinaryReader(extnStream))
-                                                {
-                                                    CmnMethods.GetFileHeader(extnReader, ref adjExtn);
-                                                }
+                                                CmnMethods.GetFileHeader(outFileReader, ref rExtn);
                                             }
-
-                                            File.Move(extractDir + "/" + outFileNameWithoutExtn, extractDir + "/" + outFileNameProperExtn + adjExtn);
                                         }
-                                        else
+
+                                        File.Move(extractDir + "/" + fName + $"{fileCount}" + fExtn, extractDir + "/" + fName + $"{fileCount}" + fExtn + rExtn);
+
+                                        string[] knownExtnArray = { ".fpk", ".dpk", ".zim", ".lz0", ".kps", ".kvm", ".spk0", ".emt", ".dcmr", ".dlgt", ".hi4", ".hd2" };
+
+                                        if (knownExtnArray.Contains(rExtn))
                                         {
-                                            var outLzoFile = extractDir + "/" + fName + $"{fileCount}" + fExtn + rExtn;
-                                            var outDcmpLzoFile = extractDir + "/" + Path.GetFileNameWithoutExtension(extractDir + "/" + fName + $"{fileCount}" + fExtn + rExtn);
-
-                                            using (FileStream lzoStream = new FileStream(outLzoFile, FileMode.Open, FileAccess.Read))
+                                            if (!rExtn.Contains(".lz0"))
                                             {
-                                                using (BinaryReader lzoReader = new BinaryReader(lzoStream))
+                                                var outFileNameWithoutExtn = Path.GetFileNameWithoutExtension(extractDir + "/" + fName + $"{fileCount}" + fExtn + rExtn);
+                                                File.Move(extractDir + "/" + fName + $"{fileCount}" + fExtn + rExtn, extractDir + "/" + outFileNameWithoutExtn);
+
+                                                var outFileNameProperExtn = Path.GetFileNameWithoutExtension(extractDir + "/" + outFileNameWithoutExtn);
+                                                var adjExtn = "";
+                                                using (FileStream extnStream = new FileStream(extractDir + "/" + outFileNameWithoutExtn, FileMode.Open, FileAccess.Read))
                                                 {
-                                                    lzoReader.BaseStream.Position = 24;
-                                                    var lzoChunks = lzoReader.ReadUInt32();
-
-                                                    uint lzoDataReadStart = 32;
-                                                    for (int lz0 = 0; lz0 < lzoChunks; lz0++)
+                                                    using (BinaryReader extnReader = new BinaryReader(extnStream))
                                                     {
-                                                        lzoReader.BaseStream.Position = lzoDataReadStart + 4;
-                                                        var cmpChunkSize = lzoReader.ReadUInt32();
-
-                                                        lzoReader.BaseStream.Position = lzoDataReadStart + 8;
-                                                        var uncmpChunkSize = lzoReader.ReadUInt32();
-
-                                                        byte[] dcmpData = new byte[uncmpChunkSize];
-                                                        using (MemoryStream lzoDataHolder = new MemoryStream())
-                                                        {
-                                                            lzoStream.Seek(lzoDataReadStart + 12, SeekOrigin.Begin);
-                                                            byte[] cmpBuffer = new byte[cmpChunkSize];
-                                                            var CmpDataToCopy = lzoStream.Read(cmpBuffer, 0, cmpBuffer.Length);
-                                                            lzoDataHolder.Write(cmpBuffer, 0, CmpDataToCopy);
-
-                                                            byte[] cmpData = lzoDataHolder.ToArray();
-                                                            MiniLz0Lib.Decompress(ref cmpData, uncmpChunkSize, ref dcmpData);
-
-                                                            using (FileStream dcmpFileStream = new FileStream(outDcmpLzoFile, FileMode.Append, FileAccess.Write))
-                                                            {
-                                                                dcmpFileStream.Write(dcmpData, 0, dcmpData.Length);
-                                                            }
-                                                        }
-
-                                                        var seekLength = cmpChunkSize;
-                                                        lzoReader.BaseStream.Seek(lzoDataReadStart + 12, SeekOrigin.Begin);
-                                                        lzoReader.BaseStream.Seek(seekLength, SeekOrigin.Current);
-
-                                                        var nextSeekVal = lzoReader.BaseStream;
-                                                        var nextSeek = (uint)nextSeekVal.Position;
-
-                                                        uint newLzoDataReadStart = nextSeek;
-                                                        lzoDataReadStart = newLzoDataReadStart;
+                                                        CmnMethods.GetFileHeader(extnReader, ref adjExtn);
                                                     }
                                                 }
+
+                                                File.Move(extractDir + "/" + outFileNameWithoutExtn, extractDir + "/" + outFileNameProperExtn + adjExtn);
                                             }
-
-                                            File.Delete(outLzoFile);
-
-                                            using (FileStream dcmpLzoFile = new FileStream(outDcmpLzoFile, FileMode.Open, FileAccess.Read))
+                                            else
                                             {
-                                                using (BinaryReader dcmpFileReader = new BinaryReader(dcmpLzoFile))
+                                                var outLzoFile = extractDir + "/" + fName + $"{fileCount}" + fExtn + rExtn;
+                                                var outDcmpLzoFile = extractDir + "/" + Path.GetFileNameWithoutExtension(extractDir + "/" + fName + $"{fileCount}" + fExtn + rExtn);
+
+                                                using (FileStream lzoStream = new FileStream(outLzoFile, FileMode.Open, FileAccess.Read))
                                                 {
-                                                    CmnMethods.GetFileHeader(dcmpFileReader, ref rExtn);
+                                                    using (BinaryReader lzoReader = new BinaryReader(lzoStream))
+                                                    {
+                                                        lzoReader.BaseStream.Position = 24;
+                                                        var lzoChunks = lzoReader.ReadUInt32();
+
+                                                        uint lzoDataReadStart = 32;
+                                                        for (int lz0 = 0; lz0 < lzoChunks; lz0++)
+                                                        {
+                                                            lzoReader.BaseStream.Position = lzoDataReadStart + 4;
+                                                            var cmpChunkSize = lzoReader.ReadUInt32();
+                                                            var uncmpChunkSize = lzoReader.ReadUInt32();
+
+                                                            byte[] dcmpData = new byte[uncmpChunkSize];
+                                                            using (MemoryStream lzoDataHolder = new MemoryStream())
+                                                            {
+                                                                lzoStream.CopyTo(lzoDataHolder, lzoDataReadStart + 12, cmpChunkSize);
+
+                                                                byte[] cmpData = lzoDataHolder.ToArray();
+                                                                MiniLz0Lib.Decompress(ref cmpData, uncmpChunkSize, ref dcmpData);
+
+                                                                using (FileStream dcmpFileStream = new FileStream(outDcmpLzoFile, FileMode.Append, FileAccess.Write))
+                                                                {
+                                                                    dcmpFileStream.Write(dcmpData, 0, dcmpData.Length);
+                                                                }
+                                                            }
+
+                                                            var seekLength = cmpChunkSize;
+                                                            lzoReader.BaseStream.Seek(lzoDataReadStart + 12, SeekOrigin.Begin);
+                                                            lzoReader.BaseStream.Seek(seekLength, SeekOrigin.Current);
+
+                                                            var nextSeekVal = lzoReader.BaseStream;
+                                                            var nextSeek = (uint)nextSeekVal.Position;
+
+                                                            uint newLzoDataReadStart = nextSeek;
+                                                            lzoDataReadStart = newLzoDataReadStart;
+                                                        }
+                                                    }
                                                 }
 
-                                                File.Move(outDcmpLzoFile, extractDir + "/" + fName + $"{fileCount}" + rExtn);
+                                                File.Delete(outLzoFile);
+
+                                                using (FileStream dcmpLzoFile = new FileStream(outDcmpLzoFile, FileMode.Open, FileAccess.Read))
+                                                {
+                                                    using (BinaryReader dcmpFileReader = new BinaryReader(dcmpLzoFile))
+                                                    {
+                                                        CmnMethods.GetFileHeader(dcmpFileReader, ref rExtn);
+                                                    }
+
+                                                    File.Move(outDcmpLzoFile, extractDir + "/" + fName + $"{fileCount}" + rExtn);
+                                                }
                                             }
                                         }
-                                    }
-                                    break;
+                                        break;
+                                }
+
+                                rExtn = "";
+
+                                intialOffset += 16;
+                                fileCount++;
                             }
-
-                            rExtn = "";
-
-                            intialOffset += 16;
-                            fileCount++;
                         }
-                    }
 
-                    File.Delete(extractDir + "/_.archive");
+                        File.Delete(extractDir + "/_.archive");
+                    }
+                }
+
+                if (isSingleFile.Equals(true))
+                {
+                    CmnMethods.AppMsgBox("Extracted " + Path.GetFileName(fpkFile) + " file", "Success", MessageBoxIcon.Information);
                 }
             }
-
-            if (isSingleFile.Equals(true))
+            catch (Exception ex)
             {
-                CmnMethods.AppMsgBox("Extracted " + Path.GetFileName(fpkFile) + " file", "Success", MessageBoxIcon.Information);
+                CmnMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
             }
         }
     }

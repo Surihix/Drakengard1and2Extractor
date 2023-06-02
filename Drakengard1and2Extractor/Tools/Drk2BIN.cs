@@ -1,79 +1,85 @@
 ﻿using Drakengard1and2Extractor.Libraries;
+using System;
 using System.IO;
 using System.Windows.Forms;
 
 namespace Drakengard1and2Extractor.Tools
 {
-    public class Drk2BIN
+    internal class Drk2BIN
     {
         public static void ExtractBin(string mainBinFile)
         {
-            var extractDir = Path.GetFullPath(mainBinFile) + "_extracted";
-            CmnMethods.FileDirectoryExistsDel(extractDir, CmnMethods.DelSwitch.folder);
-            Directory.CreateDirectory(extractDir);
-
-            using (FileStream mainBinStream = new FileStream(mainBinFile, FileMode.Open, FileAccess.Read))
+            try
             {
-                using (BinaryReader mainBinReader = new BinaryReader(mainBinStream))
+                var extractDir = Path.GetFullPath(mainBinFile) + "_extracted";
+                CmnMethods.FileDirectoryExistsDel(extractDir, CmnMethods.DelSwitch.folder);
+                Directory.CreateDirectory(extractDir);
+
+                using (FileStream mainBinStream = new FileStream(mainBinFile, FileMode.Open, FileAccess.Read))
                 {
-                    mainBinReader.BaseStream.Position = 16;
-                    var entries = mainBinReader.ReadUInt32();
-                    int fileCount = 1;
-
-
-                    int intialOffset = 48;
-                    string fname = "FILE_";
-                    string rExtn = "";
-                    for (int f = 0; f < entries; f++)
+                    using (BinaryReader mainBinReader = new BinaryReader(mainBinStream))
                     {
-                        mainBinReader.BaseStream.Position = intialOffset;
-                        var fileSize = mainBinReader.ReadUInt32();
-                        mainBinReader.BaseStream.Position = intialOffset + 8;
-                        var fileStart = mainBinReader.ReadUInt32();
+                        mainBinReader.BaseStream.Position = 16;
+                        var entries = mainBinReader.ReadUInt32();
+                        var fileCount = 1;
 
-                        string fExtn = "";
 
-                        if (mainBinFile.Contains("D_BGM.BIN") || mainBinFile.Contains("D_VOICE.BIN") ||
-                            mainBinFile.Contains("d_bgm.bin") || mainBinFile.Contains("d_voice.bin"))
+                        uint intialOffset = 48;
+                        var fname = "FILE_";
+                        var rExtn = "";
+                        for (int f = 0; f < entries; f++)
                         {
-                            string audioExtn = ".cads";
-                            fExtn = audioExtn;
-                        }
-                        if (mainBinFile.Contains("D_MOVIE.BIN") || mainBinFile.Contains("d_movie.bin"))
-                        {
-                            string fmvExtn = ".pss";
-                            fExtn = fmvExtn;
-                        }
+                            mainBinReader.BaseStream.Position = intialOffset;
+                            var fileSize = mainBinReader.ReadUInt32();
 
-                        mainBinStream.Seek(fileStart, SeekOrigin.Begin);
-                        using (FileStream outFileStream = new FileStream(extractDir + "/" + fname + $"{fileCount}" + fExtn, FileMode.OpenOrCreate, FileAccess.ReadWrite))
-                        {
-                            byte[] outFilebuffer = new byte[fileSize];
-                            var outFileDataToCopy = mainBinStream.Read(outFilebuffer, 0, outFilebuffer.Length);
-                            outFileStream.Write(outFilebuffer, 0, outFileDataToCopy);
-                        }
+                            mainBinReader.BaseStream.Position = intialOffset + 8;
+                            var fileStart = mainBinReader.ReadUInt32();
 
-                        if (mainBinFile.Contains("d_image.bin") || mainBinFile.Contains("D_IMAGE.BIN"))
-                        {
-                            var currentFile = extractDir + "/" + fname + $"{fileCount}" + fExtn;
-                            using (FileStream extractedOutFileStream = new FileStream(currentFile, FileMode.Open, FileAccess.Read))
+                            var fExtn = "";
+
+                            if (mainBinFile.Contains("D_BGM.BIN") || mainBinFile.Contains("D_VOICE.BIN") ||
+                                mainBinFile.Contains("d_bgm.bin") || mainBinFile.Contains("d_voice.bin"))
                             {
-                                using (BinaryReader extractedOutFileReader = new BinaryReader(extractedOutFileStream))
-                                {
-                                    CmnMethods.GetFileHeader(extractedOutFileReader, ref rExtn);
-                                }
+                                var audioExtn = ".cads";
+                                fExtn = audioExtn;
                             }
-                            File.Move(currentFile, currentFile + rExtn);
-                            rExtn = "";
-                        }
+                            if (mainBinFile.Contains("D_MOVIE.BIN") || mainBinFile.Contains("d_movie.bin"))
+                            {
+                                var fmvExtn = ".pss";
+                                fExtn = fmvExtn;
+                            }
 
-                        intialOffset += 32;
-                        fileCount++;
+                            using (FileStream outFileStream = new FileStream(extractDir + "/" + fname + $"{fileCount}" + fExtn, FileMode.OpenOrCreate, FileAccess.ReadWrite))
+                            {
+                                mainBinStream.CopyTo(outFileStream, fileStart, fileSize);
+                            }
+
+                            if (mainBinFile.Contains("d_image.bin") || mainBinFile.Contains("D_IMAGE.BIN"))
+                            {
+                                var currentFile = extractDir + "/" + fname + $"{fileCount}" + fExtn;
+                                using (FileStream extractedOutFileStream = new FileStream(currentFile, FileMode.Open, FileAccess.Read))
+                                {
+                                    using (BinaryReader extractedOutFileReader = new BinaryReader(extractedOutFileStream))
+                                    {
+                                        CmnMethods.GetFileHeader(extractedOutFileReader, ref rExtn);
+                                    }
+                                }
+                                File.Move(currentFile, currentFile + rExtn);
+                                rExtn = "";
+                            }
+
+                            intialOffset += 32;
+                            fileCount++;
+                        }
                     }
                 }
-            }
 
-            CmnMethods.AppMsgBox("Extracted " + Path.GetFileName(mainBinFile) + " file", "Success", MessageBoxIcon.Information);
+                CmnMethods.AppMsgBox("Extracted " + Path.GetFileName(mainBinFile) + " file", "Success", MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                CmnMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
+            }
         }
     }
 }

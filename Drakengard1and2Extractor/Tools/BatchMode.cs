@@ -8,9 +8,14 @@ namespace Drakengard1and2Extractor.Tools
 {
     public partial class BatchMode : Form
     {
-        public BatchMode()
+        public BatchMode(bool isDrk2RadioBtnChecked)
         {
             InitializeComponent();
+
+            if (isDrk2RadioBtnChecked.Equals(false))
+            {
+                BatchExtractDPKBtn.Enabled = false;
+            }
         }
 
 
@@ -28,42 +33,50 @@ namespace Drakengard1and2Extractor.Tools
         }
         private void BatchExtractFPKBtn_Click(object sender, EventArgs e)
         {
-            var currentWindow = (BatchMode)Application.OpenForms[1];
-            var fpkDirSelect = new FolderPicker();
-            fpkDirSelect.Title = "Select a folder that has fpk files";
-
-            if (fpkDirSelect.ShowDialog(currentWindow.Handle) == true)
+            try
             {
-                DisableButtons();
-                BatchStatusListBox.Items.Clear();
-                StatusMsg("Extracting fpk files....");
+                var currentWindow = (BatchMode)Application.OpenForms[1];
+                var fpkDirSelect = new FolderPicker();
+                fpkDirSelect.Title = "Select a folder that has fpk files";
 
-                var fpkDir = fpkDirSelect.ResultName + "\\";
-                var fpkFilesInDir = Directory.GetFiles(fpkDir, "*.fpk", SearchOption.TopDirectoryOnly);
-
-                Task.Run(() =>
+                if (fpkDirSelect.ShowDialog(currentWindow.Handle) == true)
                 {
-                    try
-                    {
-                        foreach (var fpkFile in fpkFilesInDir)
-                        {
-                            var readHeader = "";
-                            CmnMethods.HeaderCheck(fpkFile, ref readHeader);
+                    DisableButtons();
+                    BatchStatusListBox.Items.Clear();
+                    StatusMsg("Extracting fpk files....");
 
-                            if (readHeader.StartsWith("fpk"))
+                    var fpkDir = fpkDirSelect.ResultName + "\\";
+                    var fpkFilesInDir = Directory.GetFiles(fpkDir, "*.fpk", SearchOption.TopDirectoryOnly);
+
+                    Task.Run(() =>
+                    {
+                        try
+                        {
+                            foreach (var fpkFile in fpkFilesInDir)
                             {
-                                FileFPK.ExtractFPK(fpkFile, false);
+                                var readHeader = "";
+                                CmnMethods.HeaderCheck(fpkFile, ref readHeader);
+
+                                if (readHeader.StartsWith("fpk"))
+                                {
+                                    FileFPK.ExtractFPK(fpkFile, false);
+                                }
                             }
                         }
-                    }
-                    finally
-                    {
-                        CmnMethods.AppMsgBox("Finished extracting fpk files from the folder", "Success", MessageBoxIcon.Information);
-                        BatchStatusListBox.BeginInvoke((Action)(() => StatusMsg("")));
-                        BatchStatusListBox.BeginInvoke((Action)(() => StatusMsg("Batch extraction completed")));
-                        BeginInvoke(new Action(() => EnableButtons()));
-                    }
-                });
+                        finally
+                        {
+                            CmnMethods.AppMsgBox("Finished extracting fpk files from the folder", "Success", MessageBoxIcon.Information);
+                            BatchStatusListBox.BeginInvoke((Action)(() => StatusMsg("")));
+                            BatchStatusListBox.BeginInvoke((Action)(() => StatusMsg("Batch extraction completed")));
+                            BeginInvoke(new Action(() => EnableButtons()));
+                        }
+                    });
+                }
+            }
+            catch(Exception ex)
+            {
+                CmnMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
+                Close();
             }
         }
 
@@ -74,43 +87,51 @@ namespace Drakengard1and2Extractor.Tools
         }
         private void BatchExtractDPKBtn_Click(object sender, EventArgs e)
         {
-            var currentWindow = (BatchMode)Application.OpenForms[1];
-            var dpkDirSelect = new FolderPicker();
-            dpkDirSelect.Title = "Select a folder that has dpk files";
-
-            if (dpkDirSelect.ShowDialog(currentWindow.Handle) == true)
+            try
             {
-                DisableButtons();
-                BatchStatusListBox.Items.Clear();
-                StatusMsg("Extracting dpk files....");
+                var currentWindow = (BatchMode)Application.OpenForms[1];
+                var dpkDirSelect = new FolderPicker();
+                dpkDirSelect.Title = "Select a folder that has dpk files";
 
-                var dpkDir = dpkDirSelect.ResultName + "\\";
-                var dpkFilesInDir = Directory.GetFiles(dpkDir, "*.dpk", SearchOption.TopDirectoryOnly);
-
-                Task.Run(() =>
+                if (dpkDirSelect.ShowDialog(currentWindow.Handle) == true)
                 {
-                    try
-                    {
-                        foreach (var dpkFile in dpkFilesInDir)
-                        {
-                            var readHeader = "";
-                            CmnMethods.HeaderCheck(dpkFile, ref readHeader);
+                    DisableButtons();
+                    BatchStatusListBox.Items.Clear();
+                    StatusMsg("Extracting dpk files....");
 
-                            if (readHeader.StartsWith("dpk"))
+                    var dpkDir = dpkDirSelect.ResultName + "\\";
+                    var dpkFilesInDir = Directory.GetFiles(dpkDir, "*.dpk", SearchOption.TopDirectoryOnly);
+
+                    Task.Run(() =>
+                    {
+                        try
+                        {
+                            foreach (var dpkFile in dpkFilesInDir)
                             {
-                                FileDPK.ExtractDPK(dpkFile, false);
+                                var readHeader = "";
+                                CmnMethods.HeaderCheck(dpkFile, ref readHeader);
+
+                                if (readHeader.StartsWith("dpk"))
+                                {
+                                    FileDPK.ExtractDPK(dpkFile, false);
+                                }
                             }
                         }
-                    }
-                    finally
-                    {
-                        CmnMethods.AppMsgBox("Finished extracting dpk files from the folder", "Success", MessageBoxIcon.Information);
+                        finally
+                        {
+                            CmnMethods.AppMsgBox("Finished extracting dpk files from the folder", "Success", MessageBoxIcon.Information);
 
-                        BatchStatusListBox.BeginInvoke((Action)(() => StatusMsg("")));
-                        BatchStatusListBox.BeginInvoke((Action)(() => StatusMsg("Batch extraction completed")));
-                        BeginInvoke(new Action(() => EnableButtons()));
-                    }
-                });
+                            BatchStatusListBox.BeginInvoke((Action)(() => StatusMsg("")));
+                            BatchStatusListBox.BeginInvoke((Action)(() => StatusMsg("Batch extraction completed")));
+                            BeginInvoke(new Action(() => EnableButtons()));
+                        }
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                CmnMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
+                Close();
             }
         }
 

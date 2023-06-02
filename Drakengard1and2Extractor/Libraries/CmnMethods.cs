@@ -53,7 +53,7 @@ namespace Drakengard1and2Extractor.Libraries
         public static string ModifyString(string readStringLetters)
         {
             var modifiedString = readStringLetters.Replace("|", "").Replace("?", "").Replace(":", "").
-                Replace("<", "").Replace(">", "").Replace("*", "").Replace("0eng", "eng.fpk").
+                Replace("<", "").Replace(">", "").Replace("*", "").Replace("0eng", "0eng.fpk").
                 Replace("0jpn", "0jpn.fpk").Replace("1uk", "1uk.fpk").Replace("2fre", "2fre.fpk").Replace("3ger", "3ger.fpk").
                 Replace("4ita", "4ita.fpk").Replace("5spa", "5spa.fpk");
 

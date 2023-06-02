@@ -61,6 +61,10 @@ namespace Drakengard1and2Extractor.Tools
         }
 
 
+        private void ConvertZIMImgBtn_MouseHover(object sender, EventArgs e)
+        {
+            ConvertZimImgBtnToolTip.Show("Converts and saves the image file to one of the selected formats", ConvertZIMImgBtn);
+        }
         private void ConvertZIMImgBtn_Click(object sender, EventArgs e)
         {
             try
@@ -97,11 +101,10 @@ namespace Drakengard1and2Extractor.Tools
                         zimReader.BaseStream.Position = 82;
                         var bppFlag = zimReader.ReadByte();
 
-                        zimStream.Seek(352, SeekOrigin.Begin);
-
 
                         using (MemoryStream pixelsStream = new MemoryStream())
                         {
+                            zimStream.Seek(352, SeekOrigin.Begin);
                             byte[] pixelsBuffer = new byte[imgSize];
                             var pixelDataToCopy = zimStream.Read(pixelsBuffer, 0, pixelsBuffer.Length);
 
@@ -183,10 +186,6 @@ namespace Drakengard1and2Extractor.Tools
                 CmnMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
                 Close();
             }
-        }
-        private void ConvertZIMImgBtn_MouseHover(object sender, EventArgs e)
-        {
-            ConvertZimImgBtnToolTip.Show("Converts and saves the image file to one of the selected formats", ConvertZIMImgBtn);
         }
 
 

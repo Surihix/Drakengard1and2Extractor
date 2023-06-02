@@ -46,7 +46,7 @@ namespace Drakengard1and2Extractor
         {
             try
             {
-                OpenFileDialog binSelect = new OpenFileDialog();
+                var binSelect = new OpenFileDialog();
                 if (Drk1RadioButton.Checked == true)
                 {
                     binSelect.Filter = "Drakengard 1 BIN files" + $"|*.bin";
@@ -62,7 +62,7 @@ namespace Drakengard1and2Extractor
                 {
                     StatusListBox.Items.Clear();
 
-                    string mbinFile = binSelect.FileName;
+                    var mbinFile = binSelect.FileName;
 
                     if (Drk1RadioButton.Checked == true)
                     {
@@ -140,7 +140,7 @@ namespace Drakengard1and2Extractor
             }
             catch (Exception ex)
             {
-                CmnMethods.AppMsgBox(ex.Message, "Error", MessageBoxIcon.Error);
+                CmnMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
             }
         }
 
@@ -154,14 +154,14 @@ namespace Drakengard1and2Extractor
         {
             try
             {
-                OpenFileDialog fpkSelect = new OpenFileDialog();
+                var fpkSelect = new OpenFileDialog();
                 fpkSelect.Filter = "FPK type files (*.fpk)" + $"|*.fpk";
                 fpkSelect.RestoreDirectory = true;
 
                 if (fpkSelect.ShowDialog() == DialogResult.OK)
                 {
                     StatusListBox.Items.Clear();
-                    string fpkFile = fpkSelect.FileName;
+                    var fpkFile = fpkSelect.FileName;
 
                     var readHeader = "";
                     CmnMethods.HeaderCheck(fpkFile, ref readHeader);
@@ -198,7 +198,7 @@ namespace Drakengard1and2Extractor
             }
             catch (Exception ex)
             {
-                CmnMethods.AppMsgBox(ex.Message, "Error", MessageBoxIcon.Error);
+                CmnMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
             }
         }
 
@@ -211,14 +211,14 @@ namespace Drakengard1and2Extractor
         {
             try
             {
-                OpenFileDialog dpkSelect = new OpenFileDialog();
+                var dpkSelect = new OpenFileDialog();
                 dpkSelect.Filter = "DPK type files (*.dpk)" + $"|*.dpk";
                 dpkSelect.RestoreDirectory = true;
 
                 if (dpkSelect.ShowDialog() == DialogResult.OK)
                 {
                     StatusListBox.Items.Clear();
-                    string dpkFile = dpkSelect.FileName;
+                    var dpkFile = dpkSelect.FileName;
 
                     var readHeader = "";
                     CmnMethods.HeaderCheck(dpkFile, ref readHeader);
@@ -254,7 +254,7 @@ namespace Drakengard1and2Extractor
             }
             catch (Exception ex)
             {
-                CmnMethods.AppMsgBox(ex.Message, "Error", MessageBoxIcon.Error);
+                CmnMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
             }
         }
 
@@ -265,7 +265,15 @@ namespace Drakengard1and2Extractor
         }
         private void BatchModeBtn_Click(object sender, EventArgs e)
         {
-            BatchMode batchMode = new BatchMode();
+            StatusListBox.Items.Clear();
+
+            var isDrk2RadioBtnChecked = false;
+            if (Drk2RadioButton.Checked.Equals(true))
+            {
+                isDrk2RadioBtnChecked = true;
+            }
+
+            var batchMode = new BatchMode(isDrk2RadioBtnChecked);
             batchMode.ShowDialog();
         }
 
@@ -278,14 +286,14 @@ namespace Drakengard1and2Extractor
         {
             try
             {
-                OpenFileDialog zimSelect = new OpenFileDialog();
+                var zimSelect = new OpenFileDialog();
                 zimSelect.Filter = "ZIM type files (*.zim)" + $"|*.zim";
                 zimSelect.RestoreDirectory = true;
 
                 if (zimSelect.ShowDialog() == DialogResult.OK)
                 {
                     StatusListBox.Items.Clear();
-                    string zimFile = zimSelect.FileName;
+                    var zimFile = zimSelect.FileName;
 
                     var readHeader = "";
                     CmnMethods.HeaderCheck(zimFile, ref readHeader);
@@ -307,7 +315,7 @@ namespace Drakengard1and2Extractor
                             try
                             {
                                 StatusListBox.BeginInvoke((Action)(() => StatusMsg("Converting " + Path.GetFileName(zimFile) + "....")));
-                                FileZIM converterWindow = new FileZIM(zimFile);
+                                var converterWindow = new FileZIM(zimFile);
                                 converterWindow.ShowDialog();
                             }
                             finally
@@ -323,7 +331,7 @@ namespace Drakengard1and2Extractor
             }
             catch (Exception ex)
             {
-                CmnMethods.AppMsgBox(ex.Message, "Error", MessageBoxIcon.Error);
+                CmnMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
             }
         }
 
@@ -336,14 +344,14 @@ namespace Drakengard1and2Extractor
         {
             try
             {
-                OpenFileDialog spk0Select = new OpenFileDialog();
+                var spk0Select = new OpenFileDialog();
                 spk0Select.Filter = "SPK0 type files (*.spk0)" + $"|*.spk0";
                 spk0Select.RestoreDirectory = true;
 
                 if (spk0Select.ShowDialog() == DialogResult.OK)
                 {
                     StatusListBox.Items.Clear();
-                    string spk0File = spk0Select.FileName;
+                    var spk0File = spk0Select.FileName;
 
                     var readHeader = "";
                     CmnMethods.HeaderCheck(spk0File, ref readHeader);
@@ -365,7 +373,7 @@ namespace Drakengard1and2Extractor
                             try
                             {
                                 StatusListBox.BeginInvoke((Action)(() => StatusMsg("Converting " + Path.GetFileName(spk0File) + "....")));
-                                FileSPK0 converterWindow = new FileSPK0(spk0File);
+                                var converterWindow = new FileSPK0(spk0File);
                                 converterWindow.ShowDialog();
                             }
                             finally
@@ -381,7 +389,7 @@ namespace Drakengard1and2Extractor
             }
             catch (Exception ex)
             {
-                CmnMethods.AppMsgBox(ex.Message, "Error", MessageBoxIcon.Error);
+                CmnMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
             }
         }
 
@@ -441,7 +449,7 @@ namespace Drakengard1and2Extractor
 
         private void AboutlinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            AppAbout AboutWindow = new AppAbout();
+            var AboutWindow = new AppAbout();
             AboutWindow.ShowDialog();
         }
 
@@ -454,7 +462,7 @@ namespace Drakengard1and2Extractor
             }
             catch (Exception ex)
             {
-                CmnMethods.AppMsgBox(ex.Message, "Error", MessageBoxIcon.Error);
+                CmnMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
             }
         }
     }

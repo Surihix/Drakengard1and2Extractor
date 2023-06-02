@@ -80,7 +80,7 @@ namespace Drakengard1and2Extractor.Libraries
                     uint pitch = (widthVar * 32 + 7) / 8;
                     DDSHeaderWriter(ddsFileWriter, 20, pitch);
 
-                    DDSHeaderWriter(ddsFileWriter, 28, 1);   // (mip offset)
+                    DDSHeaderWriter(ddsFileWriter, 28, 1);
 
                     DDSHeaderWriter(ddsFileWriter, 76, 32);
 

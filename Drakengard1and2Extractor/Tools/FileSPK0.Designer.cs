@@ -28,11 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.ConvertSPK0ImgBtn = new System.Windows.Forms.Button();
             this.Spk0SaveAsComboBox = new System.Windows.Forms.ComboBox();
             this.Spk0SaveAsLabel = new System.Windows.Forms.Label();
             this.Spk0AlphaCompNumericUpDown = new System.Windows.Forms.NumericUpDown();
             this.Spk0AlphaCompLabel = new System.Windows.Forms.Label();
+            this.ConvertSpk0ImgBtnToolTip = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.Spk0AlphaCompNumericUpDown)).BeginInit();
             this.SuspendLayout();
             // 
@@ -45,6 +47,7 @@
             this.ConvertSPK0ImgBtn.Text = "Convert";
             this.ConvertSPK0ImgBtn.UseVisualStyleBackColor = true;
             this.ConvertSPK0ImgBtn.Click += new System.EventHandler(this.ConvertSPK0ImgBtn_Click);
+            this.ConvertSPK0ImgBtn.MouseHover += new System.EventHandler(this.ConvertSPK0ImgBtn_MouseHover);
             // 
             // Spk0SaveAsComboBox
             // 
@@ -119,5 +122,6 @@
         private System.Windows.Forms.Label Spk0SaveAsLabel;
         private System.Windows.Forms.NumericUpDown Spk0AlphaCompNumericUpDown;
         private System.Windows.Forms.Label Spk0AlphaCompLabel;
+        private System.Windows.Forms.ToolTip ConvertSpk0ImgBtnToolTip;
     }
 }

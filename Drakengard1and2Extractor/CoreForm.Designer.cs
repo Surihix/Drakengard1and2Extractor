@@ -64,7 +64,7 @@
             // StatusListBox
             // 
             this.StatusListBox.FormattingEnabled = true;
-            this.StatusListBox.Location = new System.Drawing.Point(12, 405);
+            this.StatusListBox.Location = new System.Drawing.Point(12, 410);
             this.StatusListBox.Name = "StatusListBox";
             this.StatusListBox.Size = new System.Drawing.Size(356, 69);
             this.StatusListBox.TabIndex = 5;
@@ -107,7 +107,7 @@
             // ExtBinBtn
             // 
             this.ExtBinBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ExtBinBtn.Location = new System.Drawing.Point(29, 56);
+            this.ExtBinBtn.Location = new System.Drawing.Point(33, 55);
             this.ExtBinBtn.Name = "ExtBinBtn";
             this.ExtBinBtn.Size = new System.Drawing.Size(103, 39);
             this.ExtBinBtn.TabIndex = 0;
@@ -163,7 +163,7 @@
             // 
             // ConvertSPK0Btn
             // 
-            this.ConvertSPK0Btn.Location = new System.Drawing.Point(45, 53);
+            this.ConvertSPK0Btn.Location = new System.Drawing.Point(45, 56);
             this.ConvertSPK0Btn.Name = "ConvertSPK0Btn";
             this.ConvertSPK0Btn.Size = new System.Drawing.Size(84, 28);
             this.ConvertSPK0Btn.TabIndex = 1;
@@ -174,7 +174,7 @@
             // 
             // ConvertZIMBtn
             // 
-            this.ConvertZIMBtn.Location = new System.Drawing.Point(45, 19);
+            this.ConvertZIMBtn.Location = new System.Drawing.Point(45, 22);
             this.ConvertZIMBtn.Name = "ConvertZIMBtn";
             this.ConvertZIMBtn.Size = new System.Drawing.Size(84, 28);
             this.ConvertZIMBtn.TabIndex = 0;
@@ -187,7 +187,7 @@
             // 
             this.AboutlinkLabel.AutoSize = true;
             this.AboutlinkLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.AboutlinkLabel.Location = new System.Drawing.Point(14, 482);
+            this.AboutlinkLabel.Location = new System.Drawing.Point(14, 487);
             this.AboutlinkLabel.Name = "AboutlinkLabel";
             this.AboutlinkLabel.Size = new System.Drawing.Size(38, 15);
             this.AboutlinkLabel.TabIndex = 6;
@@ -199,7 +199,7 @@
             // 
             this.HelpLinkLabel.AutoSize = true;
             this.HelpLinkLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.HelpLinkLabel.Location = new System.Drawing.Point(335, 482);
+            this.HelpLinkLabel.Location = new System.Drawing.Point(335, 487);
             this.HelpLinkLabel.Name = "HelpLinkLabel";
             this.HelpLinkLabel.Size = new System.Drawing.Size(33, 15);
             this.HelpLinkLabel.TabIndex = 8;
@@ -210,7 +210,7 @@
             // Versionlabel
             // 
             this.Versionlabel.AutoSize = true;
-            this.Versionlabel.Location = new System.Drawing.Point(172, 484);
+            this.Versionlabel.Location = new System.Drawing.Point(176, 489);
             this.Versionlabel.Name = "Versionlabel";
             this.Versionlabel.Size = new System.Drawing.Size(28, 13);
             this.Versionlabel.TabIndex = 7;
@@ -219,7 +219,7 @@
             // StatusLabel
             // 
             this.StatusLabel.AutoSize = true;
-            this.StatusLabel.Location = new System.Drawing.Point(14, 391);
+            this.StatusLabel.Location = new System.Drawing.Point(14, 396);
             this.StatusLabel.Name = "StatusLabel";
             this.StatusLabel.Size = new System.Drawing.Size(40, 13);
             this.StatusLabel.TabIndex = 4;
@@ -240,7 +240,7 @@
             this.ImgConvertersGroupBox.Controls.Add(this.ConvertSPK0Btn);
             this.ImgConvertersGroupBox.Location = new System.Drawing.Point(202, 288);
             this.ImgConvertersGroupBox.Name = "ImgConvertersGroupBox";
-            this.ImgConvertersGroupBox.Size = new System.Drawing.Size(167, 95);
+            this.ImgConvertersGroupBox.Size = new System.Drawing.Size(167, 96);
             this.ImgConvertersGroupBox.TabIndex = 3;
             this.ImgConvertersGroupBox.TabStop = false;
             this.ImgConvertersGroupBox.Text = "Convert Images :";
@@ -250,7 +250,7 @@
             this.BinExtractionGroupBox.Controls.Add(this.ExtBinBtn);
             this.BinExtractionGroupBox.Location = new System.Drawing.Point(12, 235);
             this.BinExtractionGroupBox.Name = "BinExtractionGroupBox";
-            this.BinExtractionGroupBox.Size = new System.Drawing.Size(168, 148);
+            this.BinExtractionGroupBox.Size = new System.Drawing.Size(168, 149);
             this.BinExtractionGroupBox.TabIndex = 2;
             this.BinExtractionGroupBox.TabStop = false;
             this.BinExtractionGroupBox.Text = "BIN Extraction :";
@@ -259,7 +259,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(381, 506);
+            this.ClientSize = new System.Drawing.Size(381, 513);
             this.Controls.Add(this.BinExtractionGroupBox);
             this.Controls.Add(this.ImgConvertersGroupBox);
             this.Controls.Add(this.FileExtGrp);

@@ -114,6 +114,7 @@
     <Compile Include="Drakengard1and2Extractor\AppAbout.Designer.cs">
       <DependentUpon>AppAbout.cs</DependentUpon>
     </Compile>
+    <Compile Include="Drakengard1and2Extractor\Libraries\StreamExtension.cs" />
     <Compile Include="Drakengard1and2Extractor\Tools\BatchMode.cs">
       <SubType>Form</SubType>
     </Compile>
