@@ -1,4 +1,4 @@
-﻿namespace Drakengard1and2Extractor.AppClasses
+﻿namespace Drakengard1and2Extractor.Tools
 {
     partial class FileZIM
     {

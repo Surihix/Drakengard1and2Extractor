@@ -5,7 +5,7 @@ using System.IO;
 
 namespace Drakengard1and2Extractor.Libraries
 {
-    public class ImageWriters
+    internal class ImageWriters
     {
         public static void BmpPng(ushort heightVar, ushort widthVar, int alphaIncreaseVar, BinaryReader pixelReaderVar,
             BinaryReader paletteReaderVar, SaveAs saveAsVar, string outImgPathVar)

@@ -2,7 +2,7 @@
 
 namespace Drakengard1and2Extractor.Libraries
 {
-    public class PS2UnSwizzlers
+    internal class PS2UnSwizzlers
     {
         public static void UnSwizzlePixels(ref byte[] pixelBufferVar, ushort widthVar, ushort heightVar)
         {

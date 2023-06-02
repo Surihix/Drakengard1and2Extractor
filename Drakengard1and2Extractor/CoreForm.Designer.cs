@@ -1,4 +1,4 @@
-﻿namespace Drakengard1and2Extractor.AppClasses
+﻿namespace Drakengard1and2Extractor
 {
     partial class CoreForm
     {
@@ -214,7 +214,7 @@
             this.Versionlabel.Name = "Versionlabel";
             this.Versionlabel.Size = new System.Drawing.Size(28, 13);
             this.Versionlabel.TabIndex = 7;
-            this.Versionlabel.Text = "v2.1";
+            this.Versionlabel.Text = "v2.2";
             // 
             // StatusLabel
             // 

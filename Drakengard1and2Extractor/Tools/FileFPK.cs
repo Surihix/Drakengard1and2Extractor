@@ -1,10 +1,10 @@
-﻿using MiniLz0;
+﻿using Drakengard1and2Extractor.Libraries;
 using System;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace Drakengard1and2Extractor.AppClasses
+namespace Drakengard1and2Extractor.Tools
 {
     public class FileFPK
     {
@@ -25,9 +25,9 @@ namespace Drakengard1and2Extractor.AppClasses
                     var fpkDataStart = fpkReader.ReadUInt32();
                     var fpkDataSize = fpkReader.ReadUInt32();
 
-                    CmnMethods.FileDirectoryExistsDel(extractDir + "/_", CmnMethods.DelSwitch.file);
+                    CmnMethods.FileDirectoryExistsDel(extractDir + "/_.archive", CmnMethods.DelSwitch.file);
 
-                    using (FileStream fpkDataStream = new FileStream(extractDir + "/_", FileMode.OpenOrCreate, FileAccess.ReadWrite))
+                    using (FileStream fpkDataStream = new FileStream(extractDir + "/_.archive", FileMode.OpenOrCreate, FileAccess.ReadWrite))
                     {
                         fpkStream.Seek(fpkDataStart, SeekOrigin.Begin);
                         byte[] fpkDataBuffer = new byte[fpkDataSize];
@@ -52,7 +52,7 @@ namespace Drakengard1and2Extractor.AppClasses
                             Array.Reverse(extnChar);
 
                             string fileExtn = string.Join("", extnChar).Replace("\0", "");
-                            CmnMethods.ModifyString(ref fileExtn);
+                            var fExtn = "." + CmnMethods.ModifyString(fileExtn);
 
                             switch (fileExtn.StartsWith("/") || fileExtn.StartsWith("\\"))
                             {
@@ -60,8 +60,6 @@ namespace Drakengard1and2Extractor.AppClasses
                                     break;
 
                                 case false:
-                                    string fExtn = "." + fileExtn;
-
                                     using (FileStream outFileStream = new FileStream(extractDir + "/" + fName + $"{fileCount}" + fExtn, FileMode.OpenOrCreate, FileAccess.ReadWrite))
                                     {
                                         fpkDataStream.Seek(outFileStart, SeekOrigin.Begin);
@@ -172,7 +170,7 @@ namespace Drakengard1and2Extractor.AppClasses
                         }
                     }
 
-                    File.Delete(extractDir + "/_");
+                    File.Delete(extractDir + "/_.archive");
                 }
             }
 

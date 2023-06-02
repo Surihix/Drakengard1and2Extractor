@@ -1,11 +1,12 @@
-﻿using MiniLz0;
+﻿using Drakengard1and2Extractor.Libraries;
+using Drakengard1and2Extractor.Tools;
 using System;
 using System.Diagnostics;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Drakengard1and2Extractor.AppClasses
+namespace Drakengard1and2Extractor
 {
     public partial class CoreForm : Form
     {
@@ -130,7 +131,6 @@ namespace Drakengard1and2Extractor.AppClasses
                                 {
                                     StatusListBox.BeginInvoke((Action)(() => StatusMsg("")));
                                     StatusListBox.BeginInvoke((Action)(() => StatusMsg("Extraction has completed")));
-                                    StatusListBox.BeginInvoke((Action)(() => StatusMsg("")));
                                     BeginInvoke(new Action(() => EnableButtons()));
                                 }
                             });
@@ -412,6 +412,7 @@ namespace Drakengard1and2Extractor.AppClasses
         {
             ExtBinBtn.Enabled = false;
             ExtFpkBtn.Enabled = false;
+            BatchModeBtn.Enabled = false;
             ConvertZIMBtn.Enabled = false;
             ConvertSPK0Btn.Enabled = false;
             if (Drk2RadioButton.Checked == true)
@@ -426,6 +427,7 @@ namespace Drakengard1and2Extractor.AppClasses
         {
             ExtBinBtn.Enabled = true;
             ExtFpkBtn.Enabled = true;
+            BatchModeBtn.Enabled = true;
             ConvertZIMBtn.Enabled = true;
             ConvertSPK0Btn.Enabled = true;
             Drk1RadioButton.Enabled = true;

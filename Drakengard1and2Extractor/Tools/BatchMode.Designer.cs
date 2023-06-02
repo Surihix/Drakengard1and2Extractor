@@ -1,4 +1,4 @@
-﻿namespace Drakengard1and2Extractor.AppClasses
+﻿namespace Drakengard1and2Extractor.Tools
 {
     partial class BatchMode
     {
@@ -33,8 +33,8 @@
             this.BatchExtractDPKBtn = new System.Windows.Forms.Button();
             this.BatchExtractFPKtoolTip = new System.Windows.Forms.ToolTip(this.components);
             this.BatchExtractDPKtoolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.StatusListBox = new System.Windows.Forms.ListBox();
-            this.label1 = new System.Windows.Forms.Label();
+            this.BatchStatusListBox = new System.Windows.Forms.ListBox();
+            this.BatchStatusLabel = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // BatchExtractFPKBtn
@@ -59,30 +59,30 @@
             this.BatchExtractDPKBtn.Click += new System.EventHandler(this.BatchExtractDPKBtn_Click);
             this.BatchExtractDPKBtn.MouseHover += new System.EventHandler(this.BatchExtractDPKBtn_MouseHover);
             // 
-            // StatusListBox
+            // BatchStatusListBox
             // 
-            this.StatusListBox.FormattingEnabled = true;
-            this.StatusListBox.Location = new System.Drawing.Point(12, 118);
-            this.StatusListBox.Name = "StatusListBox";
-            this.StatusListBox.Size = new System.Drawing.Size(194, 56);
-            this.StatusListBox.TabIndex = 3;
+            this.BatchStatusListBox.FormattingEnabled = true;
+            this.BatchStatusListBox.Location = new System.Drawing.Point(12, 118);
+            this.BatchStatusListBox.Name = "BatchStatusListBox";
+            this.BatchStatusListBox.Size = new System.Drawing.Size(194, 56);
+            this.BatchStatusListBox.TabIndex = 3;
             // 
-            // label1
+            // BatchStatusLabel
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(13, 102);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(40, 13);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "Status:";
+            this.BatchStatusLabel.AutoSize = true;
+            this.BatchStatusLabel.Location = new System.Drawing.Point(13, 102);
+            this.BatchStatusLabel.Name = "BatchStatusLabel";
+            this.BatchStatusLabel.Size = new System.Drawing.Size(40, 13);
+            this.BatchStatusLabel.TabIndex = 2;
+            this.BatchStatusLabel.Text = "Status:";
             // 
             // BatchMode
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(218, 188);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.StatusListBox);
+            this.Controls.Add(this.BatchStatusLabel);
+            this.Controls.Add(this.BatchStatusListBox);
             this.Controls.Add(this.BatchExtractDPKBtn);
             this.Controls.Add(this.BatchExtractFPKBtn);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
@@ -102,7 +102,7 @@
         private System.Windows.Forms.Button BatchExtractDPKBtn;
         private System.Windows.Forms.ToolTip BatchExtractFPKtoolTip;
         private System.Windows.Forms.ToolTip BatchExtractDPKtoolTip;
-        private System.Windows.Forms.ListBox StatusListBox;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ListBox BatchStatusListBox;
+        private System.Windows.Forms.Label BatchStatusLabel;
     }
 }

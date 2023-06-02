@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Windows.Forms;
 
-namespace Drakengard1and2Extractor.AppClasses
+namespace Drakengard1and2Extractor.Libraries
 {
     internal class CmnMethods
     {
@@ -50,12 +50,14 @@ namespace Drakengard1and2Extractor.AppClasses
             file
         }
 
-        public static void ModifyString(ref string readStringLetters)
+        public static string ModifyString(string readStringLetters)
         {
-            readStringLetters.Replace("\0", "").Replace("|", "").Replace("?", "").Replace(":", "").
-                Replace("<", "").Replace(">", "").Replace("*", "").Replace("0eng", "0eng.fpk").
+            var modifiedString = readStringLetters.Replace("|", "").Replace("?", "").Replace(":", "").
+                Replace("<", "").Replace(">", "").Replace("*", "").Replace("0eng", "eng.fpk").
                 Replace("0jpn", "0jpn.fpk").Replace("1uk", "1uk.fpk").Replace("2fre", "2fre.fpk").Replace("3ger", "3ger.fpk").
                 Replace("4ita", "4ita.fpk").Replace("5spa", "5spa.fpk");
+
+            return modifiedString;
         }
 
         public static void GetFileHeader(BinaryReader readerName, ref string rExtnVar)

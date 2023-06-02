@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Drakengard1and2Extractor.Libraries;
+using System;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Drakengard1and2Extractor.AppClasses
+namespace Drakengard1and2Extractor.Tools
 {
     public partial class BatchMode : Form
     {
@@ -15,9 +16,9 @@ namespace Drakengard1and2Extractor.AppClasses
 
         public void StatusMsg(string message)
         {
-            StatusListBox.Items.Add(message);
-            StatusListBox.SelectedIndex = StatusListBox.Items.Count - 1;
-            StatusListBox.SelectedIndex = -1;
+            BatchStatusListBox.Items.Add(message);
+            BatchStatusListBox.SelectedIndex = BatchStatusListBox.Items.Count - 1;
+            BatchStatusListBox.SelectedIndex = -1;
         }
 
 
@@ -34,7 +35,7 @@ namespace Drakengard1and2Extractor.AppClasses
             if (fpkDirSelect.ShowDialog(currentWindow.Handle) == true)
             {
                 DisableButtons();
-                StatusListBox.Items.Clear();
+                BatchStatusListBox.Items.Clear();
                 StatusMsg("Extracting fpk files....");
 
                 var fpkDir = fpkDirSelect.ResultName + "\\";
@@ -57,10 +58,9 @@ namespace Drakengard1and2Extractor.AppClasses
                     }
                     finally
                     {
-                        StatusListBox.BeginInvoke((Action)(() => StatusMsg("")));
-                        StatusListBox.BeginInvoke((Action)(() => StatusMsg("Batch extraction completed")));
-
                         CmnMethods.AppMsgBox("Finished extracting fpk files from the folder", "Success", MessageBoxIcon.Information);
+                        BatchStatusListBox.BeginInvoke((Action)(() => StatusMsg("")));
+                        BatchStatusListBox.BeginInvoke((Action)(() => StatusMsg("Batch extraction completed")));
                         BeginInvoke(new Action(() => EnableButtons()));
                     }
                 });
@@ -81,7 +81,7 @@ namespace Drakengard1and2Extractor.AppClasses
             if (dpkDirSelect.ShowDialog(currentWindow.Handle) == true)
             {
                 DisableButtons();
-                StatusListBox.Items.Clear();
+                BatchStatusListBox.Items.Clear();
                 StatusMsg("Extracting dpk files....");
 
                 var dpkDir = dpkDirSelect.ResultName + "\\";
@@ -104,10 +104,10 @@ namespace Drakengard1and2Extractor.AppClasses
                     }
                     finally
                     {
-                        StatusListBox.BeginInvoke((Action)(() => StatusMsg("")));
-                        StatusListBox.BeginInvoke((Action)(() => StatusMsg("Batch extraction completed")));
-
                         CmnMethods.AppMsgBox("Finished extracting dpk files from the folder", "Success", MessageBoxIcon.Information);
+
+                        BatchStatusListBox.BeginInvoke((Action)(() => StatusMsg("")));
+                        BatchStatusListBox.BeginInvoke((Action)(() => StatusMsg("Batch extraction completed")));
                         BeginInvoke(new Action(() => EnableButtons()));
                     }
                 });

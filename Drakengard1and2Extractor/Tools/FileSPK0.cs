@@ -3,7 +3,7 @@ using System;
 using System.IO;
 using System.Windows.Forms;
 
-namespace Drakengard1and2Extractor.AppClasses
+namespace Drakengard1and2Extractor.Tools
 {
     public partial class FileSPK0 : Form
     {

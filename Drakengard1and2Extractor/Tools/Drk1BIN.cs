@@ -1,9 +1,9 @@
-﻿using MiniLz0;
+﻿using Drakengard1and2Extractor.Libraries;
 using System;
 using System.IO;
 using System.Windows.Forms;
 
-namespace Drakengard1and2Extractor.AppClasses
+namespace Drakengard1and2Extractor.Tools
 {
     public class Drk1BIN
     {
@@ -23,14 +23,9 @@ namespace Drakengard1and2Extractor.AppClasses
                     mainBinReader.BaseStream.Position = 40;
                     var binDataStart = mainBinReader.ReadUInt32();
 
-                    mainBinReader.BaseStream.Position = 64;
-                    var mainBinNameChars = mainBinReader.ReadChars(12);
-                    string MainBinName = string.Join("", mainBinNameChars).Replace("\0", "");
-                    CmnMethods.ModifyString(ref MainBinName);
+                    CmnMethods.FileDirectoryExistsDel(extractDir + "/_.archive", CmnMethods.DelSwitch.file);
 
-                    CmnMethods.FileDirectoryExistsDel(extractDir + "/" + MainBinName, CmnMethods.DelSwitch.file);
-
-                    using (FileStream binStream = new FileStream(extractDir + "/" + MainBinName, FileMode.OpenOrCreate, FileAccess.ReadWrite))
+                    using (FileStream binStream = new FileStream(extractDir + "/_.archive", FileMode.OpenOrCreate, FileAccess.ReadWrite))
                     {
                         mainBinStream.Seek(binDataStart, SeekOrigin.Begin);
                         mainBinStream.CopyTo(binStream);
@@ -39,21 +34,18 @@ namespace Drakengard1and2Extractor.AppClasses
                         uint intialOffset = 132;
                         var fname = "FILE_";
                         var rExtn = "";
-                        int fileCount = 1;
+                        var fileCount = 1;
                         for (int f = 0; f < entries; f++)
                         {
                             mainBinReader.BaseStream.Position = intialOffset;
                             var fileStart = mainBinReader.ReadUInt32();
-                            mainBinReader.BaseStream.Position = intialOffset + 4;
                             var fileSize = mainBinReader.ReadUInt32();
 
-                            mainBinReader.BaseStream.Position = intialOffset + 8;
                             var extnChar = mainBinReader.ReadChars(4);
                             Array.Reverse(extnChar);
 
-                            string fileExtn = string.Join("", extnChar).Replace("\0", "");
-                            CmnMethods.ModifyString(ref fileExtn);
-                            string fExtn = "." + fileExtn;
+                            var fileExtn = string.Join("", extnChar).Replace("\0", "");
+                            var fExtn = "." + CmnMethods.ModifyString(fileExtn);
 
                             if (mainBinFile.Contains("image.bin") || mainBinFile.Contains("IMAGE.BIN"))
                             {
@@ -157,7 +149,7 @@ namespace Drakengard1and2Extractor.AppClasses
                         }
                     }
 
-                    File.Delete(extractDir + "/" + MainBinName);
+                    File.Delete(extractDir + "/_.archive");
                 }
             }
 

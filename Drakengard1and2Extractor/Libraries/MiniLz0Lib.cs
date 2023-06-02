@@ -1,12 +1,11 @@
-﻿using Drakengard1and2Extractor.AppClasses;
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Windows.Forms;
 
-namespace MiniLz0
+namespace Drakengard1and2Extractor.Libraries
 {
     unsafe class MiniLz0Lib
     {

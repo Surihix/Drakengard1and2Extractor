@@ -1,5 +1,4 @@
-﻿using Drakengard1and2Extractor.AppClasses;
-using System;
+﻿using System;
 using System.Windows.Forms;
 
 namespace Drakengard1and2Extractor
