@@ -1,4 +1,4 @@
-﻿namespace Drakengard1and2Extractor.Tools
+﻿namespace Drakengard1and2Extractor
 {
     partial class BatchMode
     {

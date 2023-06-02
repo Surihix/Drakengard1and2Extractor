@@ -115,10 +115,10 @@
       <DependentUpon>AppAbout.cs</DependentUpon>
     </Compile>
     <Compile Include="Drakengard1and2Extractor\Libraries\StreamExtension.cs" />
-    <Compile Include="Drakengard1and2Extractor\Tools\BatchMode.cs">
+    <Compile Include="Drakengard1and2Extractor\BatchMode.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Drakengard1and2Extractor\Tools\BatchMode.Designer.cs">
+    <Compile Include="Drakengard1and2Extractor\BatchMode.Designer.cs">
       <DependentUpon>BatchMode.cs</DependentUpon>
     </Compile>
     <Compile Include="Drakengard1and2Extractor\Libraries\CmnMethods.cs" />
@@ -153,7 +153,7 @@
     <EmbeddedResource Include="Drakengard1and2Extractor\AppAbout.resx">
       <DependentUpon>AppAbout.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Drakengard1and2Extractor\Tools\BatchMode.resx">
+    <EmbeddedResource Include="Drakengard1and2Extractor\BatchMode.resx">
       <DependentUpon>BatchMode.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Drakengard1and2Extractor\CoreForm.resx">

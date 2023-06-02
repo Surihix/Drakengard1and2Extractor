@@ -1,10 +1,11 @@
 ﻿using Drakengard1and2Extractor.Libraries;
+using Drakengard1and2Extractor.Tools;
 using System;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Drakengard1and2Extractor.Tools
+namespace Drakengard1and2Extractor
 {
     public partial class BatchMode : Form
     {
