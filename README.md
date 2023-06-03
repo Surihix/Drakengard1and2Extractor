@@ -7,8 +7,14 @@ This small C# Winforms based GUI app should help in extracting and converting fe
 # For Developers
 Use the minilz0.dll files included in the libraries folder along with the *MiniLz0Lib.cs* file, to use the minilz0 decompressor in your compiled build.
 
+# Credits
+[**Kizari**](https://github.com/Kizari)
+<br>[**Bartz24**](https://github.com/Bartz24)
+<br>[**Mugi**](https://github.com/tehmugi)
+<br>[**Simon Mourier**](https://github.com/smourier)
+
+
 # Special Thanks
 [**Joschuka**](https://github.com/Joschuka)
-<br>[**Kizari**](https://github.com/Kizari)
 <br>[**Tanuj**](https://github.com/Cyraphim)
 <br>[**TopazTK**](https://github.com/TopazTK)
