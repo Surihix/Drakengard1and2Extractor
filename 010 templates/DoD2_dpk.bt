@@ -1,0 +1,47 @@
+//---------------------------------------------------
+//--- 010 Editor v12.0.1 Binary Template
+//
+//      File: DoD2_dpk.bt
+//   Authors: Surihix
+//   Version: 1.0
+//   Purpose: Parse Drakengard 2's .dpk files
+//  Category: Drakengard 2 dpk files
+// File Mask: *.dpk
+//  ID Bytes: 64 70 6B
+//   History: 
+//   1.0   2024-03-15 Surihix: Initial version
+//---------------------------------------------------
+
+LittleEndian();
+
+struct FILE
+{
+    char magic[4]<bgcolor=cDkGreen>;
+    char dpkHeaderData[8]<bgcolor=cDkGreen>;
+    
+    uint unk1<hidden=true, bgcolor=cRed>;
+
+    uint entriesCount<bgcolor=cDkGreen>;
+
+    char reserved[12]<bgcolor=cBlack>;
+
+    local uint p = FTell();
+    local int e = 0;
+
+    for (e = 0; e < entriesCount; e++) 
+    {
+        struct ENTRY
+        {
+            char entryHash[16]<name="entryHash??", bgcolor=cLtRed>;
+            uint entryDataSize<bgcolor=cDkGreen>;
+            uint entryDataSize2<bgcolor=cDkGreen, comment="repeated">;
+            uint entryStart<bgcolor=cDkGreen>;
+            char reserved[4]<bgcolor=cBlack>;
+            p = FTell();
+            FSeek(entryStart);
+            char entryData[entryDataSize]<bgcolor=cLtGreen>;
+            FSeek(p);
+        }entry<name="Entry">;
+    }
+
+}dpkFile<open=true, name="DPK file">;

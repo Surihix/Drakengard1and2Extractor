@@ -1,0 +1,94 @@
+//---------------------------------------------------
+//--- 010 Editor v12.0.1 Binary Template
+//
+//      File: DoD1_2_fpk.bt
+//   Authors: Surihix
+//   Version: 1.0
+//   Purpose: Parse Drakengard 1 & 2's .fpk files
+//  Category: Drakengard 1 & 2 fpk files
+// File Mask: *.fpk
+//  ID Bytes: 66 70 6B
+//   History: 
+//   1.0   2024-03-15 Surihix: Initial version
+//---------------------------------------------------
+
+LittleEndian();
+
+local uint offsetTableStart = 128;
+
+typedef struct ARCHIVENAME
+{
+    local uint strStartPos = FTell();
+    local int strSize;
+    local ubyte p = 255;
+    
+    while (p != 0)
+    {
+          ubyte i;
+          p = i;
+          strSize++;
+    }
+    
+    strSize--;
+    
+    FSeek(strStartPos);
+    char name[strSize]<bgcolor=cDkGreen>;
+
+    if (name == "image.bin")
+    {
+       offsetTableStart = 160;
+    }
+
+}archiveName;
+
+
+struct FILE
+{    
+    char magic[4]<bgcolor=cDkGreen>;
+    char reserved[4]<bgcolor=cBlack>;    
+    uint offsetEntries<bgcolor=cDkGreen>;
+
+    uint unk1<hidden=true, bgcolor=cRed>;
+
+    char fpkHeaderData[8]<bgcolor=cDkGreen>;
+    uint offsetTableSize<bgcolor=cDkGreen>;
+    char reserved2[8]<bgcolor=cBlack>;
+
+    uint unk4<hidden=true, bgcolor=cRed>;
+
+    uint fpkDataStartOffset<bgcolor=cDkGreen>;
+    uint fpkDataSize<bgcolor=cDkGreen>;
+    char reserved3[16]<bgcolor=cBlack>;   
+    archiveName name[1]<name="fpk name", optimize=false>;
+    
+    local uint areaTillTable = offsetTableStart - FTell();
+    char reserved4[areaTillTable]<bgcolor=cBlack>;
+
+    FSeek(offsetTableStart);
+    local uint p = FTell();
+    local int e = 0;
+       
+    for (e = 0; e < offsetEntries; e++) 
+    { 
+        struct ENTRY
+        {             
+             char reserved5[4]<bgcolor=cBlack>;
+             uint entryStart<bgcolor=cDkGreen>;
+             uint entryDataSize<bgcolor=cDkGreen>;
+             char entryExtn[4]<comment="if valid string, then read in reverse", bgcolor=cDkGreen>;
+             p = FTell(); 
+
+             if (entryExtn[3] != 0x2F && entryDataSize != 0)
+             {
+                FSeek(fpkDataStartOffset + entryStart);
+                char entryData[entryDataSize]<bgcolor=cLtGreen>;
+                FSeek(p);
+             }
+             else
+             {
+                FSeek(p);
+             }
+        }entry<name="Entry">;
+     }   
+     
+}fpkFile<open=true, name="FPK file">;

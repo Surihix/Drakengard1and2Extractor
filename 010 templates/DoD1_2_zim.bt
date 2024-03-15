@@ -1,0 +1,95 @@
+//---------------------------------------------------------
+//--- 010 Editor v12.0.1 Binary Template
+//
+//      File: DoD1_2_zim.bt
+//   Authors: Surihix
+//   Version: 1.0
+//   Purpose: Parse Drakengard 1 & 2's .zim image files
+//  Category: zim files
+// File Mask: *.zim
+//  ID Bytes: 77 5A 49 4D 64
+//   History: 
+//   1.0   2024-03-14 Surihix: Initial version
+//---------------------------------------------------------
+
+LittleEndian();
+
+typedef struct PQRSHeader
+{
+    char pqrsData1[36]<bgcolor=cPurple>;
+    char unkData1[4]<hidden=true, bgcolor=cDkPurple>;
+    char pqrsData2[56]<bgcolor=cPurple>;
+    uint dataWidth<bgcolor=cLtPurple>;
+    uint dataHeight<bgcolor=cLtPurple>;
+    char pqrsData3[24]<hidden=true, bgcolor=cPurple>;
+    char unkData2[2]<hidden=true, bgcolor=cDkPurple>;
+    char pqrsData4[10]<bgcolor=cPurple>;
+    char unkData5[2]<hidden=true, bgcolor=cDkPurple>;
+    char pqrsData5[2]<bgcolor=cPurple>;
+    char unkData6[2]<hidden=true, bgcolor=cDkPurple>;
+    char pqrsData6[14]<bgcolor=cPurple>;  
+}pqrsHeader;
+
+
+struct FILE
+{
+
+    char magic[5]<bgcolor=cDkGreen>;
+    char reserved[3]<bgcolor=cBlack>;
+    
+    uint unk1<hidden=true, bgcolor=cRed>;
+    uint unk2<hidden=true, bgcolor=cRed>;
+    uint unk3<hidden=true, bgcolor=cRed>;
+    uint unk4<hidden=true, bgcolor=cRed>;
+    uint unk5<hidden=true, bgcolor=cRed>;
+    uint unk6<hidden=true, bgcolor=cRed>;
+    uint unk7<hidden=true, bgcolor=cRed>;
+    
+    char reserved2[4]<bgcolor=cBlack>;
+    
+    char unk8[4]<hidden=true, bgcolor=cRed>;
+    
+    ushort imgWidth<bgcolor=cDkGreen>;
+    ushort imgHeight<bgcolor=cDkGreen>;
+    char reserved3[4]<hidden=true, bgcolor=cBlack>;
+    uint pixelDataSize<bgcolor=cDkGreen>;
+    
+    char unk9[4]<hidden=true, bgcolor=cRed>;
+    char unk10[4]<hidden=true, bgcolor=cRed>;
+    char unk11[4]<hidden=true, bgcolor=cRed>;
+    
+    char reserved4[4]<hidden=true, bgcolor=cBlack>;
+    uint pqrsPaletteSectionOffset<bgcolor=cDkGreen>;
+    uint paletteDataSize<bgcolor=cDkGreen>;
+    
+    char reserved5[2]<hidden=true, bgcolor=cBlack>;
+    ubyte bppFlag<comment="48 = 8bit image & 64 = 4bit image", bgcolor=cDkGreen>;
+    
+    char unk12[5]<hidden=true, bgcolor=cRed>;
+    
+    char reserved6[43]<hidden=true, bgcolor=cBlack>;
+    
+    ubyte pqrsSectionFlag1<bgcolor=cDkGreen>;
+    uint pqrsPixelSectionOffset<bgcolor=cDkGreen>;
+    char reserved7[11]<hidden=true, bgcolor=cBlack>;
+    
+    ubyte pqrsSectionFlag2<bgcolor=cDkGreen>;
+    uint pqrsPaletteSectionOffset2<bgcolor=cDkGreen, comment="repeated">;
+    char reserved8[11]<hidden=true, bgcolor=cBlack>;
+    
+    ubyte pqrsSectionFlag3<bgcolor=cDkGreen>;
+    uint pqrsPixelSectionOffset2<bgcolor=cDkGreen, comment="repeated">;
+    char reserved9[11]<hidden=true, bgcolor=cBlack>;
+    
+    ubyte pqrsSectionFlag4<bgcolor=cDkGreen>;
+    uint pqrsPaletteSectionOffset3<bgcolor=cDkGreen, comment="repeated">;
+    char reserved10[8]<hidden=true, bgcolor=cBlack>;
+    
+    pqrsHeader pqrsPixelSection<name="PQRS Pixel Section">;
+    char pixelData[pixelDataSize]<bgcolor=cLtGreen>;
+    
+    FSeek(pqrsPaletteSectionOffset);
+    pqrsHeader pqrsPaletteSection<name="PQRS Palette Section">;
+    char paletteData[paletteDataSize]<bgcolor=cLtGreen, comment="bppFlag 48 = swizzled palette data">;
+
+}zimFile<open=true, name="ZIM file">;

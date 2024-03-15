@@ -1,0 +1,107 @@
+//---------------------------------------------------
+//--- 010 Editor v12.0.1 Binary Template
+//
+//      File: DoD1_2_spk0.bt
+//   Authors: Surihix
+//   Version: 1.0
+//   Purpose: Parse Drakengard 1 & 2's .spk0 files
+//  Category: Drakengard 1 & 2 spk0 files
+// File Mask: *.spk0
+//  ID Bytes: 53 50 4B 30
+//   History: 
+//   1.0   2024-03-15 Surihix: Initial version
+//---------------------------------------------------
+
+LittleEndian();
+
+typedef struct DMT0
+{
+    char dmt0Magic[4]<bgcolor=cDkGreen>;
+    uint imgCount<bgcolor=cDkGreen>;
+    uint dmt0ChunkSize<bgcolor=cDkGreen>;
+    char reserved[4]<bgcolor=cBlack>; 
+    char dmt0ChunkData[dmt0ChunkSize - 16]<bgcolor=cLtGreen>;
+}dmt0;
+
+
+typedef struct GRF1
+{
+    local uint grf1Pos = FTell();
+    char grf1Magic[4]<bgcolor=cDkGreen>;
+    uint imgCount<bgcolor=cDkGreen>;
+    char reserved[8]<bgcolor=cBlack>;
+
+    FSeek(grf1Pos + 24);    
+    uint pqrsPaletteDataPos<hidden=true>;
+   
+    FSeek(grf1Pos + pqrsPaletteDataPos + 96);
+    uint palDim1<hidden=true>;
+    uint palDim2<hidden=true>;
+    local uint pqrsPalSize = 144 + (palDim1 * 2) * (palDim2 * 2);
+
+    FSeek(grf1Pos + pqrsPaletteDataPos);
+    char pqrsPaletteData[pqrsPalSize]<bgcolor=cLtGreen, comment="common palette data for all images">;
+
+    FSeek(grf1Pos + 16);
+    local uint p = FTell();
+    local uint g = 0;
+    local uint imgSize = 0;
+    for (g = 0; g < imgCount; g++)
+    {
+        struct GRF1IMG
+        {
+            char unk1[4]<hidden=true, bgcolor=cRed>;
+            uint pqrsPixelDataPos<bgcolor=cDkGreen>;
+            uint pqrsPaletteDataPos<bgcolor=cDkGreen, comment="will be zero for images after the first one">;
+            char unk2[20]<hidden=true, bgcolor=cRed>;
+
+            FSeek(grf1Pos + pqrsPixelDataPos + 96);
+            uint width<hidden=true>;
+            uint height<hidden=true>;
+            imgSize = (width * height) + 144;
+            
+            FSeek(grf1Pos + pqrsPixelDataPos);
+            char pqrsPixelData[imgSize]<bgcolor=cLtGreen>;
+
+            p += 32;
+            FSeek(p);        
+        }grf1Img<name="GRF1 Image">;
+    }
+
+    g = 0;
+    for (g = 0; g < imgCount; g++)
+    {
+        struct UNKGRF1DATA
+        {
+            char unkData[96]<hidden=true, bgcolor=cRed>;
+        }unkGRF1Data<name="UnkChunkData">;
+    }
+
+}grf1;
+
+
+typedef struct DLS0
+{
+    char dls0Magic[4]<bgcolor=cDkGreen>;
+    uint unk1<name="unknown count value??", bgcolor=cLtRed>;
+    char dls0Data[FileSize() - FTell()]<bgcolor=cDkRed>;
+}dls0;
+
+
+struct FILE
+{
+    char spk0Magic[4]<bgcolor=cDkGreen>;
+    uint fileSize<bgcolor=cDkGreen>;
+
+    char unk1[4]<hidden=true, bgcolor=cRed>;
+
+    char spk0HeaderData[12]<bgcolor=cDkGreen>;
+    uint dls0ChunkOffset<bgcolor=cDkGreen>;
+    char reserved[4]<bgcolor=cBlack>;
+
+    dmt0 dmt0Chunk[1]<name="DMT0 Chunk", optimize=false>;
+    grf1 grf1Chunk[1]<name="GRF1 Chunk", optimize=false>;
+
+    FSeek(dls0ChunkOffset);
+    dls0 dls0Chunk[1]<name="DLS0 Chunk", optimize=false>;
+}spk0File<open=true, name="SPK0 file">;
