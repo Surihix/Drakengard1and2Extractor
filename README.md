@@ -5,7 +5,8 @@ This small C# Winforms based GUI app should help in extracting and converting fe
 <br>For app usage and more info on the file formats supported by this app, please refer to the Help option available on the app.
 
 # For Developers
-Use the minilz0.dll files included in the libraries folder along with the *MiniLz0Lib.cs* file, to use the minilz0 decompressor in your compiled build.
+- Use the minilz0.dll files included in the libraries folder along with the *MiniLz0Lib.cs* file, to use the minilz0 decompressor in your compiled build.
+- Refer the 010 templates present inside the [010 templates folder](https://github.com/Surihix/Drakengard1and2Extractor/tree/master/010%20templates) for information on the different file format operations supported by this tool.
 
 # Credits
 [**Kizari**](https://github.com/Kizari)
