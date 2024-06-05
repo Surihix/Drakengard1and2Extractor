@@ -1,4 +1,4 @@
-﻿using Drakengard1and2Extractor.Libraries;
+﻿using Drakengard1and2Extractor.Support;
 using System;
 using System.IO;
 using System.Windows.Forms;
@@ -12,7 +12,7 @@ namespace Drakengard1and2Extractor.Tools
             try
             {
                 var extractDir = Path.GetFullPath(mainBinFile) + "_extracted";
-                CmnMethods.FileDirectoryExistsDel(extractDir, CmnMethods.DelSwitch.folder);
+                CommonMethods.IfFileDirExistsDel(extractDir, CommonMethods.DelSwitch.folder);
                 Directory.CreateDirectory(extractDir);
 
                 using (FileStream mainBinStream = new FileStream(mainBinFile, FileMode.Open, FileAccess.Read))
@@ -25,7 +25,7 @@ namespace Drakengard1and2Extractor.Tools
                         mainBinReader.BaseStream.Position = 40;
                         var binDataStart = mainBinReader.ReadUInt32();
 
-                        CmnMethods.FileDirectoryExistsDel(extractDir + "/_.archive", CmnMethods.DelSwitch.file);
+                        CommonMethods.IfFileDirExistsDel(extractDir + "/_.archive", CommonMethods.DelSwitch.file);
 
                         using (FileStream binStream = new FileStream(extractDir + "/_.archive", FileMode.OpenOrCreate, FileAccess.ReadWrite))
                         {
@@ -47,7 +47,7 @@ namespace Drakengard1and2Extractor.Tools
                                 Array.Reverse(extnChar);
 
                                 var fileExtn = string.Join("", extnChar).Replace("\0", "");
-                                var fExtn = "." + CmnMethods.ModifyString(fileExtn);
+                                var fExtn = "." + CommonMethods.ModifyString(fileExtn);
 
                                 if (mainBinFile.Contains("image.bin") || mainBinFile.Contains("IMAGE.BIN"))
                                 {
@@ -57,14 +57,15 @@ namespace Drakengard1and2Extractor.Tools
 
                                 using (FileStream outFileStream = new FileStream(extractDir + "/" + fname + $"{fileCount}" + fExtn, FileMode.OpenOrCreate, FileAccess.ReadWrite))
                                 {
-                                    binStream.CopyTo(outFileStream, fileStart, fileSize);
+                                    binStream.Seek(fileStart, SeekOrigin.Begin);
+                                    binStream.CopyStreamTo(outFileStream, fileSize, false);
                                     binStream.Seek(fileStart, SeekOrigin.Begin);
 
                                     if (mainBinFile.Contains("image.bin") || mainBinFile.Contains("IMAGE.BIN"))
                                     {
                                         using (BinaryReader outFileReader = new BinaryReader(outFileStream))
                                         {
-                                            CmnMethods.GetFileHeader(outFileReader, ref rExtn);
+                                            CommonMethods.GetFileHeader(outFileReader, ref rExtn);
                                         }
                                     }
                                 }
@@ -97,10 +98,11 @@ namespace Drakengard1and2Extractor.Tools
                                                     deCompressedData = new byte[uncmpChunkSize];
                                                     using (MemoryStream lzoDataHolder = new MemoryStream())
                                                     {
-                                                        lzoStream.CopyTo(lzoDataHolder, lzoDataReadStart + 12, cmpChunkSize);
+                                                        lzoStream.Seek(lzoDataReadStart + 12, SeekOrigin.Begin);
+                                                        lzoStream.CopyStreamTo(lzoDataHolder, cmpChunkSize, false);
 
                                                         byte[] compressedData = lzoDataHolder.ToArray();
-                                                        MiniLz0Lib.Decompress(ref compressedData, uncmpChunkSize, ref deCompressedData);
+                                                        Minilz0Helpers.Decompress(ref compressedData, uncmpChunkSize, ref deCompressedData);
 
                                                         using (FileStream decompressedFileStream = new FileStream(currentOutDecmpLzoFile, FileMode.Append, FileAccess.Write))
                                                         {
@@ -127,7 +129,7 @@ namespace Drakengard1and2Extractor.Tools
                                         {
                                             using (BinaryReader DcmpFileReader = new BinaryReader(dcmplzoFile))
                                             {
-                                                CmnMethods.GetFileHeader(DcmpFileReader, ref rExtn);
+                                                CommonMethods.GetFileHeader(DcmpFileReader, ref rExtn);
                                             }
                                         }
 
@@ -146,11 +148,11 @@ namespace Drakengard1and2Extractor.Tools
                     }
                 }
 
-                CmnMethods.AppMsgBox("Extracted " + Path.GetFileName(mainBinFile) + " file", "Success", MessageBoxIcon.Information);
+                CommonMethods.AppMsgBox("Extracted " + Path.GetFileName(mainBinFile) + " file", "Success", MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
-                CmnMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
+                CommonMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
             }
         }
     }

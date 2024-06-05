@@ -1,4 +1,4 @@
-﻿using Drakengard1and2Extractor.Libraries;
+﻿using Drakengard1and2Extractor.Support;
 using System;
 using System.IO;
 using System.Linq;
@@ -13,7 +13,7 @@ namespace Drakengard1and2Extractor.Tools
             try
             {
                 var extractDir = Path.GetFullPath(fpkFile) + "_extracted";
-                CmnMethods.FileDirectoryExistsDel(extractDir, CmnMethods.DelSwitch.folder);
+                CommonMethods.IfFileDirExistsDel(extractDir, CommonMethods.DelSwitch.folder);
                 Directory.CreateDirectory(extractDir);
 
                 using (FileStream fpkStream = new FileStream(fpkFile, FileMode.Open, FileAccess.Read))
@@ -27,11 +27,12 @@ namespace Drakengard1and2Extractor.Tools
                         var fpkDataStart = fpkReader.ReadUInt32();
                         var fpkDataSize = fpkReader.ReadUInt32();
 
-                        CmnMethods.FileDirectoryExistsDel(extractDir + "/_.archive", CmnMethods.DelSwitch.file);
+                        CommonMethods.IfFileDirExistsDel(extractDir + "/_.archive", CommonMethods.DelSwitch.file);
 
                         using (FileStream fpkDataStream = new FileStream(extractDir + "/_.archive", FileMode.OpenOrCreate, FileAccess.ReadWrite))
                         {
-                            fpkStream.CopyTo(fpkDataStream, fpkDataStart, fpkDataSize);
+                            fpkStream.Seek(fpkDataStart, SeekOrigin.Begin);
+                            fpkStream.CopyStreamTo(fpkDataStream, fpkDataSize, false);
 
 
                             uint intialOffset = 132;
@@ -47,7 +48,7 @@ namespace Drakengard1and2Extractor.Tools
                                 Array.Reverse(extnChar);
 
                                 var fileExtn = string.Join("", extnChar).Replace("\0", "");
-                                var fExtn = "." + CmnMethods.ModifyString(fileExtn);
+                                var fExtn = "." + CommonMethods.ModifyString(fileExtn);
 
                                 switch (fileExtn.StartsWith("/") || fileExtn.StartsWith("\\"))
                                 {
@@ -57,11 +58,12 @@ namespace Drakengard1and2Extractor.Tools
                                     case false:
                                         using (FileStream outFileStream = new FileStream(extractDir + "/" + fName + $"{fileCount}" + fExtn, FileMode.OpenOrCreate, FileAccess.ReadWrite))
                                         {
-                                            fpkDataStream.CopyTo(outFileStream, outFileStart, outFileSize);
+                                            fpkDataStream.Seek(outFileStart, SeekOrigin.Begin);
+                                            fpkDataStream.CopyStreamTo(outFileStream, outFileSize, false);
 
                                             using (BinaryReader outFileReader = new BinaryReader(outFileStream))
                                             {
-                                                CmnMethods.GetFileHeader(outFileReader, ref rExtn);
+                                                CommonMethods.GetFileHeader(outFileReader, ref rExtn);
                                             }
                                         }
 
@@ -82,7 +84,7 @@ namespace Drakengard1and2Extractor.Tools
                                                 {
                                                     using (BinaryReader extnReader = new BinaryReader(extnStream))
                                                     {
-                                                        CmnMethods.GetFileHeader(extnReader, ref adjExtn);
+                                                        CommonMethods.GetFileHeader(extnReader, ref adjExtn);
                                                     }
                                                 }
 
@@ -110,10 +112,11 @@ namespace Drakengard1and2Extractor.Tools
                                                             byte[] dcmpData = new byte[uncmpChunkSize];
                                                             using (MemoryStream lzoDataHolder = new MemoryStream())
                                                             {
-                                                                lzoStream.CopyTo(lzoDataHolder, lzoDataReadStart + 12, cmpChunkSize);
+                                                                lzoStream.Seek(lzoDataReadStart + 12, SeekOrigin.Begin);
+                                                                lzoStream.CopyStreamTo(lzoDataHolder, cmpChunkSize, false);
 
                                                                 byte[] cmpData = lzoDataHolder.ToArray();
-                                                                MiniLz0Lib.Decompress(ref cmpData, uncmpChunkSize, ref dcmpData);
+                                                                Minilz0Helpers.Decompress(ref cmpData, uncmpChunkSize, ref dcmpData);
 
                                                                 using (FileStream dcmpFileStream = new FileStream(outDcmpLzoFile, FileMode.Append, FileAccess.Write))
                                                                 {
@@ -140,7 +143,7 @@ namespace Drakengard1and2Extractor.Tools
                                                 {
                                                     using (BinaryReader dcmpFileReader = new BinaryReader(dcmpLzoFile))
                                                     {
-                                                        CmnMethods.GetFileHeader(dcmpFileReader, ref rExtn);
+                                                        CommonMethods.GetFileHeader(dcmpFileReader, ref rExtn);
                                                     }
 
                                                     File.Move(outDcmpLzoFile, extractDir + "/" + fName + $"{fileCount}" + rExtn);
@@ -163,12 +166,12 @@ namespace Drakengard1and2Extractor.Tools
 
                 if (isSingleFile.Equals(true))
                 {
-                    CmnMethods.AppMsgBox("Extracted " + Path.GetFileName(fpkFile) + " file", "Success", MessageBoxIcon.Information);
+                    CommonMethods.AppMsgBox("Extracted " + Path.GetFileName(fpkFile) + " file", "Success", MessageBoxIcon.Information);
                 }
             }
             catch (Exception ex)
             {
-                CmnMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
+                CommonMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
             }
         }
     }

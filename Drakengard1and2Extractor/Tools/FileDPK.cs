@@ -1,4 +1,4 @@
-﻿using Drakengard1and2Extractor.Libraries;
+﻿using Drakengard1and2Extractor.Support;
 using System;
 using System.IO;
 using System.Windows.Forms;
@@ -12,7 +12,7 @@ namespace Drakengard1and2Extractor.Tools
             try
             {
                 var extractDir = Path.GetFullPath(dpkFile) + "_extracted";
-                CmnMethods.FileDirectoryExistsDel(extractDir, CmnMethods.DelSwitch.folder);
+                CommonMethods.IfFileDirExistsDel(extractDir, CommonMethods.DelSwitch.folder);
                 Directory.CreateDirectory(extractDir);
 
                 using (FileStream dpkStream = new FileStream(dpkFile, FileMode.Open, FileAccess.Read))
@@ -37,7 +37,8 @@ namespace Drakengard1and2Extractor.Tools
 
                             using (FileStream outFileStream = new FileStream(extractDir + "/" + fname + $"{fileCount}", FileMode.OpenOrCreate, FileAccess.ReadWrite))
                             {
-                                dpkStream.CopyTo(outFileStream, fileStart, fileSize);
+                                dpkStream.Seek(fileStart, SeekOrigin.Begin);
+                                dpkStream.CopyStreamTo(outFileStream, fileSize, false);
                             }
 
                             var currentFile = extractDir + "/" + fname + $"{fileCount}";
@@ -45,7 +46,7 @@ namespace Drakengard1and2Extractor.Tools
                             {
                                 using (BinaryReader extractedOutFileReader = new BinaryReader(extractedOutFileStream))
                                 {
-                                    CmnMethods.GetFileHeader(extractedOutFileReader, ref rExtn);
+                                    CommonMethods.GetFileHeader(extractedOutFileReader, ref rExtn);
                                 }
                             }
                             File.Move(currentFile, currentFile + rExtn);
@@ -60,12 +61,12 @@ namespace Drakengard1and2Extractor.Tools
 
                 if (isSingleFile.Equals(true))
                 {
-                    CmnMethods.AppMsgBox("Extracted " + Path.GetFileName(dpkFile) + " file", "Success", MessageBoxIcon.Information);
+                    CommonMethods.AppMsgBox("Extracted " + Path.GetFileName(dpkFile) + " file", "Success", MessageBoxIcon.Information);
                 }
             }
             catch (Exception ex)
             {
-                CmnMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
+                CommonMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
             }
         }
     }

@@ -32,19 +32,16 @@
             this.AboutWindowBtn = new System.Windows.Forms.Button();
             this.Creditlabel1 = new System.Windows.Forms.Label();
             this.Creditlabel2 = new System.Windows.Forms.Label();
-            this.Creditlabel3 = new System.Windows.Forms.Label();
             this.AppAboutPictureBox = new System.Windows.Forms.PictureBox();
-            this.CreditLabel5 = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.AppAboutPictureBox)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // AboutWindowBtn
             // 
-            this.AboutWindowBtn.Location = new System.Drawing.Point(111, 287);
+            this.AboutWindowBtn.Location = new System.Drawing.Point(111, 215);
             this.AboutWindowBtn.Name = "AboutWindowBtn";
             this.AboutWindowBtn.Size = new System.Drawing.Size(75, 23);
             this.AboutWindowBtn.TabIndex = 2;
@@ -66,21 +63,11 @@
             // 
             this.Creditlabel2.AutoSize = true;
             this.Creditlabel2.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Creditlabel2.Location = new System.Drawing.Point(8, 67);
+            this.Creditlabel2.Location = new System.Drawing.Point(8, 38);
             this.Creditlabel2.Name = "Creditlabel2";
             this.Creditlabel2.Size = new System.Drawing.Size(156, 15);
             this.Creditlabel2.TabIndex = 1;
             this.Creditlabel2.Text = "Minilzo C# Library : Bartz24";
-            // 
-            // Creditlabel3
-            // 
-            this.Creditlabel3.AutoSize = true;
-            this.Creditlabel3.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Creditlabel3.Location = new System.Drawing.Point(8, 86);
-            this.Creditlabel3.Name = "Creditlabel3";
-            this.Creditlabel3.Size = new System.Drawing.Size(153, 15);
-            this.Creditlabel3.TabIndex = 2;
-            this.Creditlabel3.Text = "PS2 Palette Swizzle : Mugi";
             // 
             // AppAboutPictureBox
             // 
@@ -91,26 +78,13 @@
             this.AppAboutPictureBox.TabIndex = 1;
             this.AppAboutPictureBox.TabStop = false;
             // 
-            // CreditLabel5
-            // 
-            this.CreditLabel5.AutoSize = true;
-            this.CreditLabel5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.CreditLabel5.Location = new System.Drawing.Point(8, 105);
-            this.CreditLabel5.Name = "CreditLabel5";
-            this.CreditLabel5.Size = new System.Drawing.Size(213, 15);
-            this.CreditLabel5.TabIndex = 3;
-            this.CreditLabel5.Text = "Folder Picker Library : Simon Mourier ";
-            // 
             // groupBox1
             // 
-            this.groupBox1.Controls.Add(this.label4);
-            this.groupBox1.Controls.Add(this.Creditlabel3);
             this.groupBox1.Controls.Add(this.Creditlabel1);
-            this.groupBox1.Controls.Add(this.CreditLabel5);
             this.groupBox1.Controls.Add(this.Creditlabel2);
             this.groupBox1.Location = new System.Drawing.Point(12, 136);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(273, 137);
+            this.groupBox1.Size = new System.Drawing.Size(273, 67);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Credits :";
@@ -125,21 +99,11 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Drakengard 1 and 2 - File Extractor";
             // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(8, 48);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(141, 15);
-            this.label4.TabIndex = 4;
-            this.label4.Text = "StreamExtension : Kizari";
-            // 
             // AppAbout
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(297, 325);
+            this.ClientSize = new System.Drawing.Size(297, 248);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.AppAboutPictureBox);
@@ -164,10 +128,7 @@
         private System.Windows.Forms.PictureBox AppAboutPictureBox;
         private System.Windows.Forms.Label Creditlabel1;
         private System.Windows.Forms.Label Creditlabel2;
-        private System.Windows.Forms.Label Creditlabel3;
-        private System.Windows.Forms.Label CreditLabel5;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label4;
     }
 }

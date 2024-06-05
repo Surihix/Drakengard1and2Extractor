@@ -1,4 +1,4 @@
-﻿using Drakengard1and2Extractor.Libraries;
+﻿using Drakengard1and2Extractor.Support;
 using System;
 using System.IO;
 using System.Threading.Tasks;
@@ -23,7 +23,7 @@ namespace Drakengard1and2Extractor.Tools
             }
             catch (Exception ex)
             {
-                CmnMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
+                CommonMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
             }
         }
 
@@ -95,13 +95,17 @@ namespace Drakengard1and2Extractor.Tools
 
                                 using (FileStream dmt0Stream = new FileStream(extractDir + "/" + "DMT0", FileMode.OpenOrCreate, FileAccess.Write))
                                 {
-                                    spk0Stream.CopyTo(dmt0Stream, 32, dmt0Size);
+                                    spk0Stream.Seek(32, SeekOrigin.Begin);
+                                    spk0Stream.CopyStreamTo(dmt0Stream, dmt0Size, false);
                                 }
 
 
                                 using (FileStream grf1Stream = new FileStream(extractDir + "/" + "GRF1", FileMode.OpenOrCreate, FileAccess.ReadWrite))
                                 {
-                                    spk0Stream.CopyTo(grf1Stream, grf1SubChunkPos, grf1Size);
+                                    spk0Stream.Seek(grf1SubChunkPos, SeekOrigin.Begin);
+                                    spk0Stream.CopyStreamTo(grf1Stream, grf1Size, false);
+
+                                    var imgOptions = new ImgOptions();
 
                                     using (BinaryReader grf1Reader = new BinaryReader(grf1Stream))
                                     {
@@ -120,59 +124,51 @@ namespace Drakengard1and2Extractor.Tools
                                         byte[] palBuffer = new byte[palSize];
                                         grf1Stream.Read(palBuffer, 0, palBuffer.Length);
 
-                                        PS2UnSwizzlers.UnSwizzlePalette(ref palBuffer);
+                                        byte[] finalizedPalBuffer = palBuffer.UnSwizzlePalette();
 
-                                        using (MemoryStream paletteStream = new MemoryStream())
+
+                                        uint imgReadPosStart = 20;
+                                        var imgFCount = 1;
+                                        for (int i = 0; i < totalImgCount; i++)
                                         {
-                                            paletteStream.Write(palBuffer, 0, palBuffer.Length);
+                                            grf1Reader.BaseStream.Position = imgReadPosStart;
+                                            var imgStartPos = grf1Reader.ReadUInt32();
 
-                                            using (BinaryReader paletteReader = new BinaryReader(paletteStream))
+                                            grf1Reader.BaseStream.Position = imgStartPos + 96;
+                                            imgOptions.Width = (int)grf1Reader.ReadUInt32();
+                                            imgOptions.Height = (int)grf1Reader.ReadUInt32();
+                                            var imgSize = imgOptions.Width * imgOptions.Height;
+
+                                            grf1Stream.Seek(imgStartPos + 144, SeekOrigin.Begin);
+                                            var pixelsBuffer = new byte[imgSize];
+                                            _ = grf1Stream.Read(pixelsBuffer, 0, imgSize);
+
+
+                                            string outImgPath;
+                                            switch (saveAsComboBoxItemIndex)
                                             {
+                                                case 0:
+                                                    outImgPath = extractDir + "/" + "GRF1_img_" + imgFCount + ".bmp";
+                                                    imgOptions.ImageFormat = System.Drawing.Imaging.ImageFormat.Bmp;
 
-                                                uint imgReadPosStart = 20;
-                                                var imgFCount = 1;
-                                                for (int i = 0; i < totalImgCount; i++)
-                                                {
-                                                    grf1Reader.BaseStream.Position = imgReadPosStart;
-                                                    var imgStartPos = grf1Reader.ReadUInt32();
+                                                    pixelsBuffer.CreateBmpPng(palBuffer, imgOptions, outImgPath);
+                                                    break;
 
-                                                    grf1Reader.BaseStream.Position = imgStartPos + 96;
-                                                    var width = grf1Reader.ReadUInt32();
-                                                    var height = grf1Reader.ReadUInt32();
-                                                    var imgSize = width * height;
+                                                case 1:
+                                                    outImgPath = extractDir + "/" + "GRF1_img_" + imgFCount + ".dds";
+                                                    pixelsBuffer.CreateDDS(palBuffer, imgOptions, outImgPath);
+                                                    break;
 
-                                                    using (MemoryStream pixelsStream = new MemoryStream())
-                                                    {
-                                                        grf1Stream.CopyTo(pixelsStream, imgStartPos + 144, imgSize);
+                                                case 2:
+                                                    outImgPath = extractDir + "/" + "GRF1_img_" + imgFCount + ".png";
+                                                    imgOptions.ImageFormat = System.Drawing.Imaging.ImageFormat.Png;
 
-                                                        using (BinaryReader pixelsReader = new BinaryReader(pixelsStream))
-                                                        {
-
-                                                            string outImgPath;
-                                                            switch (saveAsComboBoxItemIndex)
-                                                            {
-                                                                case 0:
-                                                                    outImgPath = extractDir + "/" + "GRF1_img_" + imgFCount + ".bmp";
-                                                                    ImageWriters.BmpPng((ushort)height, (ushort)width, spk0AlphaCompNumericUpDownVal, pixelsReader, paletteReader, ImageWriters.SaveAs.bmp, outImgPath);
-                                                                    break;
-
-                                                                case 1:
-                                                                    outImgPath = extractDir + "/" + "GRF1_img_" + imgFCount + ".dds";
-                                                                    ImageWriters.DDS(outImgPath, height, width, spk0AlphaCompNumericUpDownVal, pixelsReader, paletteReader);
-                                                                    break;
-
-                                                                case 2:
-                                                                    outImgPath = extractDir + "/" + "GRF1_img_" + imgFCount + ".png";
-                                                                    ImageWriters.BmpPng((ushort)height, (ushort)width, spk0AlphaCompNumericUpDownVal, pixelsReader, paletteReader, ImageWriters.SaveAs.png, outImgPath);
-                                                                    break;
-                                                            }
-                                                        }
-                                                    }
-
-                                                    imgFCount++;
-                                                    imgReadPosStart += 32;
-                                                }
+                                                    pixelsBuffer.CreateBmpPng(palBuffer, imgOptions, outImgPath);
+                                                    break;
                                             }
+
+                                            imgFCount++;
+                                            imgReadPosStart += 32;
                                         }
                                     }
                                 }
@@ -180,20 +176,21 @@ namespace Drakengard1and2Extractor.Tools
 
                                 using (FileStream dls0Stream = new FileStream(extractDir + "/" + "DLS0", FileMode.OpenOrCreate, FileAccess.Write))
                                 {
-                                    spk0Stream.CopyTo(dls0Stream, dls0SubChunkPos, dls0Size);
+                                    spk0Stream.Seek(dls0SubChunkPos, SeekOrigin.Begin);
+                                    spk0Stream.CopyStreamTo(dls0Stream, dls0Size, false);
                                 }
                             }
                         }
                     }
                     catch (Exception ex)
                     {
-                        CmnMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
+                        CommonMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
                         Close();
                     }
                 }
                 finally
                 {
-                    CmnMethods.AppMsgBox("Converted " + Path.GetFileName(Spk0FileVar) + " file", "Success", MessageBoxIcon.Information);
+                    CommonMethods.AppMsgBox("Converted " + Path.GetFileName(Spk0FileVar) + " file", "Success", MessageBoxIcon.Information);
 
                     BeginInvoke(new Action(() => Spk0SaveAsComboBox.Enabled = true));
                     BeginInvoke(new Action(() => ConvertSPK0ImgBtn.Enabled = true));

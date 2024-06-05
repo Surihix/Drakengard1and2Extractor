@@ -1,4 +1,4 @@
-﻿using Drakengard1and2Extractor.Libraries;
+﻿using Drakengard1and2Extractor.Support;
 using System;
 using System.IO;
 using System.Windows.Forms;
@@ -12,7 +12,7 @@ namespace Drakengard1and2Extractor.Tools
             try
             {
                 var extractDir = Path.GetFullPath(mainBinFile) + "_extracted";
-                CmnMethods.FileDirectoryExistsDel(extractDir, CmnMethods.DelSwitch.folder);
+                CommonMethods.IfFileDirExistsDel(extractDir, CommonMethods.DelSwitch.folder);
                 Directory.CreateDirectory(extractDir);
 
                 using (FileStream mainBinStream = new FileStream(mainBinFile, FileMode.Open, FileAccess.Read))
@@ -51,7 +51,8 @@ namespace Drakengard1and2Extractor.Tools
 
                             using (FileStream outFileStream = new FileStream(extractDir + "/" + fname + $"{fileCount}" + fExtn, FileMode.OpenOrCreate, FileAccess.ReadWrite))
                             {
-                                mainBinStream.CopyTo(outFileStream, fileStart, fileSize);
+                                mainBinStream.Seek(fileStart, SeekOrigin.Begin);
+                                mainBinStream.CopyStreamTo(outFileStream, fileSize, false);
                             }
 
                             if (mainBinFile.Contains("d_image.bin") || mainBinFile.Contains("D_IMAGE.BIN"))
@@ -61,7 +62,7 @@ namespace Drakengard1and2Extractor.Tools
                                 {
                                     using (BinaryReader extractedOutFileReader = new BinaryReader(extractedOutFileStream))
                                     {
-                                        CmnMethods.GetFileHeader(extractedOutFileReader, ref rExtn);
+                                        CommonMethods.GetFileHeader(extractedOutFileReader, ref rExtn);
                                     }
                                 }
                                 File.Move(currentFile, currentFile + rExtn);
@@ -74,11 +75,11 @@ namespace Drakengard1and2Extractor.Tools
                     }
                 }
 
-                CmnMethods.AppMsgBox("Extracted " + Path.GetFileName(mainBinFile) + " file", "Success", MessageBoxIcon.Information);
+                CommonMethods.AppMsgBox("Extracted " + Path.GetFileName(mainBinFile) + " file", "Success", MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
-                CmnMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
+                CommonMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
             }
         }
     }

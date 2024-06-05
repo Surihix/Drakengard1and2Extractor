@@ -8,10 +8,11 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>Drakengard1and2Extractor</RootNamespace>
     <AssemblyName>Drakengard1and2Extractor</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -83,20 +84,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
-    </Reference>
     <Reference Include="System.Core" />
-    <Reference Include="System.Memory, Version=4.0.1.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>packages\System.Memory.4.5.5\lib\net461\System.Memory.dll</HintPath>
-    </Reference>
+    <Reference Include="System.Design" />
     <Reference Include="System.Numerics" />
-    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>packages\System.Runtime.CompilerServices.Unsafe.4.5.3\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
-    </Reference>
+    <Reference Include="System.Security" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -114,14 +105,109 @@
     <Compile Include="Drakengard1and2Extractor\AppAbout.Designer.cs">
       <DependentUpon>AppAbout.cs</DependentUpon>
     </Compile>
-    <Compile Include="Drakengard1and2Extractor\Libraries\StreamExtension.cs" />
     <Compile Include="Drakengard1and2Extractor\BatchMode.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Drakengard1and2Extractor\BatchMode.Designer.cs">
       <DependentUpon>BatchMode.cs</DependentUpon>
     </Compile>
-    <Compile Include="Drakengard1and2Extractor\Libraries\CmnMethods.cs" />
+    <Compile Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\AdditionalVisualStyleElements.cs" />
+    <Compile Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\AnimationResource.cs" />
+    <Compile Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\ButtonType.cs" />
+    <Compile Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\ComCtlv6ActivationContext.cs" />
+    <Compile Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\CredentialDialog.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\CredentialDialog.designer.cs">
+      <DependentUpon>CredentialDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\CredentialException.cs" />
+    <Compile Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\DialogHelper.cs" />
+    <Compile Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\DownlevelTextMode.cs" />
+    <Compile Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\ExpandButtonClickedEventArgs.cs" />
+    <Compile Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\ExtendedForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\Glass.cs" />
+    <Compile Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\GlobalSuppressions.cs" />
+    <Compile Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\HyperlinkClickedEventArgs.cs" />
+    <Compile Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\InputDialog.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\InputDialog.designer.cs">
+      <DependentUpon>InputDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\InputDialogForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\InputDialogForm.designer.cs">
+      <DependentUpon>InputDialogForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\Interop\ComDlgResources.cs" />
+    <Compile Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\Interop\COMGuids.cs" />
+    <Compile Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\Interop\ErrorHelper.cs" />
+    <Compile Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\Interop\IProgressDialog.cs" />
+    <Compile Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\Interop\ShellComInterfaces.cs" />
+    <Compile Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\Interop\ShellWrapperDefinitions.cs" />
+    <Compile Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\Interop\Win32Resources.cs" />
+    <Compile Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\Interop\WindowHandleWrapper.cs" />
+    <Compile Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\NativeMethods.cs" />
+    <Compile Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\OkButtonClickedEventArgs.cs" />
+    <Compile Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\ProgressBarState.cs" />
+    <Compile Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\ProgressBarStyle.cs" />
+    <Compile Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\ProgressDialog.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\ProgressDialog.designer.cs">
+      <DependentUpon>ProgressDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\Properties\Resources.Designer.cs" />
+    <Compile Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\SafeHandles.cs" />
+    <Compile Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\ShellAnimation.cs" />
+    <Compile Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\TaskDialog.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\TaskDialog.designer.cs">
+      <DependentUpon>TaskDialog.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\TaskDialogButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\TaskDialogButtonStyle.cs" />
+    <Compile Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\TaskDialogDesigner.cs" />
+    <Compile Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\TaskDialogIcon.cs" />
+    <Compile Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\TaskDialogItem.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\TaskDialogItem.designer.cs">
+      <DependentUpon>TaskDialogItem.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\TaskDialogItemClickedEventArgs.cs" />
+    <Compile Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\TaskDialogItemCollection.cs" />
+    <Compile Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\TaskDialogRadioButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\TimerEventArgs.cs" />
+    <Compile Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\VistaFileDialog.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\VistaFileDialogEvents.cs" />
+    <Compile Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\VistaFolderBrowserDialog.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\VistaOpenFileDialog.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\VistaSaveFileDialog.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Drakengard1and2Extractor\Support\CommonMethods.cs" />
+    <Compile Include="Drakengard1and2Extractor\Support\ImageOperations\BmpPngHelpers.cs" />
+    <Compile Include="Drakengard1and2Extractor\Support\ImageOperations\DDSimgHelpers.cs" />
+    <Compile Include="Drakengard1and2Extractor\Support\ImageOperations\UnSwizzleHelpers.cs" />
+    <Compile Include="Drakengard1and2Extractor\Support\ImageOperations\ImgOptions.cs" />
+    <Compile Include="Drakengard1and2Extractor\Support\Minilz0Helpers.cs" />
+    <Compile Include="Drakengard1and2Extractor\Support\StreamHelpers.cs" />
     <Compile Include="Drakengard1and2Extractor\Tools\Drk1BIN.cs" />
     <Compile Include="Drakengard1and2Extractor\Tools\Drk2BIN.cs" />
     <Compile Include="Drakengard1and2Extractor\Tools\FileSPK0.cs">
@@ -136,9 +222,6 @@
     <Compile Include="Drakengard1and2Extractor\Tools\FileZIM.Designer.cs">
       <DependentUpon>FileZIM.cs</DependentUpon>
     </Compile>
-    <Compile Include="Drakengard1and2Extractor\Libraries\FolderPicker.cs" />
-    <Compile Include="Drakengard1and2Extractor\Libraries\ImageWriters.cs" />
-    <Compile Include="Drakengard1and2Extractor\Libraries\MiniLz0Lib.cs" />
     <Compile Include="Drakengard1and2Extractor\Tools\FileDPK.cs" />
     <Compile Include="Drakengard1and2Extractor\Tools\FileFPK.cs" />
     <Compile Include="Drakengard1and2Extractor\CoreForm.cs">
@@ -147,7 +230,6 @@
     <Compile Include="Drakengard1and2Extractor\CoreForm.Designer.cs">
       <DependentUpon>CoreForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Drakengard1and2Extractor\Libraries\PS2UnSwizzlers.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Drakengard1and2Extractor\AppAbout.resx">
@@ -159,6 +241,16 @@
     <EmbeddedResource Include="Drakengard1and2Extractor\CoreForm.resx">
       <DependentUpon>CoreForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\ExtendedForm.resx">
+      <DependentUpon>ExtendedForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\InputDialogForm.resx">
+      <DependentUpon>InputDialogForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\ProgressDialog.resx">
+      <DependentUpon>ProgressDialog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\Properties\Resources.resx" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
@@ -170,7 +262,9 @@
     <EmbeddedResource Include="Drakengard1and2Extractor\Tools\FileZIM.resx">
       <DependentUpon>FileZIM.cs</DependentUpon>
     </EmbeddedResource>
-    <None Include="packages.config" />
+    <None Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\.editorconfig" />
+    <None Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\Ookii.Dialogs.WinForms.csproj" />
+    <None Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\Properties\XPThemes.manifest" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -191,6 +285,13 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="app_icon.ico" />
+    <Content Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\CredentialDialog.bmp" />
+    <Content Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\InputDialog.bmp" />
+    <Content Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\ProgressDialog.bmp" />
+    <Content Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\TaskDialog.bmp" />
+    <Content Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\VistaFolderBrowserDialog.bmp" />
+    <Content Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\VistaOpenFileDialog.bmp" />
+    <Content Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\VistaSaveFileDialog.bmp" />
     <Content Include="images\about_img.png" />
     <Content Include="images\app_img.png" />
   </ItemGroup>

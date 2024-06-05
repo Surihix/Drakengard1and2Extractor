@@ -1,16 +1,16 @@
 ﻿using System.IO;
 using System.Windows.Forms;
 
-namespace Drakengard1and2Extractor.Libraries
+namespace Drakengard1and2Extractor.Support
 {
-    internal class CmnMethods
+    internal class CommonMethods
     {
         public static void AppMsgBox(string msg, string msgHeader, MessageBoxIcon msgType)
         {
             MessageBox.Show(msg, msgHeader, MessageBoxButtons.OK, msgType);
         }
 
-        public static void HeaderCheck(string fileName, ref string headerVar)
+        public static void HeaderCheck(string fileName, ref string header)
         {
             using (FileStream extnCheck = new FileStream(fileName, FileMode.Open, FileAccess.Read))
             {
@@ -18,28 +18,28 @@ namespace Drakengard1and2Extractor.Libraries
                 {
                     extnCheckReader.BaseStream.Position = 0;
                     var headerChars = extnCheckReader.ReadChars(4);
-                    headerVar = string.Join("", headerChars);
+                    header = string.Join("", headerChars);
                 }
 
                 extnCheck.Dispose();
             }
         }
 
-        public static void FileDirectoryExistsDel(string fileOrFolderVar, DelSwitch delSwitchVar)
+        public static void IfFileDirExistsDel(string fileOrFolder, DelSwitch delSwitch)
         {
-            switch (delSwitchVar)
+            switch (delSwitch)
             {
                 case DelSwitch.file:
-                    if (File.Exists(fileOrFolderVar))
+                    if (File.Exists(fileOrFolder))
                     {
-                        File.Delete(fileOrFolderVar);
+                        File.Delete(fileOrFolder);
                     }
                     break;
 
                 case DelSwitch.folder:
-                    if (Directory.Exists(fileOrFolderVar))
+                    if (Directory.Exists(fileOrFolder))
                     {
-                        Directory.Delete(fileOrFolderVar, true);
+                        Directory.Delete(fileOrFolder, true);
                     }
                     break;
             }
@@ -60,7 +60,7 @@ namespace Drakengard1and2Extractor.Libraries
             return modifiedString;
         }
 
-        public static void GetFileHeader(BinaryReader readerName, ref string rExtnVar)
+        public static void GetFileHeader(BinaryReader readerName, ref string rExtn)
         {
             readerName.BaseStream.Position = 0;
             var foundExtn = readerName.ReadChars(4);
@@ -69,42 +69,42 @@ namespace Drakengard1and2Extractor.Libraries
             switch (realExtn)
             {
                 case "fpk":
-                    rExtnVar = ".fpk";
+                    rExtn = ".fpk";
                     break;
                 case "dpk":
-                    rExtnVar = ".dpk";
+                    rExtn = ".dpk";
                     break;
                 case "wZIM":
-                    rExtnVar = ".zim";
+                    rExtn = ".zim";
                     break;
                 case "V3a":
-                    rExtnVar = ".lz0";
+                    rExtn = ".lz0";
                     break;
                 case "KPS_":
-                    rExtnVar = ".kps";
+                    rExtn = ".kps";
                     break;
                 case "kvm1":
-                    rExtnVar = ".kvm";
+                    rExtn = ".kvm";
                     break;
                 case "SPK0":
-                    rExtnVar = ".spk0";
+                    rExtn = ".spk0";
                     break;
                 case "EVMT":
-                    rExtnVar = ".emt";
+                    rExtn = ".emt";
                     break;
                 case "DCMR":
-                    rExtnVar = ".dcmr";
+                    rExtn = ".dcmr";
                     break;
                 case "DLGT":
-                    rExtnVar = ".dlgt";
+                    rExtn = ".dlgt";
                     break;
                 case "pBAX":
-                    rExtnVar = ".hd2";
+                    rExtn = ".hd2";
                     break;
             }
             if (realExtn.StartsWith("bh"))
             {
-                rExtnVar = ".hi4";
+                rExtn = ".hi4";
             }
         }
     }

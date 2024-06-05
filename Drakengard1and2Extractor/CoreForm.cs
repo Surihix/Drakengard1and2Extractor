@@ -1,8 +1,10 @@
-﻿using Drakengard1and2Extractor.Libraries;
+﻿using Drakengard1and2Extractor.Support;
 using Drakengard1and2Extractor.Tools;
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Runtime.InteropServices;
+using System.Security.Cryptography;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -15,15 +17,15 @@ namespace Drakengard1and2Extractor
             InitializeComponent();
             if (!File.Exists("minilzo.dll"))
             {
-                CmnMethods.AppMsgBox("Missing minilz0.dll file.\nPlease check if this dll file is present next to the exe file.", "Error", MessageBoxIcon.Error);
+                CommonMethods.AppMsgBox("Missing minilz0.dll file.\nPlease check if this dll file is present next to the exe file.", "Error", MessageBoxIcon.Error);
                 Environment.Exit(0);
             }
 
-            MiniLz0Lib.ChecklzoDll();
+            ChecklzoDll();
 
             if (!File.Exists("AppHelp.txt"))
             {
-                CmnMethods.AppMsgBox("The AppHelp.txt file is missing\nPlease ensure that this file is present next to the app to use the Help option.", "Warning", MessageBoxIcon.Warning);
+                CommonMethods.AppMsgBox("The AppHelp.txt file is missing\nPlease ensure that this file is present next to the app to use the Help option.", "Warning", MessageBoxIcon.Warning);
             }
 
             Drk1RadioButton.Checked = true;
@@ -71,13 +73,13 @@ namespace Drakengard1and2Extractor
                         DisableButtons();
 
                         var readHeader = "";
-                        CmnMethods.HeaderCheck(mbinFile, ref readHeader);
+                        CommonMethods.HeaderCheck(mbinFile, ref readHeader);
 
                         if (!readHeader.StartsWith("fpk"))
                         {
                             StatusMsg("Error: Unable to detect fpk header");
                             StatusMsg("");
-                            CmnMethods.AppMsgBox("Unable to detect fpk header", "Error", MessageBoxIcon.Error);
+                            CommonMethods.AppMsgBox("Unable to detect fpk header", "Error", MessageBoxIcon.Error);
                             StatusMsg("Extraction has completed");
                             EnableButtons();
                             return;
@@ -108,12 +110,12 @@ namespace Drakengard1and2Extractor
                         DisableButtons();
 
                         var readHeader = "";
-                        CmnMethods.HeaderCheck(mbinFile, ref readHeader);
+                        CommonMethods.HeaderCheck(mbinFile, ref readHeader);
                         if (!readHeader.StartsWith("dpk"))
                         {
                             StatusMsg("Error: Unable to detect dpk header");
                             StatusMsg("");
-                            CmnMethods.AppMsgBox("Unable to detect dpk header", "Error", MessageBoxIcon.Error);
+                            CommonMethods.AppMsgBox("Unable to detect dpk header", "Error", MessageBoxIcon.Error);
                             StatusMsg("Extraction has completed");
                             EnableButtons();
                             return;
@@ -140,7 +142,7 @@ namespace Drakengard1and2Extractor
             }
             catch (Exception ex)
             {
-                CmnMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
+                CommonMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
             }
         }
 
@@ -164,14 +166,14 @@ namespace Drakengard1and2Extractor
                     var fpkFile = fpkSelect.FileName;
 
                     var readHeader = "";
-                    CmnMethods.HeaderCheck(fpkFile, ref readHeader);
+                    CommonMethods.HeaderCheck(fpkFile, ref readHeader);
                     DisableButtons();
 
                     if (!readHeader.StartsWith("fpk"))
                     {
                         StatusMsg("Error: Unable to detect fpk header");
                         StatusMsg("");
-                        CmnMethods.AppMsgBox("Unable to detect fpk header", "Error", MessageBoxIcon.Error);
+                        CommonMethods.AppMsgBox("Unable to detect fpk header", "Error", MessageBoxIcon.Error);
                         StatusMsg("Extraction has completed");
                         EnableButtons();
                         return;
@@ -198,7 +200,7 @@ namespace Drakengard1and2Extractor
             }
             catch (Exception ex)
             {
-                CmnMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
+                CommonMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
             }
         }
 
@@ -221,13 +223,13 @@ namespace Drakengard1and2Extractor
                     var dpkFile = dpkSelect.FileName;
 
                     var readHeader = "";
-                    CmnMethods.HeaderCheck(dpkFile, ref readHeader);
+                    CommonMethods.HeaderCheck(dpkFile, ref readHeader);
 
                     if (!readHeader.StartsWith("dpk"))
                     {
                         StatusMsg("Error: Unable to detect dpk header");
                         StatusMsg("");
-                        CmnMethods.AppMsgBox("Unable to detect dpk header", "Error", MessageBoxIcon.Error);
+                        CommonMethods.AppMsgBox("Unable to detect dpk header", "Error", MessageBoxIcon.Error);
                         StatusMsg("Extraction has completed");
                         EnableButtons();
                         return;
@@ -254,7 +256,7 @@ namespace Drakengard1and2Extractor
             }
             catch (Exception ex)
             {
-                CmnMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
+                CommonMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
             }
         }
 
@@ -296,14 +298,14 @@ namespace Drakengard1and2Extractor
                     var zimFile = zimSelect.FileName;
 
                     var readHeader = "";
-                    CmnMethods.HeaderCheck(zimFile, ref readHeader);
+                    CommonMethods.HeaderCheck(zimFile, ref readHeader);
                     DisableButtons();
 
                     if (!readHeader.StartsWith("wZIM"))
                     {
                         StatusMsg("Error: Unable to detect zim header");
                         StatusMsg("");
-                        CmnMethods.AppMsgBox("Unable to detect zim header", "Error", MessageBoxIcon.Error);
+                        CommonMethods.AppMsgBox("Unable to detect zim header", "Error", MessageBoxIcon.Error);
                         StatusMsg("Conversion has completed");
                         EnableButtons();
                         return;
@@ -331,7 +333,7 @@ namespace Drakengard1and2Extractor
             }
             catch (Exception ex)
             {
-                CmnMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
+                CommonMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
             }
         }
 
@@ -354,14 +356,14 @@ namespace Drakengard1and2Extractor
                     var spk0File = spk0Select.FileName;
 
                     var readHeader = "";
-                    CmnMethods.HeaderCheck(spk0File, ref readHeader);
+                    CommonMethods.HeaderCheck(spk0File, ref readHeader);
                     DisableButtons();
 
                     if (!readHeader.StartsWith("SPK0"))
                     {
                         StatusMsg("Error: Unable to detect spk0 header");
                         StatusMsg("");
-                        CmnMethods.AppMsgBox("Unable to detect spk0 header", "Error", MessageBoxIcon.Error);
+                        CommonMethods.AppMsgBox("Unable to detect spk0 header", "Error", MessageBoxIcon.Error);
                         StatusMsg("Conversion has completed");
                         EnableButtons();
                         return;
@@ -389,7 +391,7 @@ namespace Drakengard1and2Extractor
             }
             catch (Exception ex)
             {
-                CmnMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
+                CommonMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
             }
         }
 
@@ -412,6 +414,42 @@ namespace Drakengard1and2Extractor
                 ExtBinBtn.Enabled = true;
                 ExtFpkBtn.Enabled = true;
                 ExtDpkBtn.Enabled = true;
+            }
+        }
+
+
+        public void ChecklzoDll()
+        {
+            var x86DllSha256 = "d414fad15b356f33bf02479bd417d2df767ee102180aae718ef1135146da2884";
+            var x64DllSha256 = "ea006fafb08dd554657b1c81e45c92e88d663aca0c79c48ae1f3dca22e1e2314";
+            string dllBuildHash;
+
+            var appArchitecture = RuntimeInformation.ProcessArchitecture;
+            using (FileStream lzoDllStream = new FileStream("minilzo.dll", FileMode.Open, FileAccess.Read))
+            {
+                using (SHA256 dllSHA256 = SHA256.Create())
+                {
+                    dllBuildHash = BitConverter.ToString(dllSHA256.ComputeHash(lzoDllStream)).Replace("-", "").ToLower();
+                }
+            }
+
+            switch (appArchitecture)
+            {
+                case Architecture.X86:
+                    if (!dllBuildHash.Equals(x86DllSha256))
+                    {
+                        CommonMethods.AppMsgBox("Detected incompatible minilz0.dll file.\nPlease check if the dll file included with this build of the app is the correct one.", "Error", MessageBoxIcon.Error);
+                        Environment.Exit(0);
+                    }
+                    break;
+
+                case Architecture.X64:
+                    if (!dllBuildHash.Equals(x64DllSha256))
+                    {
+                        CommonMethods.AppMsgBox("Detected incompatible minilz0.dll file.\nPlease check if the dll file included with this build of the app is the correct one.", "Error", MessageBoxIcon.Error);
+                        Environment.Exit(0);
+                    }
+                    break;
             }
         }
 
@@ -462,7 +500,7 @@ namespace Drakengard1and2Extractor
             }
             catch (Exception ex)
             {
-                CmnMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
+                CommonMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
             }
         }
     }
