@@ -11,6 +11,8 @@ namespace Drakengard1and2Extractor.Tools
         {
             try
             {
+                LoggingHelpers.LogMessage(CoreForm.NewLineChara);
+
                 var extractDir = Path.GetFullPath(mainBinFile) + "_extracted";
                 CommonMethods.IfFileDirExistsDel(extractDir, CommonMethods.DelSwitch.folder);
                 Directory.CreateDirectory(extractDir);
@@ -139,6 +141,8 @@ namespace Drakengard1and2Extractor.Tools
                                     rExtn = "";
                                 }
 
+                                LoggingHelpers.LogMessage($"Extracted '{fname}{fileCount}'");
+
                                 intialOffset += 16;
                                 fileCount++;
                             }
@@ -148,6 +152,7 @@ namespace Drakengard1and2Extractor.Tools
                     }
                 }
 
+                LoggingHelpers.LogMessage(CoreForm.NewLineChara);
                 CommonMethods.AppMsgBox("Extracted " + Path.GetFileName(mainBinFile) + " file", "Success", MessageBoxIcon.Information);
             }
             catch (Exception ex)

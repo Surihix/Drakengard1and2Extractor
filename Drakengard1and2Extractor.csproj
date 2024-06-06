@@ -97,6 +97,7 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Drakengard1and2Extractor\AppAbout.cs">
@@ -202,10 +203,12 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Drakengard1and2Extractor\Support\CommonMethods.cs" />
+    <Compile Include="Drakengard1and2Extractor\Support\Lz0Decompression.cs" />
     <Compile Include="Drakengard1and2Extractor\Support\ImageOperations\BmpPngHelpers.cs" />
     <Compile Include="Drakengard1and2Extractor\Support\ImageOperations\DDSimgHelpers.cs" />
     <Compile Include="Drakengard1and2Extractor\Support\ImageOperations\UnSwizzleHelpers.cs" />
     <Compile Include="Drakengard1and2Extractor\Support\ImageOperations\ImgOptions.cs" />
+    <Compile Include="Drakengard1and2Extractor\Support\LoggingHelpers.cs" />
     <Compile Include="Drakengard1and2Extractor\Support\Minilz0Helpers.cs" />
     <Compile Include="Drakengard1and2Extractor\Support\StreamHelpers.cs" />
     <Compile Include="Drakengard1and2Extractor\Tools\Drk1BIN.cs" />

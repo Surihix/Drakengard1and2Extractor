@@ -30,12 +30,12 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(CoreForm));
-            this.StatusListBox = new System.Windows.Forms.ListBox();
             this.BINFileExtGrp = new System.Windows.Forms.GroupBox();
             this.Drk2RadioButton = new System.Windows.Forms.RadioButton();
             this.Drk1RadioButton = new System.Windows.Forms.RadioButton();
             this.ExtBinBtn = new System.Windows.Forms.Button();
             this.FileExtGrp = new System.Windows.Forms.GroupBox();
+            this.ExtKpsBtn = new System.Windows.Forms.Button();
             this.BatchModeBtn = new System.Windows.Forms.Button();
             this.ExtDpkBtn = new System.Windows.Forms.Button();
             this.ExtFpkBtn = new System.Windows.Forms.Button();
@@ -54,20 +54,15 @@
             this.ImgConvertersGroupBox = new System.Windows.Forms.GroupBox();
             this.BinExtractionGroupBox = new System.Windows.Forms.GroupBox();
             this.BatchModeToolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.StatusTextBox = new System.Windows.Forms.TextBox();
+            this.StatusDelBtn = new System.Windows.Forms.Button();
+            this.KPStoolTip = new System.Windows.Forms.ToolTip(this.components);
             this.BINFileExtGrp.SuspendLayout();
             this.FileExtGrp.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.AppPictureBox)).BeginInit();
             this.ImgConvertersGroupBox.SuspendLayout();
             this.BinExtractionGroupBox.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // StatusListBox
-            // 
-            this.StatusListBox.FormattingEnabled = true;
-            this.StatusListBox.Location = new System.Drawing.Point(12, 410);
-            this.StatusListBox.Name = "StatusListBox";
-            this.StatusListBox.Size = new System.Drawing.Size(356, 69);
-            this.StatusListBox.TabIndex = 5;
             // 
             // BINFileExtGrp
             // 
@@ -107,7 +102,7 @@
             // ExtBinBtn
             // 
             this.ExtBinBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ExtBinBtn.Location = new System.Drawing.Point(33, 55);
+            this.ExtBinBtn.Location = new System.Drawing.Point(33, 38);
             this.ExtBinBtn.Name = "ExtBinBtn";
             this.ExtBinBtn.Size = new System.Drawing.Size(103, 39);
             this.ExtBinBtn.TabIndex = 0;
@@ -118,19 +113,31 @@
             // 
             // FileExtGrp
             // 
+            this.FileExtGrp.Controls.Add(this.ExtKpsBtn);
             this.FileExtGrp.Controls.Add(this.BatchModeBtn);
             this.FileExtGrp.Controls.Add(this.ExtDpkBtn);
             this.FileExtGrp.Controls.Add(this.ExtFpkBtn);
-            this.FileExtGrp.Location = new System.Drawing.Point(201, 141);
+            this.FileExtGrp.Location = new System.Drawing.Point(12, 226);
             this.FileExtGrp.Name = "FileExtGrp";
-            this.FileExtGrp.Size = new System.Drawing.Size(168, 130);
+            this.FileExtGrp.Size = new System.Drawing.Size(168, 168);
             this.FileExtGrp.TabIndex = 1;
             this.FileExtGrp.TabStop = false;
             this.FileExtGrp.Text = "File Extraction :";
             // 
+            // ExtKpsBtn
+            // 
+            this.ExtKpsBtn.Location = new System.Drawing.Point(42, 90);
+            this.ExtKpsBtn.Name = "ExtKpsBtn";
+            this.ExtKpsBtn.Size = new System.Drawing.Size(84, 28);
+            this.ExtKpsBtn.TabIndex = 3;
+            this.ExtKpsBtn.Text = "Extract KPS";
+            this.ExtKpsBtn.UseVisualStyleBackColor = true;
+            this.ExtKpsBtn.Click += new System.EventHandler(this.ExtKpsBtn_Click);
+            this.ExtKpsBtn.MouseHover += new System.EventHandler(this.ExtKpsBtn_MouseHover);
+            // 
             // BatchModeBtn
             // 
-            this.BatchModeBtn.Location = new System.Drawing.Point(46, 90);
+            this.BatchModeBtn.Location = new System.Drawing.Point(42, 124);
             this.BatchModeBtn.Name = "BatchModeBtn";
             this.BatchModeBtn.Size = new System.Drawing.Size(84, 28);
             this.BatchModeBtn.TabIndex = 2;
@@ -141,7 +148,7 @@
             // 
             // ExtDpkBtn
             // 
-            this.ExtDpkBtn.Location = new System.Drawing.Point(46, 56);
+            this.ExtDpkBtn.Location = new System.Drawing.Point(42, 56);
             this.ExtDpkBtn.Name = "ExtDpkBtn";
             this.ExtDpkBtn.Size = new System.Drawing.Size(84, 28);
             this.ExtDpkBtn.TabIndex = 1;
@@ -152,7 +159,7 @@
             // 
             // ExtFpkBtn
             // 
-            this.ExtFpkBtn.Location = new System.Drawing.Point(46, 22);
+            this.ExtFpkBtn.Location = new System.Drawing.Point(42, 22);
             this.ExtFpkBtn.Name = "ExtFpkBtn";
             this.ExtFpkBtn.Size = new System.Drawing.Size(84, 28);
             this.ExtFpkBtn.TabIndex = 0;
@@ -163,7 +170,7 @@
             // 
             // ConvertSPK0Btn
             // 
-            this.ConvertSPK0Btn.Location = new System.Drawing.Point(45, 56);
+            this.ConvertSPK0Btn.Location = new System.Drawing.Point(45, 73);
             this.ConvertSPK0Btn.Name = "ConvertSPK0Btn";
             this.ConvertSPK0Btn.Size = new System.Drawing.Size(84, 28);
             this.ConvertSPK0Btn.TabIndex = 1;
@@ -174,7 +181,7 @@
             // 
             // ConvertZIMBtn
             // 
-            this.ConvertZIMBtn.Location = new System.Drawing.Point(45, 22);
+            this.ConvertZIMBtn.Location = new System.Drawing.Point(45, 39);
             this.ConvertZIMBtn.Name = "ConvertZIMBtn";
             this.ConvertZIMBtn.Size = new System.Drawing.Size(84, 28);
             this.ConvertZIMBtn.TabIndex = 0;
@@ -187,7 +194,7 @@
             // 
             this.AboutlinkLabel.AutoSize = true;
             this.AboutlinkLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.AboutlinkLabel.Location = new System.Drawing.Point(14, 487);
+            this.AboutlinkLabel.Location = new System.Drawing.Point(14, 562);
             this.AboutlinkLabel.Name = "AboutlinkLabel";
             this.AboutlinkLabel.Size = new System.Drawing.Size(38, 15);
             this.AboutlinkLabel.TabIndex = 6;
@@ -199,7 +206,7 @@
             // 
             this.HelpLinkLabel.AutoSize = true;
             this.HelpLinkLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.HelpLinkLabel.Location = new System.Drawing.Point(335, 487);
+            this.HelpLinkLabel.Location = new System.Drawing.Point(335, 562);
             this.HelpLinkLabel.Name = "HelpLinkLabel";
             this.HelpLinkLabel.Size = new System.Drawing.Size(33, 15);
             this.HelpLinkLabel.TabIndex = 8;
@@ -210,16 +217,16 @@
             // Versionlabel
             // 
             this.Versionlabel.AutoSize = true;
-            this.Versionlabel.Location = new System.Drawing.Point(176, 489);
+            this.Versionlabel.Location = new System.Drawing.Point(176, 564);
             this.Versionlabel.Name = "Versionlabel";
             this.Versionlabel.Size = new System.Drawing.Size(28, 13);
             this.Versionlabel.TabIndex = 7;
-            this.Versionlabel.Text = "v2.2";
+            this.Versionlabel.Text = "v2.3";
             // 
             // StatusLabel
             // 
             this.StatusLabel.AutoSize = true;
-            this.StatusLabel.Location = new System.Drawing.Point(14, 396);
+            this.StatusLabel.Location = new System.Drawing.Point(14, 416);
             this.StatusLabel.Name = "StatusLabel";
             this.StatusLabel.Size = new System.Drawing.Size(40, 13);
             this.StatusLabel.TabIndex = 4;
@@ -238,9 +245,9 @@
             // 
             this.ImgConvertersGroupBox.Controls.Add(this.ConvertZIMBtn);
             this.ImgConvertersGroupBox.Controls.Add(this.ConvertSPK0Btn);
-            this.ImgConvertersGroupBox.Location = new System.Drawing.Point(202, 288);
+            this.ImgConvertersGroupBox.Location = new System.Drawing.Point(196, 259);
             this.ImgConvertersGroupBox.Name = "ImgConvertersGroupBox";
-            this.ImgConvertersGroupBox.Size = new System.Drawing.Size(167, 96);
+            this.ImgConvertersGroupBox.Size = new System.Drawing.Size(167, 135);
             this.ImgConvertersGroupBox.TabIndex = 3;
             this.ImgConvertersGroupBox.TabStop = false;
             this.ImgConvertersGroupBox.Text = "Convert Images :";
@@ -248,18 +255,41 @@
             // BinExtractionGroupBox
             // 
             this.BinExtractionGroupBox.Controls.Add(this.ExtBinBtn);
-            this.BinExtractionGroupBox.Location = new System.Drawing.Point(12, 235);
+            this.BinExtractionGroupBox.Location = new System.Drawing.Point(195, 141);
             this.BinExtractionGroupBox.Name = "BinExtractionGroupBox";
-            this.BinExtractionGroupBox.Size = new System.Drawing.Size(168, 149);
+            this.BinExtractionGroupBox.Size = new System.Drawing.Size(168, 112);
             this.BinExtractionGroupBox.TabIndex = 2;
             this.BinExtractionGroupBox.TabStop = false;
             this.BinExtractionGroupBox.Text = "BIN Extraction :";
+            // 
+            // StatusTextBox
+            // 
+            this.StatusTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.StatusTextBox.Location = new System.Drawing.Point(13, 434);
+            this.StatusTextBox.Multiline = true;
+            this.StatusTextBox.Name = "StatusTextBox";
+            this.StatusTextBox.ReadOnly = true;
+            this.StatusTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.StatusTextBox.Size = new System.Drawing.Size(356, 71);
+            this.StatusTextBox.TabIndex = 9;
+            // 
+            // StatusDelBtn
+            // 
+            this.StatusDelBtn.Location = new System.Drawing.Point(153, 517);
+            this.StatusDelBtn.Name = "StatusDelBtn";
+            this.StatusDelBtn.Size = new System.Drawing.Size(75, 23);
+            this.StatusDelBtn.TabIndex = 10;
+            this.StatusDelBtn.Text = "Clear Status";
+            this.StatusDelBtn.UseVisualStyleBackColor = true;
+            this.StatusDelBtn.Click += new System.EventHandler(this.StatusDelBtn_Click);
             // 
             // CoreForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(381, 513);
+            this.ClientSize = new System.Drawing.Size(381, 585);
+            this.Controls.Add(this.StatusDelBtn);
+            this.Controls.Add(this.StatusTextBox);
             this.Controls.Add(this.BinExtractionGroupBox);
             this.Controls.Add(this.ImgConvertersGroupBox);
             this.Controls.Add(this.FileExtGrp);
@@ -269,7 +299,6 @@
             this.Controls.Add(this.AboutlinkLabel);
             this.Controls.Add(this.BINFileExtGrp);
             this.Controls.Add(this.AppPictureBox);
-            this.Controls.Add(this.StatusListBox);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
@@ -287,8 +316,6 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.ListBox StatusListBox;
         private System.Windows.Forms.PictureBox AppPictureBox;
         private System.Windows.Forms.GroupBox BINFileExtGrp;
         private System.Windows.Forms.Button ExtBinBtn;
@@ -312,6 +339,10 @@
         private System.Windows.Forms.GroupBox ImgConvertersGroupBox;
         private System.Windows.Forms.GroupBox BinExtractionGroupBox;
         private System.Windows.Forms.ToolTip BatchModeToolTip;
+        private System.Windows.Forms.TextBox StatusTextBox;
+        private System.Windows.Forms.Button ExtKpsBtn;
+        private System.Windows.Forms.Button StatusDelBtn;
+        private System.Windows.Forms.ToolTip KPStoolTip;
     }
 }
 
