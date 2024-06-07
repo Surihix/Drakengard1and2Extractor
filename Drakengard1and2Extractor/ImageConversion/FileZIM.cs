@@ -139,14 +139,11 @@ namespace Drakengard1and2Extractor.ImageConversion
                         if (bppFlag == 48)
                         {
                             finalizedPalette = paletteBuffer.UnSwizzlePalette();
-                            File.WriteAllBytes("test_Palette", finalizedPalette);
                         }
                         else
                         {
                             finalizedPalette = paletteBuffer;
                         }
-
-                        File.WriteAllBytes("test_Pixels", finalizedPixels);
 
                         // Convert according to the
                         // specified format
