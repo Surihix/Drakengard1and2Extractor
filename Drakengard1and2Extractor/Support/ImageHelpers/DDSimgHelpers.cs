@@ -74,7 +74,7 @@ internal static class DDSimgHelpers
                 long writePos = 128;
                 for (int i = 0; i < imgOptions.Width * imgOptions.Height; i++)
                 {
-                    var palettePos = pixelsData[i];
+                    int palettePos = pixelsData[i];
                     palettePos *= 4;
 
                     byte red = paletteData[palettePos];

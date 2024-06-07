@@ -11,7 +11,7 @@ internal static class BmpPngHelpers
                 for (int x = 0; x < imgOptions.Width; x++)
                 {
                     var currentPixel = (y * imgOptions.Width) + x;
-                    var palettePos = pixelData[currentPixel];
+                    int palettePos = pixelData[currentPixel];
                     palettePos *= 4;
 
                     byte red = paletteData[palettePos];
