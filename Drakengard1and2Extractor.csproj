@@ -112,6 +112,7 @@
     <Compile Include="Drakengard1and2Extractor\BatchMode.Designer.cs">
       <DependentUpon>BatchMode.cs</DependentUpon>
     </Compile>
+    <Compile Include="Drakengard1and2Extractor\FileExtraction\FileKPS.cs" />
     <Compile Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\AdditionalVisualStyleElements.cs" />
     <Compile Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\AnimationResource.cs" />
     <Compile Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\ButtonType.cs" />
@@ -204,29 +205,29 @@
     </Compile>
     <Compile Include="Drakengard1and2Extractor\Support\CommonMethods.cs" />
     <Compile Include="Drakengard1and2Extractor\Support\Lz0Decompression.cs" />
-    <Compile Include="Drakengard1and2Extractor\Support\ImageOperations\BmpPngHelpers.cs" />
-    <Compile Include="Drakengard1and2Extractor\Support\ImageOperations\DDSimgHelpers.cs" />
-    <Compile Include="Drakengard1and2Extractor\Support\ImageOperations\UnSwizzleHelpers.cs" />
-    <Compile Include="Drakengard1and2Extractor\Support\ImageOperations\ImgOptions.cs" />
+    <Compile Include="Drakengard1and2Extractor\Support\ImageHelpers\BmpPngHelpers.cs" />
+    <Compile Include="Drakengard1and2Extractor\Support\ImageHelpers\DDSimgHelpers.cs" />
+    <Compile Include="Drakengard1and2Extractor\Support\ImageHelpers\UnSwizzleHelpers.cs" />
+    <Compile Include="Drakengard1and2Extractor\Support\ImageHelpers\ImgOptions.cs" />
     <Compile Include="Drakengard1and2Extractor\Support\LoggingHelpers.cs" />
     <Compile Include="Drakengard1and2Extractor\Support\Minilz0Helpers.cs" />
-    <Compile Include="Drakengard1and2Extractor\Support\StreamHelpers.cs" />
-    <Compile Include="Drakengard1and2Extractor\Tools\Drk1BIN.cs" />
-    <Compile Include="Drakengard1and2Extractor\Tools\Drk2BIN.cs" />
-    <Compile Include="Drakengard1and2Extractor\Tools\FileSPK0.cs">
+    <Compile Include="Drakengard1and2Extractor\Support\Extensions\StreamHelpers.cs" />
+    <Compile Include="Drakengard1and2Extractor\BinExtraction\Drk1BIN.cs" />
+    <Compile Include="Drakengard1and2Extractor\BinExtraction\Drk2BIN.cs" />
+    <Compile Include="Drakengard1and2Extractor\ImageConversion\FileSPK0.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Drakengard1and2Extractor\Tools\FileSPK0.Designer.cs">
+    <Compile Include="Drakengard1and2Extractor\ImageConversion\FileSPK0.Designer.cs">
       <DependentUpon>FileSPK0.cs</DependentUpon>
     </Compile>
-    <Compile Include="Drakengard1and2Extractor\Tools\FileZIM.cs">
+    <Compile Include="Drakengard1and2Extractor\ImageConversion\FileZIM.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Drakengard1and2Extractor\Tools\FileZIM.Designer.cs">
+    <Compile Include="Drakengard1and2Extractor\ImageConversion\FileZIM.Designer.cs">
       <DependentUpon>FileZIM.cs</DependentUpon>
     </Compile>
-    <Compile Include="Drakengard1and2Extractor\Tools\FileDPK.cs" />
-    <Compile Include="Drakengard1and2Extractor\Tools\FileFPK.cs" />
+    <Compile Include="Drakengard1and2Extractor\FileExtraction\FileDPK.cs" />
+    <Compile Include="Drakengard1and2Extractor\FileExtraction\FileFPK.cs" />
     <Compile Include="Drakengard1and2Extractor\CoreForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -259,10 +260,10 @@
       <SubType>Designer</SubType>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Drakengard1and2Extractor\Tools\FileSPK0.resx">
+    <EmbeddedResource Include="Drakengard1and2Extractor\ImageConversion\FileSPK0.resx">
       <DependentUpon>FileSPK0.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Drakengard1and2Extractor\Tools\FileZIM.resx">
+    <EmbeddedResource Include="Drakengard1and2Extractor\ImageConversion\FileZIM.resx">
       <DependentUpon>FileZIM.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\.editorconfig" />

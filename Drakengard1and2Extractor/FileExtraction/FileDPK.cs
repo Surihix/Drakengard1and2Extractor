@@ -3,7 +3,7 @@ using System;
 using System.IO;
 using System.Windows.Forms;
 
-namespace Drakengard1and2Extractor.Tools
+namespace Drakengard1and2Extractor.FileExtraction
 {
     internal class FileDPK
     {
@@ -59,14 +59,19 @@ namespace Drakengard1and2Extractor.Tools
                     }
                 }
 
-                if (isSingleFile.Equals(true))
+                if (isSingleFile)
                 {
+                    LoggingHelpers.LogMessage(CoreForm.NewLineChara);
+                    LoggingHelpers.LogMessage("Extraction has completed!");
+
                     CommonMethods.AppMsgBox("Extracted " + Path.GetFileName(dpkFile) + " file", "Success", MessageBoxIcon.Information);
                 }
             }
             catch (Exception ex)
             {
                 CommonMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
+                LoggingHelpers.LogMessage(CoreForm.NewLineChara);
+                LoggingHelpers.LogException("Exception: " + ex);
             }
         }
     }

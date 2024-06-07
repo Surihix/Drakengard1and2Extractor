@@ -1,5 +1,7 @@
-﻿using Drakengard1and2Extractor.Support;
-using Drakengard1and2Extractor.Tools;
+﻿using Drakengard1and2Extractor.BinExtraction;
+using Drakengard1and2Extractor.FileExtraction;
+using Drakengard1and2Extractor.ImageConversion;
+using Drakengard1and2Extractor.Support;
 using System;
 using System.Diagnostics;
 using System.Drawing;
@@ -97,8 +99,6 @@ namespace Drakengard1and2Extractor
                                 }
                                 finally
                                 {
-                                    LoggingHelpers.LogMessage("Extraction has completed");
-
                                     BeginInvoke(new Action(() => EnableDisableControls(true)));
                                 }
                             });
@@ -137,8 +137,6 @@ namespace Drakengard1and2Extractor
                                 }
                                 finally
                                 {
-                                    LoggingHelpers.LogMessage("Extraction has completed");
-
                                     BeginInvoke(new Action(() => EnableDisableControls(true)));
                                 }
                             });
@@ -196,8 +194,6 @@ namespace Drakengard1and2Extractor
                             }
                             finally
                             {
-                                LoggingHelpers.LogMessage("Extraction has completed");
-
                                 BeginInvoke(new Action(() => EnableDisableControls(true)));
                             }
                         });
@@ -253,8 +249,6 @@ namespace Drakengard1and2Extractor
                             }
                             finally
                             {
-                                LoggingHelpers.LogMessage("Extraction has completed");
-
                                 BeginInvoke(new Action(() => EnableDisableControls(true)));
                             }
                         });

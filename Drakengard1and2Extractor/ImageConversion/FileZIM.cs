@@ -3,7 +3,7 @@ using System;
 using System.IO;
 using System.Windows.Forms;
 
-namespace Drakengard1and2Extractor.Tools
+namespace Drakengard1and2Extractor.ImageConversion
 {
     public partial class FileZIM : Form
     {
@@ -111,12 +111,12 @@ namespace Drakengard1and2Extractor.Tools
                         // Process pixel data
                         zimStream.Seek(352, SeekOrigin.Begin);
                         byte[] pixelsBuffer = new byte[imgSize];
-                        var pixelDataToCopy = zimStream.Read(pixelsBuffer, 0, pixelsBuffer.Length);
+                        _ = zimStream.Read(pixelsBuffer, 0, pixelsBuffer.Length);
 
                         if (UnSwizzleCheckBox.Checked && bppFlag == 48)
                         {
                             byte[] unswizzledPixelsBuffer = pixelsBuffer.UnSwizzlePixels(imgOptions);
-                            pixelsBuffer = unswizzledPixelsBuffer;
+                            pixelsBuffer = unswizzledPixelsBuffer;                            
                         }
 
                         byte[] finalizedPixels = new byte[] { };
@@ -133,13 +133,20 @@ namespace Drakengard1and2Extractor.Tools
                         // Process palette data
                         zimStream.Seek(paletteSection + 160, SeekOrigin.Begin);
                         byte[] paletteBuffer = new byte[palSize];
-                        var paletteDataToCopy = zimStream.Read(paletteBuffer, 0, paletteBuffer.Length);
+                        _ = zimStream.Read(paletteBuffer, 0, paletteBuffer.Length);
 
-                        byte[] finalizedPalette = new byte[] { };
+                        byte[] finalizedPalette = new byte[palSize];
                         if (bppFlag == 48)
                         {
                             finalizedPalette = paletteBuffer.UnSwizzlePalette();
+                            File.WriteAllBytes("test_Palette", finalizedPalette);
                         }
+                        else
+                        {
+                            finalizedPalette = paletteBuffer;
+                        }
+
+                        File.WriteAllBytes("test_Pixels", finalizedPixels);
 
                         // Convert according to the
                         // specified format

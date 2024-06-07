@@ -4,7 +4,7 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Drakengard1and2Extractor.Tools
+namespace Drakengard1and2Extractor.ImageConversion
 {
     public partial class FileSPK0 : Form
     {

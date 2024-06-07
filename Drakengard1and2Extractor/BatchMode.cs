@@ -1,5 +1,5 @@
 ﻿using Drakengard1and2Extractor.Support;
-using Drakengard1and2Extractor.Tools;
+using Drakengard1and2Extractor.FileExtraction;
 using Ookii.Dialogs.WinForms;
 using System;
 using System.IO;

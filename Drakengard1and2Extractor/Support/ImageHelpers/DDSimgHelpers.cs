@@ -30,7 +30,7 @@ internal static class DDSimgHelpers
                 ddsStreamWriter.Write(BitConverter.GetBytes((uint)imgOptions.Height));
 
                 _ = ddsStreamWriter.BaseStream.Position = 16;
-                ddsStreamWriter.Write(BitConverter.GetBytes((uint)imgOptions.Height));
+                ddsStreamWriter.Write(BitConverter.GetBytes((uint)imgOptions.Width));
 
                 _ = ddsStreamWriter.BaseStream.Position = 28;
                 ddsStreamWriter.Write(BitConverter.GetBytes(1));
@@ -71,6 +71,7 @@ internal static class DDSimgHelpers
 
 
                 // Write the image data
+                long writePos = 128;
                 for (int i = 0; i < imgOptions.Width * imgOptions.Height; i++)
                 {
                     var palettePos = pixelsData[i];
@@ -87,13 +88,16 @@ internal static class DDSimgHelpers
                         alpha = 128;
                     }
 
-                    byte[] writeArray = new byte[3];
+                    byte[] writeArray = new byte[4];
                     writeArray[0] = blue;
                     writeArray[1] = green;
                     writeArray[2] = red;
                     writeArray[3] = (byte)alpha;
 
+                    ddsStreamWriter.BaseStream.Position = writePos;
                     ddsStreamWriter.Write(writeArray);
+
+                    writePos += 4;
                 }
             }
         }

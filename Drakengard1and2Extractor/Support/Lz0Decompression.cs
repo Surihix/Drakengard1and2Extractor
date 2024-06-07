@@ -20,7 +20,7 @@ namespace Drakengard1and2Extractor.Support
                     var lz0Chunks = lz0Reader.ReadUInt32();
                     uint lz0DataReadStart = 32;
 
-                    for (int lzo = 0; lzo < lz0Chunks; lzo++)
+                    for (int l = 0; l < lz0Chunks; l++)
                     {
                         lz0Reader.BaseStream.Position = lz0DataReadStart + 4;
                         var cmpChunkSize = lz0Reader.ReadUInt32();
@@ -40,10 +40,7 @@ namespace Drakengard1and2Extractor.Support
                         lz0Reader.BaseStream.Seek(lz0DataReadStart + 12, SeekOrigin.Begin);
                         lz0Reader.BaseStream.Seek(seekLength, SeekOrigin.Current);
 
-                        var nextSeek = (uint)lz0Reader.BaseStream.Position;
-
-                        uint newLzoDataReadStart = nextSeek;
-                        lz0DataReadStart = newLzoDataReadStart;
+                        lz0DataReadStart = (uint)lz0Reader.BaseStream.Position;
                     }
                 }
             }

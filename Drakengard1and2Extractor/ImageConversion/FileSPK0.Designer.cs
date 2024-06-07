@@ -1,4 +1,4 @@
-﻿namespace Drakengard1and2Extractor.Tools
+﻿namespace Drakengard1and2Extractor.ImageConversion
 {
     partial class FileSPK0
     {

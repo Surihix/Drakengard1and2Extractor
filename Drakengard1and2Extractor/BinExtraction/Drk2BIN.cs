@@ -3,7 +3,7 @@ using System;
 using System.IO;
 using System.Windows.Forms;
 
-namespace Drakengard1and2Extractor.Tools
+namespace Drakengard1and2Extractor.BinExtraction
 {
     internal class Drk2BIN
     {
@@ -75,11 +75,16 @@ namespace Drakengard1and2Extractor.Tools
                     }
                 }
 
+                LoggingHelpers.LogMessage(CoreForm.NewLineChara);
+                LoggingHelpers.LogMessage("Extraction has completed!");
+
                 CommonMethods.AppMsgBox("Extracted " + Path.GetFileName(mainBinFile) + " file", "Success", MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
                 CommonMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
+                LoggingHelpers.LogMessage(CoreForm.NewLineChara);
+                LoggingHelpers.LogException("Exception: " + ex);
             }
         }
     }

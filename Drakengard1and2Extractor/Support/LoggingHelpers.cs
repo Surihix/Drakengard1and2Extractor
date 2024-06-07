@@ -38,6 +38,12 @@ namespace Drakengard1and2Extractor.Support
         }
 
 
+        public static void LogException(string exceptionMsg)
+        {
+
+        }
+
+
         public static void LogMessageBatch(string message)
         {
             _BatchModeStatusTxtBox.BeginInvoke((Action)(() =>

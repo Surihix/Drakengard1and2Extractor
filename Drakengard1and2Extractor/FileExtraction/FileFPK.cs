@@ -4,10 +4,11 @@ using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace Drakengard1and2Extractor.Tools
+namespace Drakengard1and2Extractor.FileExtraction
 {
     internal class FileFPK
     {
+        private static readonly string[] _KnownExtns = { ".fpk", ".dpk", ".zim", ".lz0", ".kps", ".kvm", ".spk0", ".emt", ".dcmr", ".dlgt", ".hi4", ".hd2" };
         public static void ExtractFPK(string fpkFile, bool isSingleFile)
         {
             try
@@ -69,11 +70,29 @@ namespace Drakengard1and2Extractor.Tools
 
                                         File.Move(extractDir + "/" + fName + $"{fileCount}" + fExtn, extractDir + "/" + fName + $"{fileCount}" + fExtn + rExtn);
 
-                                        string[] knownExtnArray = { ".fpk", ".dpk", ".zim", ".lz0", ".kps", ".kvm", ".spk0", ".emt", ".dcmr", ".dlgt", ".hi4", ".hd2" };
-
-                                        if (knownExtnArray.Contains(rExtn))
+                                        if (_KnownExtns.Contains(rExtn))
                                         {
-                                            if (!rExtn.Contains(".lz0"))
+                                            if (rExtn == ".lz0")
+                                            {
+                                                var currentLz0File = extractDir + "/" + fName + $"{fileCount}" + fExtn + rExtn;
+                                                var currentDcmpLz0File = extractDir + "/" + Path.GetFileNameWithoutExtension(extractDir + "/" + fName + $"{fileCount}" + fExtn + rExtn);
+
+                                                var dcmpLz0Data = Lz0Decompression.ProcessLz0Data(currentLz0File);
+                                                using (FileStream dcmpLz0Stream = new FileStream(currentDcmpLz0File, FileMode.Append, FileAccess.Write))
+                                                {
+                                                    dcmpLz0Stream.Write(dcmpLz0Data, 0, dcmpLz0Data.Length);
+                                                }
+
+                                                File.Delete(currentLz0File);
+
+                                                using (BinaryReader dcmpLz0Reader = new BinaryReader(File.Open(currentDcmpLz0File, FileMode.Open, FileAccess.Read)))
+                                                {
+                                                    CommonMethods.GetFileHeader(dcmpLz0Reader, ref rExtn);
+                                                }
+
+                                                File.Move(currentDcmpLz0File, extractDir + "/" + fName + $"{fileCount}" + rExtn);
+                                            }
+                                            else
                                             {
                                                 var outFileNameWithoutExtn = Path.GetFileNameWithoutExtension(extractDir + "/" + fName + $"{fileCount}" + fExtn + rExtn);
                                                 File.Move(extractDir + "/" + fName + $"{fileCount}" + fExtn + rExtn, extractDir + "/" + outFileNameWithoutExtn);
@@ -90,65 +109,6 @@ namespace Drakengard1and2Extractor.Tools
 
                                                 File.Move(extractDir + "/" + outFileNameWithoutExtn, extractDir + "/" + outFileNameProperExtn + adjExtn);
                                             }
-                                            else
-                                            {
-                                                var outLzoFile = extractDir + "/" + fName + $"{fileCount}" + fExtn + rExtn;
-                                                var outDcmpLzoFile = extractDir + "/" + Path.GetFileNameWithoutExtension(extractDir + "/" + fName + $"{fileCount}" + fExtn + rExtn);
-
-                                                using (FileStream lzoStream = new FileStream(outLzoFile, FileMode.Open, FileAccess.Read))
-                                                {
-                                                    using (BinaryReader lzoReader = new BinaryReader(lzoStream))
-                                                    {
-                                                        lzoReader.BaseStream.Position = 24;
-                                                        var lzoChunks = lzoReader.ReadUInt32();
-
-                                                        uint lzoDataReadStart = 32;
-                                                        for (int lz0 = 0; lz0 < lzoChunks; lz0++)
-                                                        {
-                                                            lzoReader.BaseStream.Position = lzoDataReadStart + 4;
-                                                            var cmpChunkSize = lzoReader.ReadUInt32();
-                                                            var uncmpChunkSize = lzoReader.ReadUInt32();
-
-                                                            byte[] dcmpData = new byte[uncmpChunkSize];
-                                                            using (MemoryStream lzoDataHolder = new MemoryStream())
-                                                            {
-                                                                lzoStream.Seek(lzoDataReadStart + 12, SeekOrigin.Begin);
-                                                                lzoStream.CopyStreamTo(lzoDataHolder, cmpChunkSize, false);
-
-                                                                byte[] cmpData = lzoDataHolder.ToArray();
-                                                                Minilz0Helpers.Decompress(ref cmpData, uncmpChunkSize, ref dcmpData);
-
-                                                                using (FileStream dcmpFileStream = new FileStream(outDcmpLzoFile, FileMode.Append, FileAccess.Write))
-                                                                {
-                                                                    dcmpFileStream.Write(dcmpData, 0, dcmpData.Length);
-                                                                }
-                                                            }
-
-                                                            var seekLength = cmpChunkSize;
-                                                            lzoReader.BaseStream.Seek(lzoDataReadStart + 12, SeekOrigin.Begin);
-                                                            lzoReader.BaseStream.Seek(seekLength, SeekOrigin.Current);
-
-                                                            var nextSeekVal = lzoReader.BaseStream;
-                                                            var nextSeek = (uint)nextSeekVal.Position;
-
-                                                            uint newLzoDataReadStart = nextSeek;
-                                                            lzoDataReadStart = newLzoDataReadStart;
-                                                        }
-                                                    }
-                                                }
-
-                                                File.Delete(outLzoFile);
-
-                                                using (FileStream dcmpLzoFile = new FileStream(outDcmpLzoFile, FileMode.Open, FileAccess.Read))
-                                                {
-                                                    using (BinaryReader dcmpFileReader = new BinaryReader(dcmpLzoFile))
-                                                    {
-                                                        CommonMethods.GetFileHeader(dcmpFileReader, ref rExtn);
-                                                    }
-
-                                                    File.Move(outDcmpLzoFile, extractDir + "/" + fName + $"{fileCount}" + rExtn);
-                                                }
-                                            }
                                         }
                                         break;
                                 }
@@ -164,14 +124,19 @@ namespace Drakengard1and2Extractor.Tools
                     }
                 }
 
-                if (isSingleFile.Equals(true))
+                if (isSingleFile)
                 {
+                    LoggingHelpers.LogMessage(CoreForm.NewLineChara);
+                    LoggingHelpers.LogMessage("Extraction has completed!");
+
                     CommonMethods.AppMsgBox("Extracted " + Path.GetFileName(fpkFile) + " file", "Success", MessageBoxIcon.Information);
                 }
             }
             catch (Exception ex)
             {
                 CommonMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
+                LoggingHelpers.LogMessage(CoreForm.NewLineChara);
+                LoggingHelpers.LogException("Exception: " + ex);
             }
         }
     }

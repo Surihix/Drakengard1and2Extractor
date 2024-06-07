@@ -194,7 +194,7 @@
             // 
             this.AboutlinkLabel.AutoSize = true;
             this.AboutlinkLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.AboutlinkLabel.Location = new System.Drawing.Point(14, 562);
+            this.AboutlinkLabel.Location = new System.Drawing.Point(14, 589);
             this.AboutlinkLabel.Name = "AboutlinkLabel";
             this.AboutlinkLabel.Size = new System.Drawing.Size(38, 15);
             this.AboutlinkLabel.TabIndex = 6;
@@ -206,7 +206,7 @@
             // 
             this.HelpLinkLabel.AutoSize = true;
             this.HelpLinkLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.HelpLinkLabel.Location = new System.Drawing.Point(335, 562);
+            this.HelpLinkLabel.Location = new System.Drawing.Point(335, 589);
             this.HelpLinkLabel.Name = "HelpLinkLabel";
             this.HelpLinkLabel.Size = new System.Drawing.Size(33, 15);
             this.HelpLinkLabel.TabIndex = 8;
@@ -217,7 +217,7 @@
             // Versionlabel
             // 
             this.Versionlabel.AutoSize = true;
-            this.Versionlabel.Location = new System.Drawing.Point(176, 564);
+            this.Versionlabel.Location = new System.Drawing.Point(176, 591);
             this.Versionlabel.Name = "Versionlabel";
             this.Versionlabel.Size = new System.Drawing.Size(28, 13);
             this.Versionlabel.TabIndex = 7;
@@ -270,12 +270,12 @@
             this.StatusTextBox.Name = "StatusTextBox";
             this.StatusTextBox.ReadOnly = true;
             this.StatusTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.StatusTextBox.Size = new System.Drawing.Size(356, 71);
+            this.StatusTextBox.Size = new System.Drawing.Size(356, 95);
             this.StatusTextBox.TabIndex = 9;
             // 
             // StatusDelBtn
             // 
-            this.StatusDelBtn.Location = new System.Drawing.Point(153, 517);
+            this.StatusDelBtn.Location = new System.Drawing.Point(153, 547);
             this.StatusDelBtn.Name = "StatusDelBtn";
             this.StatusDelBtn.Size = new System.Drawing.Size(75, 23);
             this.StatusDelBtn.TabIndex = 10;
@@ -287,7 +287,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(381, 585);
+            this.ClientSize = new System.Drawing.Size(381, 612);
             this.Controls.Add(this.StatusDelBtn);
             this.Controls.Add(this.StatusTextBox);
             this.Controls.Add(this.BinExtractionGroupBox);
