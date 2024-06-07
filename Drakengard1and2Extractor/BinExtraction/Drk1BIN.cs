@@ -1,4 +1,5 @@
 ﻿using Drakengard1and2Extractor.Support;
+using Drakengard1and2Extractor.Support.Lz0Helpers;
 using System;
 using System.IO;
 using System.Windows.Forms;

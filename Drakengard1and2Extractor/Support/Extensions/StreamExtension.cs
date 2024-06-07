@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-internal static class StreamHelpers
+internal static class StreamExtension
 {
     public static void CopyStreamTo(this Stream inStream, Stream outStream, long size, bool showProgress)
     {

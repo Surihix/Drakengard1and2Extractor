@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 
-namespace Drakengard1and2Extractor.Support
+namespace Drakengard1and2Extractor.Support.Lz0Helpers
 {
     internal class Lz0Decompression
     {
@@ -32,7 +32,7 @@ namespace Drakengard1and2Extractor.Support
                         _ = lz0Stream.Read(compressedData, 0, (int)cmpChunkSize);
 
                         byte[] deCompressedData = new byte[uncmpChunkSize];
-                        Minilz0Helpers.Decompress(ref compressedData, uncmpChunkSize, ref deCompressedData);
+                        Minilz0Function.Decompress(ref compressedData, uncmpChunkSize, ref deCompressedData);
 
                         processedDataList.AddRange(deCompressedData);
 

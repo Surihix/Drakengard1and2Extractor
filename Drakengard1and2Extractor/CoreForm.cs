@@ -332,8 +332,6 @@ namespace Drakengard1and2Extractor
                             }
                             finally
                             {
-                                LoggingHelpers.LogMessage("Conversion has completed");
-
                                 BeginInvoke(new Action(() => EnableDisableControls(true)));
                             }
                         });
@@ -390,8 +388,6 @@ namespace Drakengard1and2Extractor
                             }
                             finally
                             {
-                                LoggingHelpers.LogMessage("Conversion has completed");
-
                                 BeginInvoke(new Action(() => EnableDisableControls(true)));
                             }
                         });

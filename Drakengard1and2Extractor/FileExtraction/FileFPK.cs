@@ -1,4 +1,5 @@
 ﻿using Drakengard1and2Extractor.Support;
+using Drakengard1and2Extractor.Support.Lz0Helpers;
 using System;
 using System.IO;
 using System.Linq;
@@ -128,6 +129,7 @@ namespace Drakengard1and2Extractor.FileExtraction
                 {
                     LoggingHelpers.LogMessage(CoreForm.NewLineChara);
                     LoggingHelpers.LogMessage("Extraction has completed!");
+                    LoggingHelpers.LogMessage(CoreForm.NewLineChara);
 
                     CommonMethods.AppMsgBox("Extracted " + Path.GetFileName(fpkFile) + " file", "Success", MessageBoxIcon.Information);
                 }

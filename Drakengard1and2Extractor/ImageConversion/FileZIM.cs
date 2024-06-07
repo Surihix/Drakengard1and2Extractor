@@ -1,4 +1,5 @@
 ﻿using Drakengard1and2Extractor.Support;
+using Drakengard1and2Extractor.Support.ImageHelpers;
 using System;
 using System.IO;
 using System.Windows.Forms;
@@ -115,8 +116,8 @@ namespace Drakengard1and2Extractor.ImageConversion
 
                         if (UnSwizzleCheckBox.Checked && bppFlag == 48)
                         {
-                            byte[] unswizzledPixelsBuffer = pixelsBuffer.UnSwizzlePixels(imgOptions);
-                            pixelsBuffer = unswizzledPixelsBuffer;                            
+                            byte[] unswizzledPixelsBuffer = PS2UnSwizzlers.UnSwizzlePixels(pixelsBuffer, imgOptions);
+                            pixelsBuffer = unswizzledPixelsBuffer;
                         }
 
                         byte[] finalizedPixels = new byte[] { };
@@ -138,7 +139,7 @@ namespace Drakengard1and2Extractor.ImageConversion
                         byte[] finalizedPalette = new byte[palSize];
                         if (bppFlag == 48)
                         {
-                            finalizedPalette = paletteBuffer.UnSwizzlePalette();
+                            finalizedPalette = PS2UnSwizzlers.UnSwizzlePalette(paletteBuffer);
                         }
                         else
                         {
@@ -155,14 +156,14 @@ namespace Drakengard1and2Extractor.ImageConversion
                                 imgOptions.ImageFormat = System.Drawing.Imaging.ImageFormat.Bmp;
 
                                 IfOutImgFileExistsDel(outImgPath);
-                                finalizedPixels.CreateBmpPng(finalizedPalette, imgOptions, outImgPath);
+                                BmpPngExporter.CreateBmpPng(finalizedPixels, finalizedPalette, imgOptions, outImgPath);
                                 break;
 
                             case 1:
                                 outImgPath = extractDir + Path.GetFileNameWithoutExtension(_ZimFileVar) + ".dds";
 
                                 IfOutImgFileExistsDel(outImgPath);
-                                finalizedPixels.CreateDDS(finalizedPalette, imgOptions, outImgPath);
+                                DDSimgExporter.CreateDDS(finalizedPixels, finalizedPalette, imgOptions, outImgPath);
                                 break;
 
                             case 2:
@@ -170,11 +171,15 @@ namespace Drakengard1and2Extractor.ImageConversion
                                 imgOptions.ImageFormat = System.Drawing.Imaging.ImageFormat.Png;
 
                                 IfOutImgFileExistsDel(outImgPath);
-                                finalizedPixels.CreateBmpPng(finalizedPalette, imgOptions, outImgPath);
+                                BmpPngExporter.CreateBmpPng(finalizedPixels, finalizedPalette, imgOptions, outImgPath);
                                 break;
                         }
                     }
                 }
+
+                LoggingHelpers.LogMessage(CoreForm.NewLineChara);
+                LoggingHelpers.LogMessage("Conversion has completed!");
+                LoggingHelpers.LogMessage(CoreForm.NewLineChara);
 
                 CommonMethods.AppMsgBox("Converted " + Path.GetFileName(_ZimFileVar) + " file", "Success", MessageBoxIcon.Information);
 

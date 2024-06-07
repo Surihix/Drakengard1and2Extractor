@@ -1,4 +1,5 @@
 ﻿using Drakengard1and2Extractor.Support;
+using Drakengard1and2Extractor.Support.ImageHelpers;
 using System;
 using System.IO;
 using System.Threading.Tasks;
@@ -124,7 +125,7 @@ namespace Drakengard1and2Extractor.ImageConversion
                                         byte[] palBuffer = new byte[palSize];
                                         grf1Stream.Read(palBuffer, 0, palBuffer.Length);
 
-                                        byte[] finalizedPalBuffer = palBuffer.UnSwizzlePalette();
+                                        byte[] finalizedPalBuffer = PS2UnSwizzlers.UnSwizzlePalette(palBuffer);
 
 
                                         uint imgReadPosStart = 20;
@@ -151,19 +152,19 @@ namespace Drakengard1and2Extractor.ImageConversion
                                                     outImgPath = extractDir + "/" + "GRF1_img_" + imgFCount + ".bmp";
                                                     imgOptions.ImageFormat = System.Drawing.Imaging.ImageFormat.Bmp;
 
-                                                    pixelsBuffer.CreateBmpPng(palBuffer, imgOptions, outImgPath);
+                                                    BmpPngExporter.CreateBmpPng(pixelsBuffer, palBuffer, imgOptions, outImgPath);
                                                     break;
 
                                                 case 1:
                                                     outImgPath = extractDir + "/" + "GRF1_img_" + imgFCount + ".dds";
-                                                    pixelsBuffer.CreateDDS(palBuffer, imgOptions, outImgPath);
+                                                    DDSimgExporter.CreateDDS(pixelsBuffer, palBuffer, imgOptions, outImgPath);
                                                     break;
 
                                                 case 2:
                                                     outImgPath = extractDir + "/" + "GRF1_img_" + imgFCount + ".png";
                                                     imgOptions.ImageFormat = System.Drawing.Imaging.ImageFormat.Png;
 
-                                                    pixelsBuffer.CreateBmpPng(palBuffer, imgOptions, outImgPath);
+                                                    BmpPngExporter.CreateBmpPng(pixelsBuffer, palBuffer, imgOptions, outImgPath);
                                                     break;
                                             }
 
@@ -190,6 +191,10 @@ namespace Drakengard1and2Extractor.ImageConversion
                 }
                 finally
                 {
+                    LoggingHelpers.LogMessage(CoreForm.NewLineChara);
+                    LoggingHelpers.LogMessage("Conversion has completed!");
+                    LoggingHelpers.LogMessage(CoreForm.NewLineChara);
+
                     CommonMethods.AppMsgBox("Converted " + Path.GetFileName(Spk0FileVar) + " file", "Success", MessageBoxIcon.Information);
 
                     BeginInvoke(new Action(() => Spk0SaveAsComboBox.Enabled = true));

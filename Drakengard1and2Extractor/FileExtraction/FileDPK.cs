@@ -63,6 +63,7 @@ namespace Drakengard1and2Extractor.FileExtraction
                 {
                     LoggingHelpers.LogMessage(CoreForm.NewLineChara);
                     LoggingHelpers.LogMessage("Extraction has completed!");
+                    LoggingHelpers.LogMessage(CoreForm.NewLineChara);
 
                     CommonMethods.AppMsgBox("Extracted " + Path.GetFileName(dpkFile) + " file", "Success", MessageBoxIcon.Information);
                 }
