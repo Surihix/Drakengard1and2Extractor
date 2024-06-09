@@ -66,7 +66,7 @@ namespace Drakengard1and2Extractor
                 {
                     var mbinFile = binSelect.FileName;
 
-                    if (Drk1RadioButton.Checked == true)
+                    if (Drk1RadioButton.Checked)
                     {
                         StatusTextBox.AppendText("Game is set to Drakengard 1");
                         StatusTextBox.AppendText(NewLineChara);
@@ -74,21 +74,9 @@ namespace Drakengard1and2Extractor
 
                         EnableDisableControls(false);
 
-                        var readHeader = "";
-                        CommonMethods.HeaderCheck(mbinFile, ref readHeader);
+                        var readHeader = CommonMethods.HeaderCheck(mbinFile);
 
-                        if (!readHeader.StartsWith("fpk"))
-                        {
-                            StatusTextBox.AppendText("Error: Unable to detect fpk header");
-                            StatusTextBox.AppendText(NewLineChara);
-
-                            CommonMethods.AppMsgBox("Unable to detect fpk header", "Error", MessageBoxIcon.Error);
-                            StatusTextBox.AppendText("Extraction failed!");
-
-                            EnableDisableControls(true);
-                            return;
-                        }
-                        else
+                        if (readHeader == "fpk")
                         {
                             Task.Run(() =>
                             {
@@ -103,9 +91,20 @@ namespace Drakengard1and2Extractor
                                 }
                             });
                         }
+                        else
+                        {
+                            StatusTextBox.AppendText("Error: Unable to detect fpk header");
+                            StatusTextBox.AppendText(NewLineChara);
+
+                            CommonMethods.AppMsgBox("Unable to detect fpk header", "Error", MessageBoxIcon.Error);
+                            StatusTextBox.AppendText("Extraction failed!");
+
+                            EnableDisableControls(true);
+                            return;
+                        }
                     }
 
-                    if (Drk2RadioButton.Checked == true)
+                    if (Drk2RadioButton.Checked)
                     {
                         StatusTextBox.AppendText("Game is set to Drakengard 2");
                         StatusTextBox.AppendText(NewLineChara);
@@ -113,20 +112,9 @@ namespace Drakengard1and2Extractor
 
                         EnableDisableControls(false);
 
-                        var readHeader = "";
-                        CommonMethods.HeaderCheck(mbinFile, ref readHeader);
-                        if (!readHeader.StartsWith("dpk"))
-                        {
-                            StatusTextBox.AppendText("Error: Unable to detect dpk header");
-                            StatusTextBox.AppendText(NewLineChara);
+                        var readHeader = CommonMethods.HeaderCheck(mbinFile);
 
-                            CommonMethods.AppMsgBox("Unable to detect dpk header", "Error", MessageBoxIcon.Error);
-                            StatusTextBox.AppendText("Extraction failed!");
-
-                            EnableDisableControls(true);
-                            return;
-                        }
-                        else
+                        if (readHeader == "dpk")
                         {
                             Task.Run(() =>
                             {
@@ -140,6 +128,17 @@ namespace Drakengard1and2Extractor
                                     BeginInvoke(new Action(() => EnableDisableControls(true)));
                                 }
                             });
+                        }
+                        else
+                        {
+                            StatusTextBox.AppendText("Error: Unable to detect dpk header");
+                            StatusTextBox.AppendText(NewLineChara);
+
+                            CommonMethods.AppMsgBox("Unable to detect dpk header", "Error", MessageBoxIcon.Error);
+                            StatusTextBox.AppendText("Extraction failed!");
+
+                            EnableDisableControls(true);
+                            return;
                         }
                     }
                 }
@@ -169,21 +168,9 @@ namespace Drakengard1and2Extractor
                     var fpkFile = fpkSelect.FileName;
                     EnableDisableControls(false);
 
-                    var readHeader = "";
-                    CommonMethods.HeaderCheck(fpkFile, ref readHeader);
+                    var readHeader = CommonMethods.HeaderCheck(fpkFile);
 
-                    if (!readHeader.StartsWith("fpk"))
-                    {
-                        StatusTextBox.AppendText("Error: Unable to detect fpk header");
-                        StatusTextBox.AppendText(NewLineChara);
-
-                        CommonMethods.AppMsgBox("Unable to detect fpk header", "Error", MessageBoxIcon.Error);
-                        StatusTextBox.AppendText("Extraction failed!");
-
-                        EnableDisableControls(true);
-                        return;
-                    }
-                    else
+                    if (readHeader == "fpk")
                     {
                         Task.Run(() =>
                         {
@@ -197,6 +184,17 @@ namespace Drakengard1and2Extractor
                                 BeginInvoke(new Action(() => EnableDisableControls(true)));
                             }
                         });
+                    }
+                    else
+                    {
+                        StatusTextBox.AppendText("Error: Unable to detect fpk header");
+                        StatusTextBox.AppendText(NewLineChara);
+
+                        CommonMethods.AppMsgBox("Unable to detect fpk header", "Error", MessageBoxIcon.Error);
+                        StatusTextBox.AppendText("Extraction failed!");
+
+                        EnableDisableControls(true);
+                        return;
                     }
                 }
             }
@@ -224,21 +222,9 @@ namespace Drakengard1and2Extractor
                     var dpkFile = dpkSelect.FileName;
                     EnableDisableControls(false);
 
-                    var readHeader = "";
-                    CommonMethods.HeaderCheck(dpkFile, ref readHeader);
+                    var readHeader = CommonMethods.HeaderCheck(dpkFile);
 
-                    if (!readHeader.StartsWith("dpk"))
-                    {
-                        StatusTextBox.AppendText("Error: Unable to detect dpk header");
-                        StatusTextBox.AppendText(NewLineChara);
-
-                        CommonMethods.AppMsgBox("Unable to detect dpk header", "Error", MessageBoxIcon.Error);
-                        StatusTextBox.AppendText("Extraction failed");
-
-                        EnableDisableControls(true);
-                        return;
-                    }
-                    else
+                    if (readHeader == "dpk")
                     {
                         Task.Run(() =>
                         {
@@ -252,6 +238,17 @@ namespace Drakengard1and2Extractor
                                 BeginInvoke(new Action(() => EnableDisableControls(true)));
                             }
                         });
+                    }
+                    else
+                    {
+                        StatusTextBox.AppendText("Error: Unable to detect dpk header");
+                        StatusTextBox.AppendText(NewLineChara);
+
+                        CommonMethods.AppMsgBox("Unable to detect dpk header", "Error", MessageBoxIcon.Error);
+                        StatusTextBox.AppendText("Extraction failed!");
+
+                        EnableDisableControls(true);
+                        return;
                     }
                 }
             }
@@ -268,7 +265,51 @@ namespace Drakengard1and2Extractor
         }
         private void ExtKpsBtn_Click(object sender, EventArgs e)
         {
+            try
+            {
+                var kpsSelect = new OpenFileDialog();
+                kpsSelect.Filter = "KPS type files (*.kps)" + $"|*.kps";
+                kpsSelect.RestoreDirectory = true;
 
+                if (kpsSelect.ShowDialog() == DialogResult.OK)
+                {
+                    var kpsFile = kpsSelect.FileName;
+                    EnableDisableControls(false);
+
+                    var readHeader = CommonMethods.HeaderCheck(kpsFile);
+
+                    if (readHeader == "KPS_")
+                    {
+                        Task.Run(() =>
+                        {
+                            try
+                            {
+                                LoggingHelpers.LogMessage("Extracting files from " + Path.GetFileName(kpsFile) + "....");
+                                FileKPS.ExtractKPS(kpsFile, true);
+                            }
+                            finally
+                            {
+                                BeginInvoke(new Action(() => EnableDisableControls(true)));
+                            }
+                        });
+                    }
+                    else
+                    {
+                        StatusTextBox.AppendText("Error: Unable to detect kps header");
+                        StatusTextBox.AppendText(NewLineChara);
+
+                        CommonMethods.AppMsgBox("Unable to detect kps header", "Error", MessageBoxIcon.Error);
+                        StatusTextBox.AppendText("Extraction failed!");
+
+                        EnableDisableControls(true);
+                        return;
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                CommonMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
+            }
         }
 
 
@@ -306,21 +347,9 @@ namespace Drakengard1and2Extractor
                     var zimFile = zimSelect.FileName;
                     EnableDisableControls(false);
 
-                    var readHeader = "";
-                    CommonMethods.HeaderCheck(zimFile, ref readHeader);
+                    var readHeader = CommonMethods.HeaderCheck(zimFile);
 
-                    if (!readHeader.StartsWith("wZIM"))
-                    {
-                        StatusTextBox.AppendText("Error: Unable to detect zim header");
-                        StatusTextBox.AppendText(NewLineChara);
-
-                        CommonMethods.AppMsgBox("Unable to detect zim header", "Error", MessageBoxIcon.Error);
-                        StatusTextBox.AppendText("Conversion failed!");
-
-                        EnableDisableControls(true);
-                        return;
-                    }
-                    else
+                    if (readHeader == "wZIM")
                     {
                         Task.Run(() =>
                         {
@@ -335,6 +364,17 @@ namespace Drakengard1and2Extractor
                                 BeginInvoke(new Action(() => EnableDisableControls(true)));
                             }
                         });
+                    }
+                    else
+                    {
+                        StatusTextBox.AppendText("Error: Unable to detect zim header");
+                        StatusTextBox.AppendText(NewLineChara);
+
+                        CommonMethods.AppMsgBox("Unable to detect zim header", "Error", MessageBoxIcon.Error);
+                        StatusTextBox.AppendText("Conversion failed!");
+
+                        EnableDisableControls(true);
+                        return;
                     }
                 }
             }
@@ -362,21 +402,9 @@ namespace Drakengard1and2Extractor
                     var spk0File = spk0Select.FileName;
                     EnableDisableControls(false);
 
-                    var readHeader = "";
-                    CommonMethods.HeaderCheck(spk0File, ref readHeader);
+                    var readHeader = CommonMethods.HeaderCheck(spk0File);
 
-                    if (!readHeader.StartsWith("SPK0"))
-                    {
-                        StatusTextBox.AppendText("Error: Unable to detect spk0 header");
-                        StatusTextBox.AppendText(NewLineChara);
-
-                        CommonMethods.AppMsgBox("Unable to detect spk0 header", "Error", MessageBoxIcon.Error);
-                        StatusTextBox.AppendText("Conversion failed!");
-
-                        EnableDisableControls(true);
-                        return;
-                    }
-                    else
+                    if (readHeader == "SPK0")
                     {
                         Task.Run(() =>
                         {
@@ -392,6 +420,17 @@ namespace Drakengard1and2Extractor
                             }
                         });
                     }
+                    else
+                    {
+                        StatusTextBox.AppendText("Error: Unable to detect spk0 header");
+                        StatusTextBox.AppendText(NewLineChara);
+
+                        CommonMethods.AppMsgBox("Unable to detect spk0 header", "Error", MessageBoxIcon.Error);
+                        StatusTextBox.AppendText("Conversion failed!");
+
+                        EnableDisableControls(true);
+                        return;
+                    }
                 }
             }
             catch (Exception ex)
@@ -403,22 +442,24 @@ namespace Drakengard1and2Extractor
 
         private void Drk1RadioButton_CheckedChanged(object sender, EventArgs e)
         {
-            if (Drk1RadioButton.Checked == true)
+            if (Drk1RadioButton.Checked)
             {
                 ExtBinBtn.Enabled = true;
                 ExtFpkBtn.Enabled = true;
                 ExtDpkBtn.Enabled = false;
+                ExtKpsBtn.Enabled = true;
             }
         }
 
 
         private void Drk2RadioButton_CheckedChanged(object sender, EventArgs e)
         {
-            if (Drk2RadioButton.Checked == true)
+            if (Drk2RadioButton.Checked)
             {
                 ExtBinBtn.Enabled = true;
                 ExtFpkBtn.Enabled = true;
                 ExtDpkBtn.Enabled = true;
+                ExtKpsBtn.Enabled = true;
             }
         }
 

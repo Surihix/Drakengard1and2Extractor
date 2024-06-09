@@ -10,19 +10,20 @@ namespace Drakengard1and2Extractor.Support
             MessageBox.Show(msg, msgHeader, MessageBoxButtons.OK, msgType);
         }
 
-        public static void HeaderCheck(string fileName, ref string header)
+        public static string HeaderCheck(string fileName)
         {
-            using (FileStream extnCheck = new FileStream(fileName, FileMode.Open, FileAccess.Read))
-            {
-                using (BinaryReader extnCheckReader = new BinaryReader(extnCheck))
-                {
-                    extnCheckReader.BaseStream.Position = 0;
-                    var headerChars = extnCheckReader.ReadChars(4);
-                    header = string.Join("", headerChars);
-                }
+            string header = string.Empty;
 
-                extnCheck.Dispose();
+            using (BinaryReader extnCheckReader = new BinaryReader(File.Open(fileName, FileMode.Open, FileAccess.Read)))
+            {
+                extnCheckReader.BaseStream.Position = 0;
+                var headerChars = extnCheckReader.ReadChars(4);
+                header = string.Join("", headerChars);
             }
+
+            header = header.Replace("\0", "");
+
+            return header;
         }
 
         public static void IfFileDirExistsDel(string fileOrFolder, DelSwitch delSwitch)

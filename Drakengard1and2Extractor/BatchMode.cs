@@ -57,10 +57,9 @@ namespace Drakengard1and2Extractor
                         {
                             foreach (var fpkFile in fpkFilesInDir)
                             {
-                                var readHeader = "";
-                                CommonMethods.HeaderCheck(fpkFile, ref readHeader);
+                                var readHeader = CommonMethods.HeaderCheck(fpkFile);
 
-                                if (readHeader.StartsWith("fpk"))
+                                if (readHeader == "fpk")
                                 {
                                     FileFPK.ExtractFPK(fpkFile, false);
                                 }
@@ -112,10 +111,9 @@ namespace Drakengard1and2Extractor
                         {
                             foreach (var dpkFile in dpkFilesInDir)
                             {
-                                var readHeader = "";
-                                CommonMethods.HeaderCheck(dpkFile, ref readHeader);
+                                var readHeader = CommonMethods.HeaderCheck(dpkFile);
 
-                                if (readHeader.StartsWith("dpk"))
+                                if (readHeader == "dpk")
                                 {
                                     FileDPK.ExtractDPK(dpkFile, false);
                                 }
