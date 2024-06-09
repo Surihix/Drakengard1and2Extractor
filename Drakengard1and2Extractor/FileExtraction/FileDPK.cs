@@ -1,4 +1,5 @@
 ﻿using Drakengard1and2Extractor.Support;
+using Drakengard1and2Extractor.Support.Lz0Helpers;
 using System;
 using System.IO;
 using System.Windows.Forms;
@@ -21,12 +22,12 @@ namespace Drakengard1and2Extractor.FileExtraction
                     {
                         dpkReader.BaseStream.Position = 16;
                         var entries = dpkReader.ReadUInt32();
-                        var fileCount = 1;
 
 
                         uint intialOffset = 48;
                         var fname = "FILE_";
-                        var rExtn = "";
+                        var realExtn = string.Empty;
+                        var fileCount = 1;
                         for (int f = 0; f < entries; f++)
                         {
                             dpkReader.BaseStream.Position = intialOffset;
@@ -35,23 +36,39 @@ namespace Drakengard1and2Extractor.FileExtraction
                             dpkReader.BaseStream.Position = intialOffset + 8;
                             var fileStart = dpkReader.ReadUInt32();
 
-                            using (FileStream outFileStream = new FileStream(extractDir + "/" + fname + $"{fileCount}", FileMode.OpenOrCreate, FileAccess.ReadWrite))
+                            var currentFile = Path.Combine(extractDir, fname + $"{fileCount}");
+
+                            using (FileStream outFileStream = new FileStream(currentFile, FileMode.OpenOrCreate, FileAccess.ReadWrite))
                             {
                                 dpkStream.Seek(fileStart, SeekOrigin.Begin);
                                 dpkStream.CopyStreamTo(outFileStream, fileSize, false);
                             }
 
-                            var currentFile = extractDir + "/" + fname + $"{fileCount}";
-                            using (FileStream extractedOutFileStream = new FileStream(currentFile, FileMode.Open, FileAccess.Read))
+                            using (BinaryReader outFileReader = new BinaryReader(File.Open(currentFile, FileMode.Open, FileAccess.Read)))
                             {
-                                using (BinaryReader extractedOutFileReader = new BinaryReader(extractedOutFileStream))
-                                {
-                                    rExtn = CommonMethods.GetFileHeader(extractedOutFileReader);
-                                }
+                                realExtn = CommonMethods.GetFileHeader(outFileReader);
                             }
-                            File.Move(currentFile, currentFile + rExtn);
 
-                            rExtn = "";
+                            File.Move(currentFile, currentFile + realExtn);
+
+                            if (realExtn == ".lz0")
+                            {
+                                var dcmpLz0Data = Lz0Decompression.ProcessLz0Data(currentFile + realExtn);
+                                
+                                File.WriteAllBytes(currentFile, dcmpLz0Data);
+                                File.Delete(currentFile + realExtn);
+
+                                using (BinaryReader dcmpLz0Reader = new BinaryReader(File.Open(currentFile, FileMode.Open, FileAccess.Read)))
+                                {
+                                    realExtn = CommonMethods.GetFileHeader(dcmpLz0Reader);
+                                }
+
+                                File.Move(currentFile, currentFile + realExtn);
+                            }
+
+                            LoggingHelpers.LogMessage($"Extracted '{fname}{fileCount}'");
+
+                            realExtn = string.Empty;
 
                             intialOffset += 32;
                             fileCount++;
