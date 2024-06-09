@@ -62,7 +62,7 @@ namespace Drakengard1and2Extractor.BinExtraction
                                 {
                                     using (BinaryReader extractedOutFileReader = new BinaryReader(extractedOutFileStream))
                                     {
-                                        CommonMethods.GetFileHeader(extractedOutFileReader, ref rExtn);
+                                        rExtn = CommonMethods.GetFileHeader(extractedOutFileReader);
                                     }
                                 }
                                 File.Move(currentFile, currentFile + rExtn);

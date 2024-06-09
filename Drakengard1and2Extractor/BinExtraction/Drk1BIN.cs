@@ -14,11 +14,15 @@ namespace Drakengard1and2Extractor.BinExtraction
             {
                 LoggingHelpers.LogMessage(CoreForm.NewLineChara);
 
+                LoggingHelpers.LogMessage("Preparing bin file....");
+                LoggingHelpers.LogMessage(CoreForm.NewLineChara);
+
                 var extractDir = Path.GetFullPath(mainBinFile) + "_extracted";
                 CommonMethods.IfFileDirExistsDel(extractDir, CommonMethods.DelSwitch.folder);
                 Directory.CreateDirectory(extractDir);
 
                 var mainBinName = Path.GetFileName(mainBinFile);
+                var isImageBinFile = mainBinName == "image.bin" || mainBinName == "IMAGE.BIN";
 
                 using (FileStream mainBinStream = new FileStream(mainBinFile, FileMode.Open, FileAccess.Read))
                 {
@@ -30,9 +34,11 @@ namespace Drakengard1and2Extractor.BinExtraction
                         mainBinReader.BaseStream.Position = 40;
                         var binDataStart = mainBinReader.ReadUInt32();
 
-                        CommonMethods.IfFileDirExistsDel(extractDir + "/_.archive", CommonMethods.DelSwitch.file);
+                        var tmpArchiveFile = Path.Combine(extractDir, "_.archive");
 
-                        using (FileStream binStream = new FileStream(extractDir + "/_.archive", FileMode.OpenOrCreate, FileAccess.ReadWrite))
+                        CommonMethods.IfFileDirExistsDel(tmpArchiveFile, CommonMethods.DelSwitch.file);
+
+                        using (FileStream binStream = new FileStream(tmpArchiveFile, FileMode.OpenOrCreate, FileAccess.ReadWrite))
                         {
                             mainBinStream.Seek(binDataStart, SeekOrigin.Begin);
                             mainBinStream.CopyTo(binStream);
@@ -40,7 +46,10 @@ namespace Drakengard1and2Extractor.BinExtraction
 
                             uint intialOffset = 132;
                             var fname = "FILE_";
-                            var rExtn = "";
+                            var fileExtn = string.Empty;
+                            var fileExtnFixed = string.Empty;
+                            var tmpExtn = string.Empty;
+                            var realExtn = string.Empty;
                             var fileCount = 1;
                             for (int f = 0; f < entries; f++)
                             {
@@ -48,58 +57,63 @@ namespace Drakengard1and2Extractor.BinExtraction
                                 var fileStart = mainBinReader.ReadUInt32();
                                 var fileSize = mainBinReader.ReadUInt32();
 
+                                if (fileStart == 0 && fileSize == 0)
+                                {
+                                    intialOffset += 16;
+                                    continue;
+                                }
+
                                 var extnChar = mainBinReader.ReadChars(4);
                                 Array.Reverse(extnChar);
 
-                                var fileExtn = string.Join("", extnChar).Replace("\0", "");
-                                var fExtn = "." + CommonMethods.ModifyString(fileExtn);
-
-                                if (mainBinName == "image.bin" || mainBinFile == "IMAGE.BIN")
+                                if (isImageBinFile)
                                 {
-                                    fExtn = "";
+                                    fileExtnFixed = string.Empty;
+                                }
+                                else
+                                {
+                                    fileExtn = string.Join("", extnChar).Replace("\0", "");
+                                    fileExtnFixed = "." + CommonMethods.ModifyExtnString(fileExtn);
                                 }
 
-                                using (FileStream outFileStream = new FileStream(extractDir + "/" + fname + $"{fileCount}" + fExtn, FileMode.OpenOrCreate, FileAccess.ReadWrite))
+                                var currentFile = Path.Combine(extractDir, fname + $"{fileCount}" + fileExtnFixed);
+
+                                using (FileStream outFileStream = new FileStream(currentFile, FileMode.OpenOrCreate, FileAccess.ReadWrite))
                                 {
                                     binStream.Seek(fileStart, SeekOrigin.Begin);
                                     binStream.CopyStreamTo(outFileStream, fileSize, false);
-                                    binStream.Seek(fileStart, SeekOrigin.Begin);
 
-                                    if (mainBinName == "image.bin" || mainBinFile == "IMAGE.BIN")
+                                    if (isImageBinFile)
                                     {
                                         using (BinaryReader outFileReader = new BinaryReader(outFileStream))
                                         {
-                                            CommonMethods.GetFileHeader(outFileReader, ref rExtn);
+                                            tmpExtn = CommonMethods.GetFileHeader(outFileReader);
                                         }
                                     }
                                 }
 
-                                if (mainBinName == "image.bin" || mainBinFile == "IMAGE.BIN")
+                                if (isImageBinFile)
                                 {
-                                    File.Move(extractDir + "/" + fname + $"{fileCount}" + fExtn, extractDir + "/" + fname + $"{fileCount}" + fExtn + rExtn);
+                                    var currentTmpFile = Path.Combine(extractDir, fname + $"{fileCount}" + fileExtnFixed + tmpExtn);
 
-                                    if (rExtn == ".lz0")
+                                    File.Move(currentFile, currentTmpFile);
+
+                                    if (tmpExtn == ".lz0")
                                     {
-                                        var currentLz0File = extractDir + "/" + fname + $"{fileCount}" + fExtn + rExtn;
-                                        var currentDcmpLz0File = extractDir + "/" + Path.GetFileNameWithoutExtension(extractDir + "/" + fname + $"{fileCount}" + fExtn + rExtn);
+                                        var dcmpLz0Data = Lz0Decompression.ProcessLz0Data(currentTmpFile);
 
-                                        var dcmpLz0Data = Lz0Decompression.ProcessLz0Data(currentLz0File);
-                                        using (FileStream dcmpLz0Stream = new FileStream(currentDcmpLz0File, FileMode.Append, FileAccess.Write))
+                                        File.WriteAllBytes(currentFile, dcmpLz0Data);
+                                        File.Delete(currentTmpFile);
+
+                                        using (BinaryReader dcmpLz0Reader = new BinaryReader(File.Open(currentFile, FileMode.Open, FileAccess.Read)))
                                         {
-                                            dcmpLz0Stream.Write(dcmpLz0Data, 0, dcmpLz0Data.Length);
+                                            realExtn = CommonMethods.GetFileHeader(dcmpLz0Reader);
                                         }
 
-                                        File.Delete(currentLz0File);
-
-                                        using (BinaryReader dcmpLz0Reader = new BinaryReader(File.Open(currentDcmpLz0File, FileMode.Open, FileAccess.Read)))
-                                        {
-                                            CommonMethods.GetFileHeader(dcmpLz0Reader, ref rExtn);
-                                        }
-
-                                        File.Move(currentDcmpLz0File, currentDcmpLz0File + rExtn);
+                                        File.Move(currentFile, currentFile + realExtn);
                                     }
 
-                                    rExtn = "";
+                                    realExtn = string.Empty;
                                 }
 
                                 LoggingHelpers.LogMessage($"Extracted '{fname}{fileCount}'");
@@ -109,7 +123,7 @@ namespace Drakengard1and2Extractor.BinExtraction
                             }
                         }
 
-                        File.Delete(extractDir + "/_.archive");
+                        File.Delete(tmpArchiveFile);
                     }
                 }
 

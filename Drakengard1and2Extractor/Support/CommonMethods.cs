@@ -50,7 +50,7 @@ namespace Drakengard1and2Extractor.Support
             file
         }
 
-        public static string ModifyString(string readStringLetters)
+        public static string ModifyExtnString(string readStringLetters)
         {
             var modifiedString = readStringLetters.Replace("|", "").Replace("?", "").Replace(":", "").
                 Replace("<", "").Replace(">", "").Replace("*", "").Replace("0eng", "0eng.fpk").
@@ -60,11 +60,13 @@ namespace Drakengard1and2Extractor.Support
             return modifiedString;
         }
 
-        public static void GetFileHeader(BinaryReader readerName, ref string rExtn)
+        public static string GetFileHeader(BinaryReader readerName)
         {
             readerName.BaseStream.Position = 0;
             var foundExtn = readerName.ReadChars(4);
             string realExtn = string.Join("", foundExtn).Replace("\0", "");
+
+            string rExtn = string.Empty;
 
             switch (realExtn)
             {
@@ -106,6 +108,8 @@ namespace Drakengard1and2Extractor.Support
             {
                 rExtn = ".hi4";
             }
+
+            return rExtn;
         }
     }
 }

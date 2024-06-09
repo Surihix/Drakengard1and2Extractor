@@ -50,7 +50,7 @@ namespace Drakengard1and2Extractor.FileExtraction
                                 Array.Reverse(extnChar);
 
                                 var fileExtn = string.Join("", extnChar).Replace("\0", "");
-                                var fExtn = "." + CommonMethods.ModifyString(fileExtn);
+                                var fExtn = "." + CommonMethods.ModifyExtnString(fileExtn);
 
                                 switch (fileExtn.StartsWith("/") || fileExtn.StartsWith("\\"))
                                 {
@@ -65,7 +65,7 @@ namespace Drakengard1and2Extractor.FileExtraction
 
                                             using (BinaryReader outFileReader = new BinaryReader(outFileStream))
                                             {
-                                                CommonMethods.GetFileHeader(outFileReader, ref rExtn);
+                                                rExtn = CommonMethods.GetFileHeader(outFileReader);
                                             }
                                         }
 
@@ -88,7 +88,7 @@ namespace Drakengard1and2Extractor.FileExtraction
 
                                                 using (BinaryReader dcmpLz0Reader = new BinaryReader(File.Open(currentDcmpLz0File, FileMode.Open, FileAccess.Read)))
                                                 {
-                                                    CommonMethods.GetFileHeader(dcmpLz0Reader, ref rExtn);
+                                                    rExtn = CommonMethods.GetFileHeader(dcmpLz0Reader);
                                                 }
 
                                                 File.Move(currentDcmpLz0File, extractDir + "/" + fName + $"{fileCount}" + rExtn);
@@ -104,7 +104,7 @@ namespace Drakengard1and2Extractor.FileExtraction
                                                 {
                                                     using (BinaryReader extnReader = new BinaryReader(extnStream))
                                                     {
-                                                        CommonMethods.GetFileHeader(extnReader, ref adjExtn);
+                                                        adjExtn = CommonMethods.GetFileHeader(extnReader);
                                                     }
                                                 }
 
