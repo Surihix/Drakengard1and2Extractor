@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -24,7 +25,10 @@ namespace Drakengard1and2Extractor.Support.LoggingHelpers
 
         public static void LogException(string exceptionMsg)
         {
+            CommonMethods.AppMsgBox("Exception recorded in 'Exception.txt' file", "Exception", MessageBoxIcon.Warning);
 
+            var newLineChars = CoreForm.NewLineChara + CoreForm.NewLineChara;
+            File.AppendAllText("Exception.txt", newLineChars + exceptionMsg + newLineChars);
         }
     }
 }

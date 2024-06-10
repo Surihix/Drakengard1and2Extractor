@@ -120,6 +120,8 @@
             this.Name = "BatchForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Batch Mode";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.BatchForm_FormClosing);
+            this.Shown += new System.EventHandler(this.BatchForm_Shown);
             this.ResumeLayout(false);
             this.PerformLayout();
 

@@ -72,6 +72,7 @@ namespace Drakengard1and2Extractor
             catch (Exception ex)
             {
                 CommonMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
+                BatchFormLogHelper.LogException("Exception: " + ex);
                 Close();
             }
         }
@@ -129,6 +130,8 @@ namespace Drakengard1and2Extractor
             catch (Exception ex)
             {
                 CommonMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
+                BatchFormLogHelper.LogException("Exception: " + ex);
+                Dispose();
                 Close();
             }
         }
@@ -195,6 +198,7 @@ namespace Drakengard1and2Extractor
             catch (Exception ex)
             {
                 CommonMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
+                BatchFormLogHelper.LogException("Exception: " + ex);
                 Close();
             }
         }
@@ -210,6 +214,17 @@ namespace Drakengard1and2Extractor
         private void BatchStatusDelBtn_Click(object sender, EventArgs e)
         {
             BatchStatusTextBox.Clear();
+        }
+
+        private void BatchForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            Dispose();
+            Hide();
+        }
+
+        private void BatchForm_Shown(object sender, EventArgs e)
+        {
+            BatchFormLogHelper.SetStatusTxtBox();
         }
     }
 }

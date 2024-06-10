@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -6,7 +7,12 @@ namespace Drakengard1and2Extractor.Support.LoggingHelpers
 {
     internal class BatchFormLogHelper
     {
-        private static TextBox _StatusTxtBox = Application.OpenForms["BatchForm"].Controls["BatchStatusTextBox"] as TextBox;
+        public static TextBox _StatusTxtBox = Application.OpenForms["BatchForm"].Controls["BatchStatusTextBox"] as TextBox;
+
+        public static void SetStatusTxtBox()
+        {
+            _StatusTxtBox = Application.OpenForms["BatchForm"].Controls["BatchStatusTextBox"] as TextBox;
+        }
 
         public static void LogMessage(string message)
         {
@@ -19,6 +25,15 @@ namespace Drakengard1and2Extractor.Support.LoggingHelpers
                 }
                 _StatusTxtBox.AppendText(message + CoreForm.NewLineChara);
             }));
+        }
+
+
+        public static void LogException(string exceptionMsg)
+        {
+            CommonMethods.AppMsgBox("Exception recorded in 'Exception_Batch.txt' file", "Exception", MessageBoxIcon.Warning);
+
+            var newLineChars = CoreForm.NewLineChara + CoreForm.NewLineChara;
+            File.AppendAllText("Exception_Batch.txt", newLineChars + exceptionMsg + newLineChars);
         }
     }
 }
