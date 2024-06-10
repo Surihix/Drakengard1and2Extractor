@@ -37,7 +37,7 @@ namespace Drakengard1and2Extractor.Support
                     }
                     break;
 
-                case DelSwitch.folder:
+                case DelSwitch.directory:
                     if (Directory.Exists(fileOrFolder))
                     {
                         Directory.Delete(fileOrFolder, true);
@@ -47,7 +47,7 @@ namespace Drakengard1and2Extractor.Support
         }
         public enum DelSwitch
         {
-            folder,
+            directory,
             file
         }
 
@@ -64,53 +64,56 @@ namespace Drakengard1and2Extractor.Support
         public static string GetFileHeader(BinaryReader readerName)
         {
             readerName.BaseStream.Position = 0;
-            var foundExtn = readerName.ReadChars(4);
-            string realExtn = string.Join("", foundExtn).Replace("\0", "");
+            var foundExtnChars = readerName.ReadChars(4);
+            string foundExtn = string.Join("", foundExtnChars).Replace("\0", "");
 
-            string rExtn = string.Empty;
+            string realExtn = string.Empty;
 
-            switch (realExtn)
+            switch (foundExtn)
             {
                 case "fpk":
-                    rExtn = ".fpk";
+                    realExtn = ".fpk";
                     break;
                 case "dpk":
-                    rExtn = ".dpk";
+                    realExtn = ".dpk";
                     break;
                 case "wZIM":
-                    rExtn = ".zim";
+                    realExtn = ".zim";
                     break;
                 case "V3a":
-                    rExtn = ".lz0";
+                    realExtn = ".lz0";
                     break;
                 case "KPS_":
-                    rExtn = ".kps";
+                    realExtn = ".kps";
                     break;
                 case "kvm1":
-                    rExtn = ".kvm";
+                    realExtn = ".kvm";
                     break;
                 case "SPK0":
-                    rExtn = ".spk0";
+                    realExtn = ".spk0";
                     break;
                 case "EVMT":
-                    rExtn = ".emt";
+                    realExtn = ".emt";
                     break;
                 case "DCMR":
-                    rExtn = ".dcmr";
+                    realExtn = ".dcmr";
                     break;
                 case "DLGT":
-                    rExtn = ".dlgt";
+                    realExtn = ".dlgt";
                     break;
                 case "pBAX":
-                    rExtn = ".hd2";
+                    realExtn = ".hd2";
+                    break;
+                case "SPFn":
+                    realExtn = ".spf";
                     break;
             }
-            if (realExtn.StartsWith("bh"))
+            if (foundExtn.StartsWith("bh"))
             {
-                rExtn = ".hi4";
+                realExtn = ".hi4";
             }
 
-            return rExtn;
+            return realExtn;
         }
     }
 }

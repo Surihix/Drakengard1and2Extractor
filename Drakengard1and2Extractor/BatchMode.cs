@@ -1,31 +1,22 @@
-﻿using Drakengard1and2Extractor.Support;
-using Drakengard1and2Extractor.FileExtraction;
+﻿using Drakengard1and2Extractor.FileExtraction;
+using Drakengard1and2Extractor.Support;
+using Drakengard1and2Extractor.Support.LoggingHelpers;
 using Ookii.Dialogs.WinForms;
 using System;
 using System.IO;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Drakengard1and2Extractor
 {
-    public partial class BatchMode : Form
+    public partial class BatchForm : Form
     {
-        public BatchMode(bool isDrk2RadioBtnChecked)
+        private static readonly string _NewLineChara = Environment.NewLine;
+
+        public BatchForm()
         {
             InitializeComponent();
 
-            if (isDrk2RadioBtnChecked.Equals(false))
-            {
-                BatchExtractDPKBtn.Enabled = false;
-            }
-        }
-
-
-        public void StatusMsg(string message)
-        {
-            BatchStatusListBox.Items.Add(message);
-            BatchStatusListBox.SelectedIndex = BatchStatusListBox.Items.Count - 1;
-            BatchStatusListBox.SelectedIndex = -1;
+            BatchStatusTextBox.BackColor = System.Drawing.SystemColors.Window;
         }
 
 
@@ -37,21 +28,22 @@ namespace Drakengard1and2Extractor
         {
             try
             {
-                var currentWindow = (BatchMode)Application.OpenForms[1];
-                var fpkDirSelect = new VistaFolderBrowserDialog();
-                fpkDirSelect.Description = "Select a folder that has fpk files";
-                fpkDirSelect.UseDescriptionForTitle = true;
+                var currentWindow = (BatchForm)Application.OpenForms[1];
+                var fpkDirSelect = new VistaFolderBrowserDialog
+                {
+                    Description = "Select a folder that has fpk files",
+                    UseDescriptionForTitle = true
+                };
 
                 if (fpkDirSelect.ShowDialog(currentWindow.Handle) == true)
                 {
-                    DisableButtons();
-                    BatchStatusListBox.Items.Clear();
-                    StatusMsg("Extracting fpk files....");
+                    EnableDisableControls(false);
+                    BatchFormLogHelper.LogMessage("Extracting fpk files....");
 
                     var fpkDir = fpkDirSelect.SelectedPath + "\\";
                     var fpkFilesInDir = Directory.GetFiles(fpkDir, "*.fpk", SearchOption.TopDirectoryOnly);
 
-                    Task.Run(() =>
+                    System.Threading.Tasks.Task.Run(() =>
                     {
                         try
                         {
@@ -62,15 +54,17 @@ namespace Drakengard1and2Extractor
                                 if (readHeader == "fpk")
                                 {
                                     FileFPK.ExtractFPK(fpkFile, false);
+                                    BatchFormLogHelper.LogMessage("Extracted " + Path.GetFileName(fpkFile));
                                 }
                             }
                         }
                         finally
                         {
+                            BatchFormLogHelper.LogMessage(_NewLineChara);
+                            BatchFormLogHelper.LogMessage("Batch extraction completed!");
+
                             CommonMethods.AppMsgBox("Finished extracting fpk files from the folder", "Success", MessageBoxIcon.Information);
-                            BatchStatusListBox.BeginInvoke((Action)(() => StatusMsg("")));
-                            BatchStatusListBox.BeginInvoke((Action)(() => StatusMsg("Batch extraction completed")));
-                            BeginInvoke(new Action(() => EnableButtons()));
+                            BeginInvoke(new Action(() => EnableDisableControls(true)));
                         }
                     });
                 }
@@ -91,21 +85,22 @@ namespace Drakengard1and2Extractor
         {
             try
             {
-                var currentWindow = (BatchMode)Application.OpenForms[1];
-                var dpkDirSelect = new VistaFolderBrowserDialog();
-                dpkDirSelect.Description = "Select a folder that has dpk files";
-                dpkDirSelect.UseDescriptionForTitle = true;
+                var currentWindow = (BatchForm)Application.OpenForms[1];
+                var dpkDirSelect = new VistaFolderBrowserDialog
+                {
+                    Description = "Select a folder that has dpk files",
+                    UseDescriptionForTitle = true
+                };
 
                 if (dpkDirSelect.ShowDialog(currentWindow.Handle) == true)
                 {
-                    DisableButtons();
-                    BatchStatusListBox.Items.Clear();
-                    StatusMsg("Extracting dpk files....");
+                    EnableDisableControls(false);
+                    BatchFormLogHelper.LogMessage("Extracting dpk files....");
 
                     var dpkDir = dpkDirSelect.SelectedPath + "\\";
                     var dpkFilesInDir = Directory.GetFiles(dpkDir, "*.dpk", SearchOption.TopDirectoryOnly);
 
-                    Task.Run(() =>
+                    System.Threading.Tasks.Task.Run(() =>
                     {
                         try
                         {
@@ -116,16 +111,17 @@ namespace Drakengard1and2Extractor
                                 if (readHeader == "dpk")
                                 {
                                     FileDPK.ExtractDPK(dpkFile, false);
+                                    BatchFormLogHelper.LogMessage("Extracted " + Path.GetFileName(dpkFile));
                                 }
                             }
                         }
                         finally
                         {
-                            CommonMethods.AppMsgBox("Finished extracting dpk files from the folder", "Success", MessageBoxIcon.Information);
+                            BatchFormLogHelper.LogMessage(_NewLineChara);
+                            BatchFormLogHelper.LogMessage("Batch extraction completed!");
 
-                            BatchStatusListBox.BeginInvoke((Action)(() => StatusMsg("")));
-                            BatchStatusListBox.BeginInvoke((Action)(() => StatusMsg("Batch extraction completed")));
-                            BeginInvoke(new Action(() => EnableButtons()));
+                            CommonMethods.AppMsgBox("Finished extracting dpk files from the folder", "Success", MessageBoxIcon.Information);
+                            BeginInvoke(new Action(() => EnableDisableControls(true)));
                         }
                     });
                 }
@@ -138,16 +134,82 @@ namespace Drakengard1and2Extractor
         }
 
 
-        private void DisableButtons()
+        private void BatchExtractKPSBtn_MouseHover(object sender, EventArgs e)
         {
-            BatchExtractDPKBtn.Enabled = false;
-            BatchExtractFPKBtn.Enabled = false;
+            BatchExtractKPStoolTip.Show("Extract all KPS files present inside a folder", BatchExtractKPSBtn);
+        }
+        private void BatchExtractKPSBtn_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                var currentWindow = (BatchForm)Application.OpenForms[1];
+                var kpsDirSelect = new VistaFolderBrowserDialog
+                {
+                    Description = "Select a folder that has kps files",
+                    UseDescriptionForTitle = true
+                };
+
+                if (kpsDirSelect.ShowDialog(currentWindow.Handle) == true)
+                {
+                    EnableDisableControls(false);
+                    BatchFormLogHelper.LogMessage("Extracting kps files....");
+
+                    var kpsDir = kpsDirSelect.SelectedPath + "\\";
+                    var kpsFilesInDir = Directory.GetFiles(kpsDir, "*.kps", SearchOption.TopDirectoryOnly);
+
+                    var shiftJISParse = false;
+
+                    var shiftJISResult = MessageBox.Show("Parse the text data in Japanese Encoding (shift-jis) format ? ", "ShiftJIS", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                    if (shiftJISResult == DialogResult.Yes)
+                    {
+                        shiftJISParse = true;
+                    }
+
+                    System.Threading.Tasks.Task.Run(() =>
+                    {
+                        try
+                        {
+                            foreach (var kpsFile in kpsFilesInDir)
+                            {
+                                var readHeader = CommonMethods.HeaderCheck(kpsFile);
+
+                                if (readHeader == "KPS_")
+                                {
+                                    FileKPS.ExtractKPS(kpsFile, shiftJISParse, false);
+                                    BatchFormLogHelper.LogMessage("Extracted " + Path.GetFileName(kpsFile));
+                                }
+                            }
+                        }
+                        finally
+                        {
+                            BatchFormLogHelper.LogMessage(_NewLineChara);
+                            BatchFormLogHelper.LogMessage("Batch extraction completed!");
+
+                            CommonMethods.AppMsgBox("Finished extracting kps files from the folder", "Success", MessageBoxIcon.Information);
+                            BeginInvoke(new Action(() => EnableDisableControls(true)));
+                        }
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                CommonMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
+                Close();
+            }
         }
 
-        private void EnableButtons()
+
+        private void EnableDisableControls(bool isEnabled)
         {
-            BatchExtractDPKBtn.Enabled = true;
-            BatchExtractFPKBtn.Enabled = true;
+            BatchExtractDPKBtn.Enabled = isEnabled;
+            BatchExtractFPKBtn.Enabled = isEnabled;
+            BatchExtractKPSBtn.Enabled = isEnabled;
+        }
+
+        private void BatchStatusDelBtn_Click(object sender, EventArgs e)
+        {
+            BatchStatusTextBox.Clear();
         }
     }
 }

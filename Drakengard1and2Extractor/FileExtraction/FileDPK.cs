@@ -1,4 +1,5 @@
 ﻿using Drakengard1and2Extractor.Support;
+using Drakengard1and2Extractor.Support.LoggingHelpers;
 using Drakengard1and2Extractor.Support.Lz0Helpers;
 using System;
 using System.IO;
@@ -13,35 +14,37 @@ namespace Drakengard1and2Extractor.FileExtraction
             try
             {
                 var extractDir = Path.GetFullPath(dpkFile) + "_extracted";
-                CommonMethods.IfFileDirExistsDel(extractDir, CommonMethods.DelSwitch.folder);
+                CommonMethods.IfFileDirExistsDel(extractDir, CommonMethods.DelSwitch.directory);
                 Directory.CreateDirectory(extractDir);
+
+                var dpkStructure = new CommonStructures.DPK();
 
                 using (FileStream dpkStream = new FileStream(dpkFile, FileMode.Open, FileAccess.Read))
                 {
                     using (BinaryReader dpkReader = new BinaryReader(dpkStream))
                     {
                         dpkReader.BaseStream.Position = 16;
-                        var entries = dpkReader.ReadUInt32();
+                        dpkStructure.EntryCount = dpkReader.ReadUInt32();
 
 
                         uint intialOffset = 48;
                         var fname = "FILE_";
                         var realExtn = string.Empty;
                         var fileCount = 1;
-                        for (int f = 0; f < entries; f++)
+                        for (int f = 0; f < dpkStructure.EntryCount; f++)
                         {
                             dpkReader.BaseStream.Position = intialOffset;
-                            var fileSize = dpkReader.ReadUInt32();
+                            dpkStructure.EntryDataSize = dpkReader.ReadUInt32();
 
                             dpkReader.BaseStream.Position = intialOffset + 8;
-                            var fileStart = dpkReader.ReadUInt32();
+                            dpkStructure.EntryDataOffset = dpkReader.ReadUInt32();
 
                             var currentFile = Path.Combine(extractDir, fname + $"{fileCount}");
 
                             using (FileStream outFileStream = new FileStream(currentFile, FileMode.OpenOrCreate, FileAccess.ReadWrite))
                             {
-                                dpkStream.Seek(fileStart, SeekOrigin.Begin);
-                                dpkStream.CopyStreamTo(outFileStream, fileSize, false);
+                                dpkStream.Seek(dpkStructure.EntryDataOffset, SeekOrigin.Begin);
+                                dpkStream.CopyStreamTo(outFileStream, dpkStructure.EntryDataSize, false);
                             }
 
                             using (BinaryReader outFileReader = new BinaryReader(File.Open(currentFile, FileMode.Open, FileAccess.Read)))
@@ -54,7 +57,7 @@ namespace Drakengard1and2Extractor.FileExtraction
                             if (realExtn == ".lz0")
                             {
                                 var dcmpLz0Data = Lz0Decompression.ProcessLz0Data(currentFile + realExtn);
-                                
+
                                 File.WriteAllBytes(currentFile, dcmpLz0Data);
                                 File.Delete(currentFile + realExtn);
 
@@ -66,7 +69,7 @@ namespace Drakengard1and2Extractor.FileExtraction
                                 File.Move(currentFile, currentFile + realExtn);
                             }
 
-                            LoggingHelpers.LogMessage($"Extracted '{fname}{fileCount}'");
+                            CoreFormLogHelpers.LogMessage($"Extracted '{fname}{fileCount}'");
 
                             realExtn = string.Empty;
 
@@ -78,9 +81,9 @@ namespace Drakengard1and2Extractor.FileExtraction
 
                 if (isSingleFile)
                 {
-                    LoggingHelpers.LogMessage(CoreForm.NewLineChara);
-                    LoggingHelpers.LogMessage("Extraction has completed!");
-                    LoggingHelpers.LogMessage(CoreForm.NewLineChara);
+                    CoreFormLogHelpers.LogMessage(CoreForm.NewLineChara);
+                    CoreFormLogHelpers.LogMessage("Extraction has completed!");
+                    CoreFormLogHelpers.LogMessage(CoreForm.NewLineChara);
 
                     CommonMethods.AppMsgBox("Extracted " + Path.GetFileName(dpkFile) + " file", "Success", MessageBoxIcon.Information);
                 }
@@ -88,8 +91,8 @@ namespace Drakengard1and2Extractor.FileExtraction
             catch (Exception ex)
             {
                 CommonMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
-                LoggingHelpers.LogMessage(CoreForm.NewLineChara);
-                LoggingHelpers.LogException("Exception: " + ex);
+                CoreFormLogHelpers.LogMessage(CoreForm.NewLineChara);
+                CoreFormLogHelpers.LogException("Exception: " + ex);
             }
         }
     }

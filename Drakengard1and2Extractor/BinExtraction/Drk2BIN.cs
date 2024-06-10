@@ -1,4 +1,5 @@
 ﻿using Drakengard1and2Extractor.Support;
+using Drakengard1and2Extractor.Support.LoggingHelpers;
 using Drakengard1and2Extractor.Support.Lz0Helpers;
 using System;
 using System.Collections.Generic;
@@ -20,10 +21,10 @@ namespace Drakengard1and2Extractor.BinExtraction
         {
             try
             {
-                LoggingHelpers.LogMessage(CoreForm.NewLineChara);
+                CoreFormLogHelpers.LogMessage(CoreForm.NewLineChara);
 
                 var extractDir = Path.GetFullPath(mainBinFile) + "_extracted";
-                CommonMethods.IfFileDirExistsDel(extractDir, CommonMethods.DelSwitch.folder);
+                CommonMethods.IfFileDirExistsDel(extractDir, CommonMethods.DelSwitch.directory);
                 Directory.CreateDirectory(extractDir);
 
                 var mainBinName = Path.GetFileName(mainBinFile);
@@ -33,34 +34,36 @@ namespace Drakengard1and2Extractor.BinExtraction
                 if (_BinExtnsDict.ContainsKey(mainBinName.ToLower()))
                 {
                     fExtn = _BinExtnsDict[mainBinName.ToLower()];
-                }                
+                }
+
+                var dpkStructure = new CommonStructures.DPK();
 
                 using (FileStream mainBinStream = new FileStream(mainBinFile, FileMode.Open, FileAccess.Read))
                 {
                     using (BinaryReader mainBinReader = new BinaryReader(mainBinStream))
                     {
                         mainBinReader.BaseStream.Position = 16;
-                        var entries = mainBinReader.ReadUInt32();
+                        dpkStructure.EntryCount = mainBinReader.ReadUInt32();
 
 
                         uint intialOffset = 48;
                         var fname = "FILE_";
                         var realExtn = string.Empty;
                         var fileCount = 1;
-                        for (int f = 0; f < entries; f++)
+                        for (int f = 0; f < dpkStructure.EntryCount; f++)
                         {
                             mainBinReader.BaseStream.Position = intialOffset;
-                            var fileSize = mainBinReader.ReadUInt32();
+                            dpkStructure.EntryDataSize = mainBinReader.ReadUInt32();
 
                             mainBinReader.BaseStream.Position = intialOffset + 8;
-                            var fileStart = mainBinReader.ReadUInt32();
+                            dpkStructure.EntryDataOffset = mainBinReader.ReadUInt32();
 
                             var currentFile = Path.Combine(extractDir, fname + $"{fileCount}" + fExtn);
 
                             using (FileStream outFileStream = new FileStream(currentFile, FileMode.OpenOrCreate, FileAccess.ReadWrite))
                             {
-                                mainBinStream.Seek(fileStart, SeekOrigin.Begin);
-                                mainBinStream.CopyStreamTo(outFileStream, fileSize, false);
+                                mainBinStream.Seek(dpkStructure.EntryDataOffset, SeekOrigin.Begin);
+                                mainBinStream.CopyStreamTo(outFileStream, dpkStructure.EntryDataSize, false);
                             }
 
                             if (isdImageBin)
@@ -90,7 +93,7 @@ namespace Drakengard1and2Extractor.BinExtraction
                                 realExtn = string.Empty;
                             }
 
-                            LoggingHelpers.LogMessage($"Extracted '{fname}{fileCount}'");
+                            CoreFormLogHelpers.LogMessage($"Extracted '{fname}{fileCount}'");
 
                             intialOffset += 32;
                             fileCount++;
@@ -98,16 +101,16 @@ namespace Drakengard1and2Extractor.BinExtraction
                     }
                 }
 
-                LoggingHelpers.LogMessage(CoreForm.NewLineChara);
-                LoggingHelpers.LogMessage("Extraction has completed!");
+                CoreFormLogHelpers.LogMessage(CoreForm.NewLineChara);
+                CoreFormLogHelpers.LogMessage("Extraction has completed!");
 
                 CommonMethods.AppMsgBox("Extracted " + Path.GetFileName(mainBinFile) + " file", "Success", MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
                 CommonMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
-                LoggingHelpers.LogMessage(CoreForm.NewLineChara);
-                LoggingHelpers.LogException("Exception: " + ex);
+                CoreFormLogHelpers.LogMessage(CoreForm.NewLineChara);
+                CoreFormLogHelpers.LogException("Exception: " + ex);
             }
         }
     }

@@ -1,5 +1,6 @@
 ﻿using Drakengard1and2Extractor.Support;
 using Drakengard1and2Extractor.Support.ImageHelpers;
+using Drakengard1and2Extractor.Support.LoggingHelpers;
 using System;
 using System.IO;
 using System.Windows.Forms;
@@ -10,7 +11,7 @@ namespace Drakengard1and2Extractor.ImageConversion
     {
         private readonly string _ZimFileVar;
 
-        public void ZIMConvertButtons(bool isEnabled)
+        public void ZIMConvertControls(bool isEnabled)
         {
             ZimSaveAsComboBox.Enabled = isEnabled;
             ConvertZIMImgBtn.Enabled = isEnabled;
@@ -84,11 +85,12 @@ namespace Drakengard1and2Extractor.ImageConversion
             {
                 ConvertZIMImgBtn.Text = "Converting...";
 
-                ZIMConvertButtons(false);
+                ZIMConvertControls(false);
 
                 var imgOptions = new ImgOptions();
                 var zimFileDir = Path.GetFullPath(_ZimFileVar);
-                var extractDir = Path.GetDirectoryName(zimFileDir) + "/";
+                var extractDir = Path.GetDirectoryName(zimFileDir);
+                var zimNameNoExtn = Path.GetFileNameWithoutExtension(_ZimFileVar);
                 imgOptions.AlphaIncrease = (int)ZimAlphaCompNumericUpDown.Value;
 
                 using (FileStream zimStream = new FileStream(_ZimFileVar, FileMode.Open, FileAccess.Read))
@@ -100,7 +102,7 @@ namespace Drakengard1and2Extractor.ImageConversion
                         imgOptions.Height = zimReader.ReadUInt16();
 
                         zimReader.BaseStream.Position = 52;
-                        var imgSize = zimReader.ReadUInt32();
+                        var pixelSize = zimReader.ReadUInt32();
 
                         zimReader.BaseStream.Position = 72;
                         var paletteSection = zimReader.ReadUInt32();
@@ -111,7 +113,7 @@ namespace Drakengard1and2Extractor.ImageConversion
 
                         // Process pixel data
                         zimStream.Seek(352, SeekOrigin.Begin);
-                        byte[] pixelsBuffer = new byte[imgSize];
+                        byte[] pixelsBuffer = new byte[pixelSize];
                         _ = zimStream.Read(pixelsBuffer, 0, pixelsBuffer.Length);
 
                         if (UnSwizzleCheckBox.Checked && bppFlag == 48)
@@ -120,11 +122,10 @@ namespace Drakengard1and2Extractor.ImageConversion
                             pixelsBuffer = unswizzledPixelsBuffer;
                         }
 
-                        byte[] finalizedPixels = new byte[] { };
+                        byte[] finalizedPixels = new byte[pixelSize];
                         if (bppFlag == 64)
                         {
-                            byte[] convertedPixels = ConvertPixelsTo8Bpp(pixelsBuffer);
-                            finalizedPixels = convertedPixels;
+                            finalizedPixels = ConvertPixelsTo8Bpp(pixelsBuffer);
                         }
                         else
                         {
@@ -152,44 +153,46 @@ namespace Drakengard1and2Extractor.ImageConversion
                         switch (ZimSaveAsComboBox.SelectedIndex)
                         {
                             case 0:
-                                outImgPath = extractDir + Path.GetFileNameWithoutExtension(_ZimFileVar) + ".bmp";
+                                outImgPath = Path.Combine(extractDir, zimNameNoExtn + ".bmp");
                                 imgOptions.ImageFormat = System.Drawing.Imaging.ImageFormat.Bmp;
 
-                                IfOutImgFileExistsDel(outImgPath);
+                                CommonMethods.IfFileDirExistsDel(outImgPath, CommonMethods.DelSwitch.file);
                                 BmpPngExporter.CreateBmpPng(finalizedPixels, finalizedPalette, imgOptions, outImgPath);
                                 break;
 
                             case 1:
-                                outImgPath = extractDir + Path.GetFileNameWithoutExtension(_ZimFileVar) + ".dds";
+                                outImgPath = Path.Combine(extractDir, zimNameNoExtn + ".dds");
 
-                                IfOutImgFileExistsDel(outImgPath);
+                                CommonMethods.IfFileDirExistsDel(outImgPath, CommonMethods.DelSwitch.file);
                                 DDSimgExporter.CreateDDS(finalizedPixels, finalizedPalette, imgOptions, outImgPath);
                                 break;
 
                             case 2:
-                                outImgPath = extractDir + Path.GetFileNameWithoutExtension(_ZimFileVar) + ".png";
+                                outImgPath = Path.Combine(extractDir, zimNameNoExtn + ".png");
                                 imgOptions.ImageFormat = System.Drawing.Imaging.ImageFormat.Png;
 
-                                IfOutImgFileExistsDel(outImgPath);
+                                CommonMethods.IfFileDirExistsDel(outImgPath, CommonMethods.DelSwitch.file);
                                 BmpPngExporter.CreateBmpPng(finalizedPixels, finalizedPalette, imgOptions, outImgPath);
                                 break;
                         }
                     }
                 }
 
-                LoggingHelpers.LogMessage(CoreForm.NewLineChara);
-                LoggingHelpers.LogMessage("Conversion has completed!");
-                LoggingHelpers.LogMessage(CoreForm.NewLineChara);
+                CoreFormLogHelpers.LogMessage(CoreForm.NewLineChara);
+                CoreFormLogHelpers.LogMessage("Conversion has completed!");
+                CoreFormLogHelpers.LogMessage(CoreForm.NewLineChara);
 
                 CommonMethods.AppMsgBox("Converted " + Path.GetFileName(_ZimFileVar) + " file", "Success", MessageBoxIcon.Information);
 
-                ZIMConvertButtons(true);
+                ZIMConvertControls(true);
 
                 ConvertZIMImgBtn.Text = "Convert";
             }
             catch (Exception ex)
             {
                 CommonMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
+                CoreFormLogHelpers.LogMessage(CoreForm.NewLineChara);
+                CoreFormLogHelpers.LogException("Exception: " + ex);
                 Close();
             }
         }
@@ -233,15 +236,6 @@ namespace Drakengard1and2Extractor.ImageConversion
                         }
                     }
                 }
-            }
-        }
-
-
-        static void IfOutImgFileExistsDel(string outImgFileName)
-        {
-            if (File.Exists(outImgFileName))
-            {
-                File.Delete(outImgFileName);
             }
         }
     }

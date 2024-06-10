@@ -2,9 +2,9 @@
 using System.Linq;
 using System.Windows.Forms;
 
-namespace Drakengard1and2Extractor.Support
+namespace Drakengard1and2Extractor.Support.LoggingHelpers
 {
-    internal class LoggingHelpers
+    internal class CoreFormLogHelpers
     {
         private static TextBox _StatusTxtBox = Application.OpenForms["CoreForm"].Controls["StatusTextBox"] as TextBox;
 

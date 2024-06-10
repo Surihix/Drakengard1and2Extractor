@@ -204,12 +204,14 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Drakengard1and2Extractor\Support\CommonMethods.cs" />
+    <Compile Include="Drakengard1and2Extractor\Support\CommonStructures.cs" />
+    <Compile Include="Drakengard1and2Extractor\Support\LoggingHelpers\BatchFormLogHelper.cs" />
     <Compile Include="Drakengard1and2Extractor\Support\Lz0Helpers\Lz0Decompression.cs" />
     <Compile Include="Drakengard1and2Extractor\Support\ImageHelpers\BmpPngExporter.cs" />
     <Compile Include="Drakengard1and2Extractor\Support\ImageHelpers\DDSimgExporter.cs" />
     <Compile Include="Drakengard1and2Extractor\Support\ImageHelpers\PS2UnSwizzlers.cs" />
     <Compile Include="Drakengard1and2Extractor\Support\ImageHelpers\ImgOptions.cs" />
-    <Compile Include="Drakengard1and2Extractor\Support\LoggingHelpers.cs" />
+    <Compile Include="Drakengard1and2Extractor\Support\LoggingHelpers\CoreFormLogHelpers.cs" />
     <Compile Include="Drakengard1and2Extractor\Support\Lz0Helpers\Minilz0Function.cs" />
     <Compile Include="Drakengard1and2Extractor\Support\Extensions\StreamExtension.cs" />
     <Compile Include="Drakengard1and2Extractor\BinExtraction\Drk1BIN.cs" />

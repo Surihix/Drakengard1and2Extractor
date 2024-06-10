@@ -2,13 +2,9 @@
 using Drakengard1and2Extractor.FileExtraction;
 using Drakengard1and2Extractor.ImageConversion;
 using Drakengard1and2Extractor.Support;
+using Drakengard1and2Extractor.Support.LoggingHelpers;
 using System;
-using System.Diagnostics;
-using System.Drawing;
 using System.IO;
-using System.Runtime.InteropServices;
-using System.Security.Cryptography;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Drakengard1and2Extractor
@@ -20,6 +16,7 @@ namespace Drakengard1and2Extractor
         public CoreForm()
         {
             InitializeComponent();
+
             if (!File.Exists("minilzo.dll"))
             {
                 CommonMethods.AppMsgBox("Missing minilz0.dll file.\nPlease check if this dll file is present next to the exe file.", "Error", MessageBoxIcon.Error);
@@ -35,7 +32,7 @@ namespace Drakengard1and2Extractor
 
             Drk1RadioButton.Checked = true;
 
-            StatusTextBox.BackColor = SystemColors.Window;
+            StatusTextBox.BackColor = System.Drawing.SystemColors.Window;
             StatusTextBox.Text = "App was launched!";
             StatusTextBox.AppendText(NewLineChara);
             StatusTextBox.AppendText(NewLineChara);
@@ -78,11 +75,11 @@ namespace Drakengard1and2Extractor
 
                         if (readHeader == "fpk")
                         {
-                            Task.Run(() =>
+                            System.Threading.Tasks.Task.Run(() =>
                             {
                                 try
                                 {
-                                    LoggingHelpers.LogMessage("Extracting files from " + Path.GetFileName(mbinFile) + "....");
+                                    CoreFormLogHelpers.LogMessage("Extracting files from " + Path.GetFileName(mbinFile) + "....");
                                     Drk1BIN.ExtractBin(mbinFile);
                                 }
                                 finally
@@ -116,11 +113,11 @@ namespace Drakengard1and2Extractor
 
                         if (readHeader == "dpk")
                         {
-                            Task.Run(() =>
+                            System.Threading.Tasks.Task.Run(() =>
                             {
                                 try
                                 {
-                                    LoggingHelpers.LogMessage("Extracting files from " + Path.GetFileName(mbinFile) + "....");
+                                    CoreFormLogHelpers.LogMessage("Extracting files from " + Path.GetFileName(mbinFile) + "....");
                                     Drk2BIN.ExtractBin(mbinFile);
                                 }
                                 finally
@@ -146,6 +143,8 @@ namespace Drakengard1and2Extractor
             catch (Exception ex)
             {
                 CommonMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
+                CoreFormLogHelpers.LogMessage(NewLineChara);
+                CoreFormLogHelpers.LogException("Exception: " + ex);
             }
         }
 
@@ -172,11 +171,11 @@ namespace Drakengard1and2Extractor
 
                     if (readHeader == "fpk")
                     {
-                        Task.Run(() =>
+                        System.Threading.Tasks.Task.Run(() =>
                         {
                             try
                             {
-                                LoggingHelpers.LogMessage("Extracting files from " + Path.GetFileName(fpkFile) + "....");
+                                CoreFormLogHelpers.LogMessage("Extracting files from " + Path.GetFileName(fpkFile) + "....");
                                 FileFPK.ExtractFPK(fpkFile, true);
                             }
                             finally
@@ -201,6 +200,8 @@ namespace Drakengard1and2Extractor
             catch (Exception ex)
             {
                 CommonMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
+                CoreFormLogHelpers.LogMessage(NewLineChara);
+                CoreFormLogHelpers.LogException("Exception: " + ex);
             }
         }
 
@@ -226,11 +227,11 @@ namespace Drakengard1and2Extractor
 
                     if (readHeader == "dpk")
                     {
-                        Task.Run(() =>
+                        System.Threading.Tasks.Task.Run(() =>
                         {
                             try
                             {
-                                LoggingHelpers.LogMessage("Extracting files from " + Path.GetFileName(dpkFile) + "....");
+                                CoreFormLogHelpers.LogMessage("Extracting files from " + Path.GetFileName(dpkFile) + "....");
                                 FileDPK.ExtractDPK(dpkFile, true);
                             }
                             finally
@@ -255,6 +256,8 @@ namespace Drakengard1and2Extractor
             catch (Exception ex)
             {
                 CommonMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
+                CoreFormLogHelpers.LogMessage(NewLineChara);
+                CoreFormLogHelpers.LogException("Exception: " + ex);
             }
         }
 
@@ -280,12 +283,21 @@ namespace Drakengard1and2Extractor
 
                     if (readHeader == "KPS_")
                     {
-                        Task.Run(() =>
+                        var shiftJISParse = false;
+
+                        var shiftJISResult = MessageBox.Show("Parse the text data in Japanese Encoding (shift-jis) format ? ", "ShiftJIS", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                        if (shiftJISResult == DialogResult.Yes)
+                        {
+                            shiftJISParse = true;
+                        }
+
+                        System.Threading.Tasks.Task.Run(() =>
                         {
                             try
                             {
-                                LoggingHelpers.LogMessage("Extracting files from " + Path.GetFileName(kpsFile) + "....");
-                                FileKPS.ExtractKPS(kpsFile, true);
+                                CoreFormLogHelpers.LogMessage("Extracting files from " + Path.GetFileName(kpsFile) + "....");
+                                FileKPS.ExtractKPS(kpsFile, shiftJISParse, true);
                             }
                             finally
                             {
@@ -309,6 +321,8 @@ namespace Drakengard1and2Extractor
             catch (Exception ex)
             {
                 CommonMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
+                CoreFormLogHelpers.LogMessage(NewLineChara);
+                CoreFormLogHelpers.LogException("Exception: " + ex);
             }
         }
 
@@ -319,14 +333,8 @@ namespace Drakengard1and2Extractor
         }
         private void BatchModeBtn_Click(object sender, EventArgs e)
         {
-            var isDrk2RadioBtnChecked = false;
-            if (Drk2RadioButton.Checked.Equals(true))
-            {
-                isDrk2RadioBtnChecked = true;
-            }
-
-            var batchMode = new BatchMode(isDrk2RadioBtnChecked);
-            batchMode.ShowDialog();
+            var batchModeForm = new BatchForm();
+            batchModeForm.ShowDialog();
         }
 
 
@@ -351,11 +359,11 @@ namespace Drakengard1and2Extractor
 
                     if (readHeader == "wZIM")
                     {
-                        Task.Run(() =>
+                        System.Threading.Tasks.Task.Run(() =>
                         {
                             try
                             {
-                                LoggingHelpers.LogMessage("Converting " + Path.GetFileName(zimFile) + "....");
+                                CoreFormLogHelpers.LogMessage("Converting " + Path.GetFileName(zimFile) + "....");
                                 var converterWindow = new FileZIM(zimFile);
                                 converterWindow.ShowDialog();
                             }
@@ -381,6 +389,8 @@ namespace Drakengard1and2Extractor
             catch (Exception ex)
             {
                 CommonMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
+                CoreFormLogHelpers.LogMessage(NewLineChara);
+                CoreFormLogHelpers.LogException("Exception: " + ex);
             }
         }
 
@@ -406,11 +416,11 @@ namespace Drakengard1and2Extractor
 
                     if (readHeader == "SPK0")
                     {
-                        Task.Run(() =>
+                        System.Threading.Tasks.Task.Run(() =>
                         {
                             try
                             {
-                                LoggingHelpers.LogMessage("Converting " + Path.GetFileName(spk0File) + "....");
+                                CoreFormLogHelpers.LogMessage("Converting " + Path.GetFileName(spk0File) + "....");
                                 var converterWindow = new FileSPK0(spk0File);
                                 converterWindow.ShowDialog();
                             }
@@ -436,6 +446,8 @@ namespace Drakengard1and2Extractor
             catch (Exception ex)
             {
                 CommonMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
+                CoreFormLogHelpers.LogMessage(NewLineChara);
+                CoreFormLogHelpers.LogException("Exception: " + ex);
             }
         }
 
@@ -470,18 +482,19 @@ namespace Drakengard1and2Extractor
             var x64DllSha256 = "ea006fafb08dd554657b1c81e45c92e88d663aca0c79c48ae1f3dca22e1e2314";
             string dllBuildHash;
 
-            var appArchitecture = RuntimeInformation.ProcessArchitecture;
-            using (FileStream lzoDllStream = new FileStream("minilzo.dll", FileMode.Open, FileAccess.Read))
+            var appArchitecture = System.Runtime.InteropServices.RuntimeInformation.ProcessArchitecture;
+
+            using (var dllStream = new FileStream("minilzo.dll", FileMode.Open, FileAccess.Read))
             {
-                using (SHA256 dllSHA256 = SHA256.Create())
+                using (System.Security.Cryptography.SHA256 dllSHA256 = System.Security.Cryptography.SHA256.Create())
                 {
-                    dllBuildHash = BitConverter.ToString(dllSHA256.ComputeHash(lzoDllStream)).Replace("-", "").ToLower();
+                    dllBuildHash = BitConverter.ToString(dllSHA256.ComputeHash(dllStream)).Replace("-", "").ToLower();
                 }
             }
 
             switch (appArchitecture)
             {
-                case Architecture.X86:
+                case System.Runtime.InteropServices.Architecture.X86:
                     if (!dllBuildHash.Equals(x86DllSha256))
                     {
                         CommonMethods.AppMsgBox("Detected incompatible minilz0.dll file.\nPlease check if the dll file included with this build of the app is the correct one.", "Error", MessageBoxIcon.Error);
@@ -489,7 +502,7 @@ namespace Drakengard1and2Extractor
                     }
                     break;
 
-                case Architecture.X64:
+                case System.Runtime.InteropServices.Architecture.X64:
                     if (!dllBuildHash.Equals(x64DllSha256))
                     {
                         CommonMethods.AppMsgBox("Detected incompatible minilz0.dll file.\nPlease check if the dll file included with this build of the app is the correct one.", "Error", MessageBoxIcon.Error);
@@ -534,7 +547,7 @@ namespace Drakengard1and2Extractor
         {
             try
             {
-                Process.Start("AppHelp.txt");
+                System.Diagnostics.Process.Start("AppHelp.txt");
             }
             catch (Exception ex)
             {

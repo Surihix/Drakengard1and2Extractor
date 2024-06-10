@@ -1,8 +1,8 @@
 ﻿using Drakengard1and2Extractor.Support;
 using Drakengard1and2Extractor.Support.ImageHelpers;
+using Drakengard1and2Extractor.Support.LoggingHelpers;
 using System;
 using System.IO;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Drakengard1and2Extractor.ImageConversion
@@ -10,6 +10,17 @@ namespace Drakengard1and2Extractor.ImageConversion
     public partial class FileSPK0 : Form
     {
         private readonly string Spk0FileVar;
+
+        public void SPK0ConvertControls(bool isEnabled)
+        {
+            Spk0SaveAsComboBox.Enabled = isEnabled;
+            ConvertSPK0ImgBtn.Enabled = isEnabled;
+
+            if (Spk0SaveAsComboBox.SelectedIndex == 1 || Spk0SaveAsComboBox.SelectedIndex == 2)
+            {
+                Spk0AlphaCompNumericUpDown.Enabled = isEnabled;
+            }
+        }
 
         public FileSPK0(string spk0File)
         {
@@ -31,11 +42,11 @@ namespace Drakengard1and2Extractor.ImageConversion
 
         private void Spk0SaveAsComboBox_SelectionChangeCommitted(object sender, EventArgs e)
         {
-            if (Spk0SaveAsComboBox.SelectedIndex.Equals(0))
+            if (Spk0SaveAsComboBox.SelectedIndex == 0)
             {
                 Spk0AlphaCompNumericUpDown.Enabled = false;
             }
-            if (Spk0SaveAsComboBox.SelectedIndex.Equals(1) || Spk0SaveAsComboBox.SelectedIndex.Equals(2))
+            if (Spk0SaveAsComboBox.SelectedIndex == 1 || Spk0SaveAsComboBox.SelectedIndex == 2)
             {
                 Spk0AlphaCompNumericUpDown.Enabled = true;
             }
@@ -50,30 +61,20 @@ namespace Drakengard1and2Extractor.ImageConversion
         {
             ConvertSPK0ImgBtn.Text = "Converting...";
 
-            Spk0SaveAsComboBox.Enabled = false;
-            ConvertSPK0ImgBtn.Enabled = false;
-
-            if (Spk0SaveAsComboBox.SelectedIndex.Equals(1) || Spk0SaveAsComboBox.SelectedIndex.Equals(2))
-            {
-                Spk0AlphaCompNumericUpDown.Enabled = false;
-            }
+            SPK0ConvertControls(false);
 
             var saveAsComboBoxItemIndex = Spk0SaveAsComboBox.SelectedIndex;
             var spk0AlphaCompNumericUpDownVal = (int)Spk0AlphaCompNumericUpDown.Value;
 
-            Task.Run(() =>
+            System.Threading.Tasks.Task.Run(() =>
             {
                 try
                 {
                     try
                     {
-                        var spk0FileDir = Path.GetFullPath(Spk0FileVar);
-                        var extractDir = Path.GetDirectoryName(spk0FileDir) + "/" + Path.GetFileName(Spk0FileVar) + "_extracted";
+                        var extractDir = Path.Combine(Path.GetDirectoryName(Spk0FileVar), Path.GetFileName(Spk0FileVar) + "_extracted");
 
-                        if (Directory.Exists(extractDir))
-                        {
-                            Directory.Delete(extractDir, true);
-                        }
+                        CommonMethods.IfFileDirExistsDel(extractDir, CommonMethods.DelSwitch.directory);
                         Directory.CreateDirectory(extractDir);
 
 
@@ -94,14 +95,14 @@ namespace Drakengard1and2Extractor.ImageConversion
                                 var dls0Size = spk0Stream.Length - grf1EndPos;
 
 
-                                using (FileStream dmt0Stream = new FileStream(extractDir + "/" + "DMT0", FileMode.OpenOrCreate, FileAccess.Write))
+                                using (FileStream dmt0Stream = new FileStream(Path.Combine(extractDir, "DMT0"), FileMode.OpenOrCreate, FileAccess.Write))
                                 {
                                     spk0Stream.Seek(32, SeekOrigin.Begin);
                                     spk0Stream.CopyStreamTo(dmt0Stream, dmt0Size, false);
                                 }
 
 
-                                using (FileStream grf1Stream = new FileStream(extractDir + "/" + "GRF1", FileMode.OpenOrCreate, FileAccess.ReadWrite))
+                                using (FileStream grf1Stream = new FileStream(Path.Combine(extractDir, "GRF1"), FileMode.OpenOrCreate, FileAccess.ReadWrite))
                                 {
                                     spk0Stream.Seek(grf1SubChunkPos, SeekOrigin.Begin);
                                     spk0Stream.CopyStreamTo(grf1Stream, grf1Size, false);
@@ -149,19 +150,19 @@ namespace Drakengard1and2Extractor.ImageConversion
                                             switch (saveAsComboBoxItemIndex)
                                             {
                                                 case 0:
-                                                    outImgPath = extractDir + "/" + "GRF1_img_" + imgFCount + ".bmp";
+                                                    outImgPath = Path.Combine(extractDir, "GRF1_img_" + imgFCount + ".bmp");
                                                     imgOptions.ImageFormat = System.Drawing.Imaging.ImageFormat.Bmp;
 
                                                     BmpPngExporter.CreateBmpPng(pixelsBuffer, palBuffer, imgOptions, outImgPath);
                                                     break;
 
                                                 case 1:
-                                                    outImgPath = extractDir + "/" + "GRF1_img_" + imgFCount + ".dds";
+                                                    outImgPath = Path.Combine(extractDir, "GRF1_img_" + imgFCount + ".dds");
                                                     DDSimgExporter.CreateDDS(pixelsBuffer, palBuffer, imgOptions, outImgPath);
                                                     break;
 
                                                 case 2:
-                                                    outImgPath = extractDir + "/" + "GRF1_img_" + imgFCount + ".png";
+                                                    outImgPath = Path.Combine(extractDir, "GRF1_img_" + imgFCount + ".png");
                                                     imgOptions.ImageFormat = System.Drawing.Imaging.ImageFormat.Png;
 
                                                     BmpPngExporter.CreateBmpPng(pixelsBuffer, palBuffer, imgOptions, outImgPath);
@@ -175,7 +176,7 @@ namespace Drakengard1and2Extractor.ImageConversion
                                 }
 
 
-                                using (FileStream dls0Stream = new FileStream(extractDir + "/" + "DLS0", FileMode.OpenOrCreate, FileAccess.Write))
+                                using (FileStream dls0Stream = new FileStream(Path.Combine(extractDir, "DLS0"), FileMode.OpenOrCreate, FileAccess.Write))
                                 {
                                     spk0Stream.Seek(dls0SubChunkPos, SeekOrigin.Begin);
                                     spk0Stream.CopyStreamTo(dls0Stream, dls0Size, false);
@@ -186,25 +187,20 @@ namespace Drakengard1and2Extractor.ImageConversion
                     catch (Exception ex)
                     {
                         CommonMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
+                        CoreFormLogHelpers.LogMessage(CoreForm.NewLineChara);
+                        CoreFormLogHelpers.LogException("Exception: " + ex);
                         Close();
                     }
                 }
                 finally
                 {
-                    LoggingHelpers.LogMessage(CoreForm.NewLineChara);
-                    LoggingHelpers.LogMessage("Conversion has completed!");
-                    LoggingHelpers.LogMessage(CoreForm.NewLineChara);
+                    CoreFormLogHelpers.LogMessage(CoreForm.NewLineChara);
+                    CoreFormLogHelpers.LogMessage("Conversion has completed!");
+                    CoreFormLogHelpers.LogMessage(CoreForm.NewLineChara);
 
                     CommonMethods.AppMsgBox("Converted " + Path.GetFileName(Spk0FileVar) + " file", "Success", MessageBoxIcon.Information);
 
-                    BeginInvoke(new Action(() => Spk0SaveAsComboBox.Enabled = true));
-                    BeginInvoke(new Action(() => ConvertSPK0ImgBtn.Enabled = true));
-
-                    if (saveAsComboBoxItemIndex.Equals(1) || saveAsComboBoxItemIndex.Equals(2))
-                    {
-                        BeginInvoke(new Action(() => Spk0AlphaCompNumericUpDown.Enabled = true));
-                    }
-
+                    BeginInvoke(new Action(() => SPK0ConvertControls(true)));
                     BeginInvoke(new Action(() => ConvertSPK0ImgBtn.Text = "Convert"));
                 }
             });
