@@ -1,15 +1,14 @@
 ﻿using Drakengard1and2Extractor.Support;
 using Drakengard1and2Extractor.Support.ImageHelpers;
-using Drakengard1and2Extractor.Support.LoggingHelpers;
 using System;
 using System.IO;
 using System.Windows.Forms;
 
 namespace Drakengard1and2Extractor.ImageConversion
 {
-    public partial class FileSPK0 : Form
+    public partial class SPK0Form : Form
     {
-        private readonly string Spk0FileVar;
+        private readonly string _Spk0File;
 
         public void SPK0ConvertControls(bool isEnabled)
         {
@@ -22,11 +21,11 @@ namespace Drakengard1and2Extractor.ImageConversion
             }
         }
 
-        public FileSPK0(string spk0File)
+        public SPK0Form(string spk0File)
         {
             try
             {
-                Spk0FileVar = spk0File;
+                _Spk0File = spk0File;
 
                 InitializeComponent();
 
@@ -72,13 +71,13 @@ namespace Drakengard1and2Extractor.ImageConversion
                 {
                     try
                     {
-                        var extractDir = Path.Combine(Path.GetDirectoryName(Spk0FileVar), Path.GetFileName(Spk0FileVar) + "_extracted");
+                        var extractDir = Path.Combine(Path.GetDirectoryName(_Spk0File), Path.GetFileName(_Spk0File) + "_extracted");
 
                         CommonMethods.IfFileDirExistsDel(extractDir, CommonMethods.DelSwitch.directory);
                         Directory.CreateDirectory(extractDir);
 
 
-                        using (FileStream spk0Stream = new FileStream(Spk0FileVar, FileMode.Open, FileAccess.Read))
+                        using (FileStream spk0Stream = new FileStream(_Spk0File, FileMode.Open, FileAccess.Read))
                         {
                             using (BinaryReader spk0Reader = new BinaryReader(spk0Stream))
                             {
@@ -126,7 +125,7 @@ namespace Drakengard1and2Extractor.ImageConversion
                                         byte[] palBuffer = new byte[palSize];
                                         grf1Stream.Read(palBuffer, 0, palBuffer.Length);
 
-                                        byte[] finalizedPalBuffer = PS2UnSwizzlers.UnSwizzlePalette(palBuffer);
+                                        byte[] finalizedPalBuffer = PS2Unswizzlers.UnSwizzlePalette(palBuffer);
 
 
                                         uint imgReadPosStart = 20;
@@ -187,18 +186,18 @@ namespace Drakengard1and2Extractor.ImageConversion
                     catch (Exception ex)
                     {
                         CommonMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
-                        CoreFormLogHelpers.LogMessage(CoreForm.NewLineChara);
-                        CoreFormLogHelpers.LogException("Exception: " + ex);
+                        LoggingMethods.LogMessage(CommonMethods.NewLineChara);
+                        LoggingMethods.LogException("Exception: " + ex);
                         Close();
                     }
                 }
                 finally
                 {
-                    CoreFormLogHelpers.LogMessage(CoreForm.NewLineChara);
-                    CoreFormLogHelpers.LogMessage("Conversion has completed!");
-                    CoreFormLogHelpers.LogMessage(CoreForm.NewLineChara);
+                    LoggingMethods.LogMessage(CommonMethods.NewLineChara);
+                    LoggingMethods.LogMessage("Conversion has completed!");
+                    LoggingMethods.LogMessage(CommonMethods.NewLineChara);
 
-                    CommonMethods.AppMsgBox("Converted " + Path.GetFileName(Spk0FileVar) + " file", "Success", MessageBoxIcon.Information);
+                    CommonMethods.AppMsgBox("Converted " + Path.GetFileName(_Spk0File) + " file", "Success", MessageBoxIcon.Information);
 
                     BeginInvoke(new Action(() => SPK0ConvertControls(true)));
                     BeginInvoke(new Action(() => ConvertSPK0ImgBtn.Text = "Convert"));

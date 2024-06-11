@@ -1,6 +1,5 @@
 ﻿using Drakengard1and2Extractor.FileExtraction;
 using Drakengard1and2Extractor.Support;
-using Drakengard1and2Extractor.Support.LoggingHelpers;
 using Ookii.Dialogs.WinForms;
 using System;
 using System.IO;
@@ -17,6 +16,12 @@ namespace Drakengard1and2Extractor
             InitializeComponent();
 
             BatchStatusTextBox.BackColor = System.Drawing.SystemColors.Window;
+        }
+
+
+        private void BatchForm_Shown(object sender, EventArgs e)
+        {
+            LoggingMethods.SetBatchFormStatusBox();
         }
 
 
@@ -38,7 +43,7 @@ namespace Drakengard1and2Extractor
                 if (fpkDirSelect.ShowDialog(currentWindow.Handle) == true)
                 {
                     EnableDisableControls(false);
-                    BatchFormLogHelper.LogMessage("Extracting fpk files....");
+                    LoggingMethods.LogMessage("Extracting fpk files....");
 
                     var fpkDir = fpkDirSelect.SelectedPath + "\\";
                     var fpkFilesInDir = Directory.GetFiles(fpkDir, "*.fpk", SearchOption.TopDirectoryOnly);
@@ -54,14 +59,14 @@ namespace Drakengard1and2Extractor
                                 if (readHeader == "fpk")
                                 {
                                     FileFPK.ExtractFPK(fpkFile, false);
-                                    BatchFormLogHelper.LogMessage("Extracted " + Path.GetFileName(fpkFile));
+                                    LoggingMethods.LogMessage("Extracted " + Path.GetFileName(fpkFile));
                                 }
                             }
                         }
                         finally
                         {
-                            BatchFormLogHelper.LogMessage(_NewLineChara);
-                            BatchFormLogHelper.LogMessage("Batch extraction completed!");
+                            LoggingMethods.LogMessage(_NewLineChara);
+                            LoggingMethods.LogMessage("Batch extraction completed!");
 
                             CommonMethods.AppMsgBox("Finished extracting fpk files from the folder", "Success", MessageBoxIcon.Information);
                             BeginInvoke(new Action(() => EnableDisableControls(true)));
@@ -72,7 +77,7 @@ namespace Drakengard1and2Extractor
             catch (Exception ex)
             {
                 CommonMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
-                BatchFormLogHelper.LogException("Exception: " + ex);
+                LoggingMethods.LogException("Exception: " + ex);
                 Close();
             }
         }
@@ -96,7 +101,7 @@ namespace Drakengard1and2Extractor
                 if (dpkDirSelect.ShowDialog(currentWindow.Handle) == true)
                 {
                     EnableDisableControls(false);
-                    BatchFormLogHelper.LogMessage("Extracting dpk files....");
+                    LoggingMethods.LogMessage("Extracting dpk files....");
 
                     var dpkDir = dpkDirSelect.SelectedPath + "\\";
                     var dpkFilesInDir = Directory.GetFiles(dpkDir, "*.dpk", SearchOption.TopDirectoryOnly);
@@ -112,14 +117,14 @@ namespace Drakengard1and2Extractor
                                 if (readHeader == "dpk")
                                 {
                                     FileDPK.ExtractDPK(dpkFile, false);
-                                    BatchFormLogHelper.LogMessage("Extracted " + Path.GetFileName(dpkFile));
+                                    LoggingMethods.LogMessage("Extracted " + Path.GetFileName(dpkFile));
                                 }
                             }
                         }
                         finally
                         {
-                            BatchFormLogHelper.LogMessage(_NewLineChara);
-                            BatchFormLogHelper.LogMessage("Batch extraction completed!");
+                            LoggingMethods.LogMessage(_NewLineChara);
+                            LoggingMethods.LogMessage("Batch extraction completed!");
 
                             CommonMethods.AppMsgBox("Finished extracting dpk files from the folder", "Success", MessageBoxIcon.Information);
                             BeginInvoke(new Action(() => EnableDisableControls(true)));
@@ -130,7 +135,7 @@ namespace Drakengard1and2Extractor
             catch (Exception ex)
             {
                 CommonMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
-                BatchFormLogHelper.LogException("Exception: " + ex);
+                LoggingMethods.LogException("Exception: " + ex);
                 Dispose();
                 Close();
             }
@@ -155,7 +160,7 @@ namespace Drakengard1and2Extractor
                 if (kpsDirSelect.ShowDialog(currentWindow.Handle) == true)
                 {
                     EnableDisableControls(false);
-                    BatchFormLogHelper.LogMessage("Extracting kps files....");
+                    LoggingMethods.LogMessage("Extracting kps files....");
 
                     var kpsDir = kpsDirSelect.SelectedPath + "\\";
                     var kpsFilesInDir = Directory.GetFiles(kpsDir, "*.kps", SearchOption.TopDirectoryOnly);
@@ -180,14 +185,14 @@ namespace Drakengard1and2Extractor
                                 if (readHeader == "KPS_")
                                 {
                                     FileKPS.ExtractKPS(kpsFile, shiftJISParse, false);
-                                    BatchFormLogHelper.LogMessage("Extracted " + Path.GetFileName(kpsFile));
+                                    LoggingMethods.LogMessage("Extracted " + Path.GetFileName(kpsFile));
                                 }
                             }
                         }
                         finally
                         {
-                            BatchFormLogHelper.LogMessage(_NewLineChara);
-                            BatchFormLogHelper.LogMessage("Batch extraction completed!");
+                            LoggingMethods.LogMessage(_NewLineChara);
+                            LoggingMethods.LogMessage("Batch extraction completed!");
 
                             CommonMethods.AppMsgBox("Finished extracting kps files from the folder", "Success", MessageBoxIcon.Information);
                             BeginInvoke(new Action(() => EnableDisableControls(true)));
@@ -198,7 +203,7 @@ namespace Drakengard1and2Extractor
             catch (Exception ex)
             {
                 CommonMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
-                BatchFormLogHelper.LogException("Exception: " + ex);
+                LoggingMethods.LogException("Exception: " + ex);
                 Close();
             }
         }
@@ -211,20 +216,18 @@ namespace Drakengard1and2Extractor
             BatchExtractKPSBtn.Enabled = isEnabled;
         }
 
+
         private void BatchStatusDelBtn_Click(object sender, EventArgs e)
         {
             BatchStatusTextBox.Clear();
         }
 
+
         private void BatchForm_FormClosing(object sender, FormClosingEventArgs e)
         {
+            LoggingMethods.SetCoreFormStatusBox();
             Dispose();
             Hide();
-        }
-
-        private void BatchForm_Shown(object sender, EventArgs e)
-        {
-            BatchFormLogHelper.SetStatusTxtBox();
         }
     }
 }

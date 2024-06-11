@@ -3,9 +3,9 @@ using System.Windows.Forms;
 
 namespace Drakengard1and2Extractor
 {
-    public partial class AppAbout : Form
+    public partial class AboutForm : Form
     {
-        public AppAbout()
+        public AboutForm()
         {
             InitializeComponent();
         }

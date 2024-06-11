@@ -1,6 +1,6 @@
 ﻿namespace Drakengard1and2Extractor
 {
-    partial class AppAbout
+    partial class AboutForm
     {
         /// <summary>
         /// Required designer variable.
@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AppAbout));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(AboutForm));
             this.AboutWindowBtn = new System.Windows.Forms.Button();
             this.Creditlabel1 = new System.Windows.Forms.Label();
             this.Creditlabel2 = new System.Windows.Forms.Label();

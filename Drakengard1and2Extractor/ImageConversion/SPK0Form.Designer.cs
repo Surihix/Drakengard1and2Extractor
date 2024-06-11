@@ -1,6 +1,6 @@
 ﻿namespace Drakengard1and2Extractor.ImageConversion
 {
-    partial class FileSPK0
+    partial class SPK0Form
     {
         /// <summary>
         /// Required designer variable.

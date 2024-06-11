@@ -51,7 +51,7 @@
             this.ZIMtoolTip = new System.Windows.Forms.ToolTip(this.components);
             this.SPK0toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.AppPictureBox = new System.Windows.Forms.PictureBox();
-            this.ImgConvertersGroupBox = new System.Windows.Forms.GroupBox();
+            this.ImgConvtGroupBox = new System.Windows.Forms.GroupBox();
             this.BinExtractionGroupBox = new System.Windows.Forms.GroupBox();
             this.BatchModeToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.StatusTextBox = new System.Windows.Forms.TextBox();
@@ -60,7 +60,7 @@
             this.BINFileExtGrp.SuspendLayout();
             this.FileExtGrp.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.AppPictureBox)).BeginInit();
-            this.ImgConvertersGroupBox.SuspendLayout();
+            this.ImgConvtGroupBox.SuspendLayout();
             this.BinExtractionGroupBox.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -85,7 +85,6 @@
             this.Drk2RadioButton.TabStop = true;
             this.Drk2RadioButton.Text = "Drakengard 2";
             this.Drk2RadioButton.UseVisualStyleBackColor = true;
-            this.Drk2RadioButton.CheckedChanged += new System.EventHandler(this.Drk2RadioButton_CheckedChanged);
             // 
             // Drk1RadioButton
             // 
@@ -97,7 +96,6 @@
             this.Drk1RadioButton.TabStop = true;
             this.Drk1RadioButton.Text = "Drakengard 1";
             this.Drk1RadioButton.UseVisualStyleBackColor = true;
-            this.Drk1RadioButton.CheckedChanged += new System.EventHandler(this.Drk1RadioButton_CheckedChanged);
             // 
             // ExtBinBtn
             // 
@@ -241,16 +239,16 @@
             this.AppPictureBox.TabIndex = 1;
             this.AppPictureBox.TabStop = false;
             // 
-            // ImgConvertersGroupBox
+            // ImgConvtGroupBox
             // 
-            this.ImgConvertersGroupBox.Controls.Add(this.ConvertZIMBtn);
-            this.ImgConvertersGroupBox.Controls.Add(this.ConvertSPK0Btn);
-            this.ImgConvertersGroupBox.Location = new System.Drawing.Point(196, 259);
-            this.ImgConvertersGroupBox.Name = "ImgConvertersGroupBox";
-            this.ImgConvertersGroupBox.Size = new System.Drawing.Size(167, 135);
-            this.ImgConvertersGroupBox.TabIndex = 3;
-            this.ImgConvertersGroupBox.TabStop = false;
-            this.ImgConvertersGroupBox.Text = "Convert Images :";
+            this.ImgConvtGroupBox.Controls.Add(this.ConvertZIMBtn);
+            this.ImgConvtGroupBox.Controls.Add(this.ConvertSPK0Btn);
+            this.ImgConvtGroupBox.Location = new System.Drawing.Point(196, 259);
+            this.ImgConvtGroupBox.Name = "ImgConvtGroupBox";
+            this.ImgConvtGroupBox.Size = new System.Drawing.Size(167, 135);
+            this.ImgConvtGroupBox.TabIndex = 3;
+            this.ImgConvtGroupBox.TabStop = false;
+            this.ImgConvtGroupBox.Text = "Image Conversion :";
             // 
             // BinExtractionGroupBox
             // 
@@ -291,7 +289,7 @@
             this.Controls.Add(this.StatusDelBtn);
             this.Controls.Add(this.StatusTextBox);
             this.Controls.Add(this.BinExtractionGroupBox);
-            this.Controls.Add(this.ImgConvertersGroupBox);
+            this.Controls.Add(this.ImgConvtGroupBox);
             this.Controls.Add(this.FileExtGrp);
             this.Controls.Add(this.StatusLabel);
             this.Controls.Add(this.Versionlabel);
@@ -304,11 +302,12 @@
             this.MaximizeBox = false;
             this.Name = "CoreForm";
             this.Text = "Drakengard 1 & 2 - File Extractor";
+            this.Shown += new System.EventHandler(this.CoreForm_Shown);
             this.BINFileExtGrp.ResumeLayout(false);
             this.BINFileExtGrp.PerformLayout();
             this.FileExtGrp.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.AppPictureBox)).EndInit();
-            this.ImgConvertersGroupBox.ResumeLayout(false);
+            this.ImgConvtGroupBox.ResumeLayout(false);
             this.BinExtractionGroupBox.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -336,7 +335,7 @@
         private System.Windows.Forms.ToolTip ZIMtoolTip;
         private System.Windows.Forms.ToolTip SPK0toolTip;
         private System.Windows.Forms.Button BatchModeBtn;
-        private System.Windows.Forms.GroupBox ImgConvertersGroupBox;
+        private System.Windows.Forms.GroupBox ImgConvtGroupBox;
         private System.Windows.Forms.GroupBox BinExtractionGroupBox;
         private System.Windows.Forms.ToolTip BatchModeToolTip;
         private System.Windows.Forms.TextBox StatusTextBox;

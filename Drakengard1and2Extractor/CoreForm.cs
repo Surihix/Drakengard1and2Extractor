@@ -2,7 +2,6 @@
 using Drakengard1and2Extractor.FileExtraction;
 using Drakengard1and2Extractor.ImageConversion;
 using Drakengard1and2Extractor.Support;
-using Drakengard1and2Extractor.Support.LoggingHelpers;
 using System;
 using System.IO;
 using System.Windows.Forms;
@@ -11,8 +10,6 @@ namespace Drakengard1and2Extractor
 {
     public partial class CoreForm : Form
     {
-        public static readonly string NewLineChara = Environment.NewLine;
-
         public CoreForm()
         {
             InitializeComponent();
@@ -34,8 +31,14 @@ namespace Drakengard1and2Extractor
 
             StatusTextBox.BackColor = System.Drawing.SystemColors.Window;
             StatusTextBox.Text = "App was launched!";
-            StatusTextBox.AppendText(NewLineChara);
-            StatusTextBox.AppendText(NewLineChara);
+            StatusTextBox.AppendText(CommonMethods.NewLineChara);
+            StatusTextBox.AppendText(CommonMethods.NewLineChara);
+        }
+
+
+        private void CoreForm_Shown(object sender, EventArgs e)
+        {
+            LoggingMethods.SetCoreFormStatusBox();
         }
 
 
@@ -66,8 +69,8 @@ namespace Drakengard1and2Extractor
                     if (Drk1RadioButton.Checked)
                     {
                         StatusTextBox.AppendText("Game is set to Drakengard 1");
-                        StatusTextBox.AppendText(NewLineChara);
-                        StatusTextBox.AppendText(NewLineChara);
+                        StatusTextBox.AppendText(CommonMethods.NewLineChara);
+                        StatusTextBox.AppendText(CommonMethods.NewLineChara);
 
                         EnableDisableControls(false);
 
@@ -79,7 +82,7 @@ namespace Drakengard1and2Extractor
                             {
                                 try
                                 {
-                                    CoreFormLogHelpers.LogMessage("Extracting files from " + Path.GetFileName(mbinFile) + "....");
+                                    LoggingMethods.LogMessage("Extracting files from " + Path.GetFileName(mbinFile) + "....");
                                     Drk1BIN.ExtractBin(mbinFile);
                                 }
                                 finally
@@ -91,9 +94,9 @@ namespace Drakengard1and2Extractor
                         else
                         {
                             StatusTextBox.AppendText("Error: Unable to detect fpk header");
-                            StatusTextBox.AppendText(NewLineChara);
+                            StatusTextBox.AppendText(CommonMethods.NewLineChara);
 
-                            CommonMethods.AppMsgBox("Unable to detect fpk header", "Error", MessageBoxIcon.Error);
+                            CommonMethods.AppMsgBox("This is not a valid Drakengard 1 .bin file", "Error", MessageBoxIcon.Error);
                             StatusTextBox.AppendText("Extraction failed!");
 
                             EnableDisableControls(true);
@@ -104,8 +107,8 @@ namespace Drakengard1and2Extractor
                     if (Drk2RadioButton.Checked)
                     {
                         StatusTextBox.AppendText("Game is set to Drakengard 2");
-                        StatusTextBox.AppendText(NewLineChara);
-                        StatusTextBox.AppendText(NewLineChara);
+                        StatusTextBox.AppendText(CommonMethods.NewLineChara);
+                        StatusTextBox.AppendText(CommonMethods.NewLineChara);
 
                         EnableDisableControls(false);
 
@@ -117,7 +120,7 @@ namespace Drakengard1and2Extractor
                             {
                                 try
                                 {
-                                    CoreFormLogHelpers.LogMessage("Extracting files from " + Path.GetFileName(mbinFile) + "....");
+                                    LoggingMethods.LogMessage("Extracting files from " + Path.GetFileName(mbinFile) + "....");
                                     Drk2BIN.ExtractBin(mbinFile);
                                 }
                                 finally
@@ -129,9 +132,9 @@ namespace Drakengard1and2Extractor
                         else
                         {
                             StatusTextBox.AppendText("Error: Unable to detect dpk header");
-                            StatusTextBox.AppendText(NewLineChara);
+                            StatusTextBox.AppendText(CommonMethods.NewLineChara);
 
-                            CommonMethods.AppMsgBox("Unable to detect dpk header", "Error", MessageBoxIcon.Error);
+                            CommonMethods.AppMsgBox("This is not a valid Drakengard 2 .bin file", "Error", MessageBoxIcon.Error);
                             StatusTextBox.AppendText("Extraction failed!");
 
                             EnableDisableControls(true);
@@ -143,8 +146,8 @@ namespace Drakengard1and2Extractor
             catch (Exception ex)
             {
                 CommonMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
-                CoreFormLogHelpers.LogMessage(NewLineChara);
-                CoreFormLogHelpers.LogException("Exception: " + ex);
+                LoggingMethods.LogMessage(CommonMethods.NewLineChara);
+                LoggingMethods.LogException("Exception: " + ex);
             }
         }
 
@@ -175,7 +178,7 @@ namespace Drakengard1and2Extractor
                         {
                             try
                             {
-                                CoreFormLogHelpers.LogMessage("Extracting files from " + Path.GetFileName(fpkFile) + "....");
+                                LoggingMethods.LogMessage("Extracting files from " + Path.GetFileName(fpkFile) + "....");
                                 FileFPK.ExtractFPK(fpkFile, true);
                             }
                             finally
@@ -187,7 +190,7 @@ namespace Drakengard1and2Extractor
                     else
                     {
                         StatusTextBox.AppendText("Error: Unable to detect fpk header");
-                        StatusTextBox.AppendText(NewLineChara);
+                        StatusTextBox.AppendText(CommonMethods.NewLineChara);
 
                         CommonMethods.AppMsgBox("Unable to detect fpk header", "Error", MessageBoxIcon.Error);
                         StatusTextBox.AppendText("Extraction failed!");
@@ -200,8 +203,8 @@ namespace Drakengard1and2Extractor
             catch (Exception ex)
             {
                 CommonMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
-                CoreFormLogHelpers.LogMessage(NewLineChara);
-                CoreFormLogHelpers.LogException("Exception: " + ex);
+                LoggingMethods.LogMessage(CommonMethods.NewLineChara);
+                LoggingMethods.LogException("Exception: " + ex);
             }
         }
 
@@ -231,7 +234,7 @@ namespace Drakengard1and2Extractor
                         {
                             try
                             {
-                                CoreFormLogHelpers.LogMessage("Extracting files from " + Path.GetFileName(dpkFile) + "....");
+                                LoggingMethods.LogMessage("Extracting files from " + Path.GetFileName(dpkFile) + "....");
                                 FileDPK.ExtractDPK(dpkFile, true);
                             }
                             finally
@@ -243,7 +246,7 @@ namespace Drakengard1and2Extractor
                     else
                     {
                         StatusTextBox.AppendText("Error: Unable to detect dpk header");
-                        StatusTextBox.AppendText(NewLineChara);
+                        StatusTextBox.AppendText(CommonMethods.NewLineChara);
 
                         CommonMethods.AppMsgBox("Unable to detect dpk header", "Error", MessageBoxIcon.Error);
                         StatusTextBox.AppendText("Extraction failed!");
@@ -256,8 +259,8 @@ namespace Drakengard1and2Extractor
             catch (Exception ex)
             {
                 CommonMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
-                CoreFormLogHelpers.LogMessage(NewLineChara);
-                CoreFormLogHelpers.LogException("Exception: " + ex);
+                LoggingMethods.LogMessage(CommonMethods.NewLineChara);
+                LoggingMethods.LogException("Exception: " + ex);
             }
         }
 
@@ -296,7 +299,7 @@ namespace Drakengard1and2Extractor
                         {
                             try
                             {
-                                CoreFormLogHelpers.LogMessage("Extracting files from " + Path.GetFileName(kpsFile) + "....");
+                                LoggingMethods.LogMessage("Extracting " + Path.GetFileName(kpsFile) + "....");
                                 FileKPS.ExtractKPS(kpsFile, shiftJISParse, true);
                             }
                             finally
@@ -308,7 +311,7 @@ namespace Drakengard1and2Extractor
                     else
                     {
                         StatusTextBox.AppendText("Error: Unable to detect kps header");
-                        StatusTextBox.AppendText(NewLineChara);
+                        StatusTextBox.AppendText(CommonMethods.NewLineChara);
 
                         CommonMethods.AppMsgBox("Unable to detect kps header", "Error", MessageBoxIcon.Error);
                         StatusTextBox.AppendText("Extraction failed!");
@@ -321,8 +324,8 @@ namespace Drakengard1and2Extractor
             catch (Exception ex)
             {
                 CommonMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
-                CoreFormLogHelpers.LogMessage(NewLineChara);
-                CoreFormLogHelpers.LogException("Exception: " + ex);
+                LoggingMethods.LogMessage(CommonMethods.NewLineChara);
+                LoggingMethods.LogException("Exception: " + ex);
             }
         }
 
@@ -363,8 +366,8 @@ namespace Drakengard1and2Extractor
                         {
                             try
                             {
-                                CoreFormLogHelpers.LogMessage("Converting " + Path.GetFileName(zimFile) + "....");
-                                var converterWindow = new FileZIM(zimFile);
+                                LoggingMethods.LogMessage("Converting " + Path.GetFileName(zimFile) + "....");
+                                var converterWindow = new ZIMForm(zimFile);
                                 converterWindow.ShowDialog();
                             }
                             finally
@@ -376,7 +379,7 @@ namespace Drakengard1and2Extractor
                     else
                     {
                         StatusTextBox.AppendText("Error: Unable to detect zim header");
-                        StatusTextBox.AppendText(NewLineChara);
+                        StatusTextBox.AppendText(CommonMethods.NewLineChara);
 
                         CommonMethods.AppMsgBox("Unable to detect zim header", "Error", MessageBoxIcon.Error);
                         StatusTextBox.AppendText("Conversion failed!");
@@ -389,8 +392,8 @@ namespace Drakengard1and2Extractor
             catch (Exception ex)
             {
                 CommonMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
-                CoreFormLogHelpers.LogMessage(NewLineChara);
-                CoreFormLogHelpers.LogException("Exception: " + ex);
+                LoggingMethods.LogMessage(CommonMethods.NewLineChara);
+                LoggingMethods.LogException("Exception: " + ex);
             }
         }
 
@@ -420,8 +423,8 @@ namespace Drakengard1and2Extractor
                         {
                             try
                             {
-                                CoreFormLogHelpers.LogMessage("Converting " + Path.GetFileName(spk0File) + "....");
-                                var converterWindow = new FileSPK0(spk0File);
+                                LoggingMethods.LogMessage("Converting " + Path.GetFileName(spk0File) + "....");
+                                var converterWindow = new SPK0Form(spk0File);
                                 converterWindow.ShowDialog();
                             }
                             finally
@@ -433,7 +436,7 @@ namespace Drakengard1and2Extractor
                     else
                     {
                         StatusTextBox.AppendText("Error: Unable to detect spk0 header");
-                        StatusTextBox.AppendText(NewLineChara);
+                        StatusTextBox.AppendText(CommonMethods.NewLineChara);
 
                         CommonMethods.AppMsgBox("Unable to detect spk0 header", "Error", MessageBoxIcon.Error);
                         StatusTextBox.AppendText("Conversion failed!");
@@ -446,32 +449,8 @@ namespace Drakengard1and2Extractor
             catch (Exception ex)
             {
                 CommonMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
-                CoreFormLogHelpers.LogMessage(NewLineChara);
-                CoreFormLogHelpers.LogException("Exception: " + ex);
-            }
-        }
-
-
-        private void Drk1RadioButton_CheckedChanged(object sender, EventArgs e)
-        {
-            if (Drk1RadioButton.Checked)
-            {
-                ExtBinBtn.Enabled = true;
-                ExtFpkBtn.Enabled = true;
-                ExtDpkBtn.Enabled = false;
-                ExtKpsBtn.Enabled = true;
-            }
-        }
-
-
-        private void Drk2RadioButton_CheckedChanged(object sender, EventArgs e)
-        {
-            if (Drk2RadioButton.Checked)
-            {
-                ExtBinBtn.Enabled = true;
-                ExtFpkBtn.Enabled = true;
-                ExtDpkBtn.Enabled = true;
-                ExtKpsBtn.Enabled = true;
+                LoggingMethods.LogMessage(CommonMethods.NewLineChara);
+                LoggingMethods.LogException("Exception: " + ex);
             }
         }
 
@@ -517,14 +496,11 @@ namespace Drakengard1and2Extractor
         {
             ExtBinBtn.Enabled = isEnabled;
             ExtFpkBtn.Enabled = isEnabled;
+            ExtDpkBtn.Enabled = isEnabled;
             ExtKpsBtn.Enabled = isEnabled;
             BatchModeBtn.Enabled = isEnabled;
             ConvertZIMBtn.Enabled = isEnabled;
             ConvertSPK0Btn.Enabled = isEnabled;
-            if (Drk2RadioButton.Checked == isEnabled)
-            {
-                ExtDpkBtn.Enabled = isEnabled;
-            }
             Drk1RadioButton.Enabled = isEnabled;
             Drk2RadioButton.Enabled = isEnabled;
         }
@@ -538,7 +514,7 @@ namespace Drakengard1and2Extractor
 
         private void AboutlinkLabel_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            var AboutWindow = new AppAbout();
+            var AboutWindow = new AboutForm();
             AboutWindow.ShowDialog();
         }
 

@@ -1,15 +1,14 @@
 ﻿using Drakengard1and2Extractor.Support;
 using Drakengard1and2Extractor.Support.ImageHelpers;
-using Drakengard1and2Extractor.Support.LoggingHelpers;
 using System;
 using System.IO;
 using System.Windows.Forms;
 
 namespace Drakengard1and2Extractor.ImageConversion
 {
-    public partial class FileZIM : Form
+    public partial class ZIMForm : Form
     {
-        private readonly string _ZimFileVar;
+        private readonly string _ZimFile;
 
         public void ZIMConvertControls(bool isEnabled)
         {
@@ -23,11 +22,11 @@ namespace Drakengard1and2Extractor.ImageConversion
             }
         }
 
-        public FileZIM(string zimFile)
+        public ZIMForm(string zimFile)
         {
             try
             {
-                _ZimFileVar = zimFile;
+                _ZimFile = zimFile;
 
                 var bppValue = 0;
                 using (FileStream fs = new FileStream(zimFile, FileMode.Open, FileAccess.Read))
@@ -88,12 +87,12 @@ namespace Drakengard1and2Extractor.ImageConversion
                 ZIMConvertControls(false);
 
                 var imgOptions = new ImgOptions();
-                var zimFileDir = Path.GetFullPath(_ZimFileVar);
+                var zimFileDir = Path.GetFullPath(_ZimFile);
                 var extractDir = Path.GetDirectoryName(zimFileDir);
-                var zimNameNoExtn = Path.GetFileNameWithoutExtension(_ZimFileVar);
+                var zimNameNoExtn = Path.GetFileNameWithoutExtension(_ZimFile);
                 imgOptions.AlphaIncrease = (int)ZimAlphaCompNumericUpDown.Value;
 
-                using (FileStream zimStream = new FileStream(_ZimFileVar, FileMode.Open, FileAccess.Read))
+                using (FileStream zimStream = new FileStream(_ZimFile, FileMode.Open, FileAccess.Read))
                 {
                     using (BinaryReader zimReader = new BinaryReader(zimStream))
                     {
@@ -118,7 +117,7 @@ namespace Drakengard1and2Extractor.ImageConversion
 
                         if (UnSwizzleCheckBox.Checked && bppFlag == 48)
                         {
-                            byte[] unswizzledPixelsBuffer = PS2UnSwizzlers.UnSwizzlePixels(pixelsBuffer, imgOptions);
+                            byte[] unswizzledPixelsBuffer = PS2Unswizzlers.UnSwizzlePixels(pixelsBuffer, imgOptions);
                             pixelsBuffer = unswizzledPixelsBuffer;
                         }
 
@@ -140,7 +139,7 @@ namespace Drakengard1and2Extractor.ImageConversion
                         byte[] finalizedPalette = new byte[palSize];
                         if (bppFlag == 48)
                         {
-                            finalizedPalette = PS2UnSwizzlers.UnSwizzlePalette(paletteBuffer);
+                            finalizedPalette = PS2Unswizzlers.UnSwizzlePalette(paletteBuffer);
                         }
                         else
                         {
@@ -178,11 +177,11 @@ namespace Drakengard1and2Extractor.ImageConversion
                     }
                 }
 
-                CoreFormLogHelpers.LogMessage(CoreForm.NewLineChara);
-                CoreFormLogHelpers.LogMessage("Conversion has completed!");
-                CoreFormLogHelpers.LogMessage(CoreForm.NewLineChara);
+                LoggingMethods.LogMessage(CommonMethods.NewLineChara);
+                LoggingMethods.LogMessage("Conversion has completed!");
+                LoggingMethods.LogMessage(CommonMethods.NewLineChara);
 
-                CommonMethods.AppMsgBox("Converted " + Path.GetFileName(_ZimFileVar) + " file", "Success", MessageBoxIcon.Information);
+                CommonMethods.AppMsgBox("Converted " + Path.GetFileName(_ZimFile) + " file", "Success", MessageBoxIcon.Information);
 
                 ZIMConvertControls(true);
 
@@ -191,8 +190,8 @@ namespace Drakengard1and2Extractor.ImageConversion
             catch (Exception ex)
             {
                 CommonMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
-                CoreFormLogHelpers.LogMessage(CoreForm.NewLineChara);
-                CoreFormLogHelpers.LogException("Exception: " + ex);
+                LoggingMethods.LogMessage(CommonMethods.NewLineChara);
+                LoggingMethods.LogException("Exception: " + ex);
                 Close();
             }
         }

@@ -1,14 +1,19 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Windows.Forms;
 
 namespace Drakengard1and2Extractor.Support
 {
     internal class CommonMethods
     {
+        public static readonly string NewLineChara = Environment.NewLine;
+
+
         public static void AppMsgBox(string msg, string msgHeader, MessageBoxIcon msgType)
         {
             MessageBox.Show(msg, msgHeader, MessageBoxButtons.OK, msgType);
         }
+
 
         public static string HeaderCheck(string fileName)
         {
@@ -26,21 +31,22 @@ namespace Drakengard1and2Extractor.Support
             return header;
         }
 
-        public static void IfFileDirExistsDel(string fileOrFolder, DelSwitch delSwitch)
+
+        public static void IfFileDirExistsDel(string fileOrDir, DelSwitch delSwitch)
         {
             switch (delSwitch)
             {
                 case DelSwitch.file:
-                    if (File.Exists(fileOrFolder))
+                    if (File.Exists(fileOrDir))
                     {
-                        File.Delete(fileOrFolder);
+                        File.Delete(fileOrDir);
                     }
                     break;
 
                 case DelSwitch.directory:
-                    if (Directory.Exists(fileOrFolder))
+                    if (Directory.Exists(fileOrDir))
                     {
-                        Directory.Delete(fileOrFolder, true);
+                        Directory.Delete(fileOrDir, true);
                     }
                     break;
             }
@@ -50,6 +56,7 @@ namespace Drakengard1and2Extractor.Support
             directory,
             file
         }
+
 
         public static string ModifyExtnString(string readStringLetters)
         {
@@ -61,11 +68,12 @@ namespace Drakengard1and2Extractor.Support
             return modifiedString;
         }
 
+
         public static string GetFileHeader(BinaryReader readerName)
         {
             readerName.BaseStream.Position = 0;
             var foundExtnChars = readerName.ReadChars(4);
-            string foundExtn = string.Join("", foundExtnChars).Replace("\0", "");
+            var foundExtn = string.Join("", foundExtnChars).Replace("\0", "");
 
             string realExtn = string.Empty;
 

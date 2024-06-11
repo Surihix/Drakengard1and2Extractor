@@ -2,7 +2,7 @@
 
 namespace Drakengard1and2Extractor.Support.ImageHelpers
 {
-    internal static class PS2UnSwizzlers
+    internal static class PS2Unswizzlers
     {
         public static byte[] UnSwizzlePixels(byte[] pixelBufferVar, ImgOptions imgOptions)
         {

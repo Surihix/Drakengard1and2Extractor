@@ -1,5 +1,4 @@
 ﻿using Drakengard1and2Extractor.Support;
-using Drakengard1and2Extractor.Support.LoggingHelpers;
 using Drakengard1and2Extractor.Support.Lz0Helpers;
 using System;
 using System.IO;
@@ -13,10 +12,10 @@ namespace Drakengard1and2Extractor.BinExtraction
         {
             try
             {
-                CoreFormLogHelpers.LogMessage(CoreForm.NewLineChara);
+                LoggingMethods.LogMessage(CommonMethods.NewLineChara);
 
-                CoreFormLogHelpers.LogMessage("Preparing bin file....");
-                CoreFormLogHelpers.LogMessage(CoreForm.NewLineChara);
+                LoggingMethods.LogMessage("Preparing bin file....");
+                LoggingMethods.LogMessage(CommonMethods.NewLineChara);
 
                 var extractDir = Path.GetFullPath(mainBinFile) + "_extracted";
                 CommonMethods.IfFileDirExistsDel(extractDir, CommonMethods.DelSwitch.directory);
@@ -118,7 +117,7 @@ namespace Drakengard1and2Extractor.BinExtraction
                                     }
                                 }
 
-                                CoreFormLogHelpers.LogMessage($"Extracted '{fname}{fileCount}'");
+                                LoggingMethods.LogMessage($"Extracted '{fname}{fileCount}'");
 
                                 intialOffset += 16;
                                 fileCount++;
@@ -129,16 +128,16 @@ namespace Drakengard1and2Extractor.BinExtraction
                     }
                 }
 
-                CoreFormLogHelpers.LogMessage(CoreForm.NewLineChara);
-                CoreFormLogHelpers.LogMessage("Extraction has completed!");
+                LoggingMethods.LogMessage(CommonMethods.NewLineChara);
+                LoggingMethods.LogMessage("Extraction has completed!");
 
                 CommonMethods.AppMsgBox("Extracted " + Path.GetFileName(mainBinFile) + " file", "Success", MessageBoxIcon.Information);
             }
             catch (Exception ex)
             {
                 CommonMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
-                CoreFormLogHelpers.LogMessage(CoreForm.NewLineChara);
-                CoreFormLogHelpers.LogException("Exception: " + ex);
+                LoggingMethods.LogMessage(CommonMethods.NewLineChara);
+                LoggingMethods.LogException("Exception: " + ex);
             }
         }
     }

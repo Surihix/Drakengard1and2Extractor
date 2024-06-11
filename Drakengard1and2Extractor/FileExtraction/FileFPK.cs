@@ -1,5 +1,4 @@
 ﻿using Drakengard1and2Extractor.Support;
-using Drakengard1and2Extractor.Support.LoggingHelpers;
 using Drakengard1and2Extractor.Support.Lz0Helpers;
 using System;
 using System.IO;
@@ -117,9 +116,9 @@ namespace Drakengard1and2Extractor.FileExtraction
 
                 if (isSingleFile)
                 {
-                    CoreFormLogHelpers.LogMessage(CoreForm.NewLineChara);
-                    CoreFormLogHelpers.LogMessage("Extraction has completed!");
-                    CoreFormLogHelpers.LogMessage(CoreForm.NewLineChara);
+                    LoggingMethods.LogMessage(CommonMethods.NewLineChara);
+                    LoggingMethods.LogMessage("Extraction has completed!");
+                    LoggingMethods.LogMessage(CommonMethods.NewLineChara);
 
                     CommonMethods.AppMsgBox("Extracted " + Path.GetFileName(fpkFile) + " file", "Success", MessageBoxIcon.Information);
                 }
@@ -127,8 +126,8 @@ namespace Drakengard1and2Extractor.FileExtraction
             catch (Exception ex)
             {
                 CommonMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
-                CoreFormLogHelpers.LogMessage(CoreForm.NewLineChara);
-                CoreFormLogHelpers.LogException("Exception: " + ex);
+                LoggingMethods.LogMessage(CommonMethods.NewLineChara);
+                LoggingMethods.LogException("Exception: " + ex);
             }
         }
     }
