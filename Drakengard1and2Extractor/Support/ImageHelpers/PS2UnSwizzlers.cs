@@ -4,7 +4,7 @@ namespace Drakengard1and2Extractor.Support.ImageHelpers
 {
     internal static class PS2Unswizzlers
     {
-        public static byte[] UnSwizzlePixels(byte[] pixelBufferVar, ImgOptions imgOptions)
+        public static byte[] UnswizzlePixels(byte[] pixelBufferVar, ImgOptions imgOptions)
         {
             byte[] swizzleWorkBuffer = new byte[pixelBufferVar.Length - 0];
             Array.Copy(pixelBufferVar, 0, swizzleWorkBuffer, 0, swizzleWorkBuffer.Length);
@@ -31,7 +31,7 @@ namespace Drakengard1and2Extractor.Support.ImageHelpers
         }
 
 
-        public static byte[] UnSwizzlePalette(byte[] paletteBuffer)
+        public static byte[] UnswizzlePalette(byte[] paletteBuffer)
         {
             byte[] newPaletteBuffer = new byte[1024];
             int copyIndex = 0;
