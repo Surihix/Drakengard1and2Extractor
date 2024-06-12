@@ -115,6 +115,22 @@ namespace Drakengard1and2Extractor.Support
                 case "SPFn":
                     realExtn = ".spf";
                     break;
+                case "CHFh":
+                    realExtn = ".chf";
+                    break;
+                case "CMFf":
+                    realExtn = ".cmf";
+                    break;
+                case "CFFd":
+                    realExtn = ".cff";
+                    break;
+                case "CJFg":
+                    realExtn = ".cjf";
+                    break;
+                case "CEFh":
+                    realExtn = ".cef";
+                    break;
+
             }
             if (foundExtn.StartsWith("bh"))
             {

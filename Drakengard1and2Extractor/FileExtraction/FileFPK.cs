@@ -11,7 +11,8 @@ namespace Drakengard1and2Extractor.FileExtraction
     {
         private static readonly string[] _KnownExtns = new string[]
         {
-            ".fpk", ".dpk", ".zim", ".lz0", ".kps", ".kvm", ".spk0", ".emt", ".dcmr", ".dlgt", ".hi4", ".hd2", ".spf"
+            ".fpk", ".dpk", ".zim", ".lz0", ".kps", ".kvm", ".spk0", ".emt", ".dcmr", ".dlgt", ".hi4", ".hd2", ".spf", 
+            ".chf", ".cmf", ".cff", ".cjf", ".cef"
         };
 
         public static void ExtractFPK(string fpkFile, bool isSingleFile)

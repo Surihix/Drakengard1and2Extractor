@@ -113,6 +113,14 @@
       <DependentUpon>BatchForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Drakengard1and2Extractor\FileExtraction\FileKPS.cs" />
+    <Compile Include="Drakengard1and2Extractor\ImageConversion\ImgSPK0.cs" />
+    <Compile Include="Drakengard1and2Extractor\ImageConversion\ImgZIM.cs" />
+    <Compile Include="Drakengard1and2Extractor\ImageConversion\ZIMForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Drakengard1and2Extractor\ImageConversion\ZIMForm.Designer.cs">
+      <DependentUpon>ZIMForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\AdditionalVisualStyleElements.cs" />
     <Compile Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\AnimationResource.cs" />
     <Compile Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\ButtonType.cs" />
@@ -221,12 +229,6 @@
     <Compile Include="Drakengard1and2Extractor\ImageConversion\SPK0Form.Designer.cs">
       <DependentUpon>SPK0Form.cs</DependentUpon>
     </Compile>
-    <Compile Include="Drakengard1and2Extractor\ImageConversion\ZIMForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Drakengard1and2Extractor\ImageConversion\ZIMForm.Designer.cs">
-      <DependentUpon>ZIMForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Drakengard1and2Extractor\FileExtraction\FileDPK.cs" />
     <Compile Include="Drakengard1and2Extractor\FileExtraction\FileFPK.cs" />
     <Compile Include="Drakengard1and2Extractor\CoreForm.cs">
@@ -246,6 +248,9 @@
     <EmbeddedResource Include="Drakengard1and2Extractor\CoreForm.resx">
       <DependentUpon>CoreForm.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Drakengard1and2Extractor\ImageConversion\ZIMForm.resx">
+      <DependentUpon>ZIMForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\ExtendedForm.resx">
       <DependentUpon>ExtendedForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -263,9 +268,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Drakengard1and2Extractor\ImageConversion\SPK0Form.resx">
       <DependentUpon>SPK0Form.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Drakengard1and2Extractor\ImageConversion\ZIMForm.resx">
-      <DependentUpon>ZIMForm.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\.editorconfig" />
     <None Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\Ookii.Dialogs.WinForms.csproj" />

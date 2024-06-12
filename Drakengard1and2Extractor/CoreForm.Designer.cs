@@ -36,9 +36,9 @@
             this.ExtBinBtn = new System.Windows.Forms.Button();
             this.FileExtGrp = new System.Windows.Forms.GroupBox();
             this.ExtKpsBtn = new System.Windows.Forms.Button();
-            this.BatchModeBtn = new System.Windows.Forms.Button();
             this.ExtDpkBtn = new System.Windows.Forms.Button();
             this.ExtFpkBtn = new System.Windows.Forms.Button();
+            this.BatchModeBtn = new System.Windows.Forms.Button();
             this.ConvertSPK0Btn = new System.Windows.Forms.Button();
             this.ConvertZIMBtn = new System.Windows.Forms.Button();
             this.AboutlinkLabel = new System.Windows.Forms.LinkLabel();
@@ -68,9 +68,9 @@
             // 
             this.BINFileExtGrp.Controls.Add(this.Drk2RadioButton);
             this.BINFileExtGrp.Controls.Add(this.Drk1RadioButton);
-            this.BINFileExtGrp.Location = new System.Drawing.Point(12, 141);
+            this.BINFileExtGrp.Location = new System.Drawing.Point(13, 31);
             this.BINFileExtGrp.Name = "BINFileExtGrp";
-            this.BINFileExtGrp.Size = new System.Drawing.Size(168, 79);
+            this.BINFileExtGrp.Size = new System.Drawing.Size(140, 79);
             this.BINFileExtGrp.TabIndex = 0;
             this.BINFileExtGrp.TabStop = false;
             this.BINFileExtGrp.Text = "Game Selection :";
@@ -100,7 +100,7 @@
             // ExtBinBtn
             // 
             this.ExtBinBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ExtBinBtn.Location = new System.Drawing.Point(33, 38);
+            this.ExtBinBtn.Location = new System.Drawing.Point(30, 128);
             this.ExtBinBtn.Name = "ExtBinBtn";
             this.ExtBinBtn.Size = new System.Drawing.Size(103, 39);
             this.ExtBinBtn.TabIndex = 0;
@@ -112,12 +112,11 @@
             // FileExtGrp
             // 
             this.FileExtGrp.Controls.Add(this.ExtKpsBtn);
-            this.FileExtGrp.Controls.Add(this.BatchModeBtn);
             this.FileExtGrp.Controls.Add(this.ExtDpkBtn);
             this.FileExtGrp.Controls.Add(this.ExtFpkBtn);
-            this.FileExtGrp.Location = new System.Drawing.Point(12, 226);
+            this.FileExtGrp.Location = new System.Drawing.Point(200, 142);
             this.FileExtGrp.Name = "FileExtGrp";
-            this.FileExtGrp.Size = new System.Drawing.Size(168, 168);
+            this.FileExtGrp.Size = new System.Drawing.Size(168, 138);
             this.FileExtGrp.TabIndex = 1;
             this.FileExtGrp.TabStop = false;
             this.FileExtGrp.Text = "File Extraction :";
@@ -132,17 +131,6 @@
             this.ExtKpsBtn.UseVisualStyleBackColor = true;
             this.ExtKpsBtn.Click += new System.EventHandler(this.ExtKpsBtn_Click);
             this.ExtKpsBtn.MouseHover += new System.EventHandler(this.ExtKpsBtn_MouseHover);
-            // 
-            // BatchModeBtn
-            // 
-            this.BatchModeBtn.Location = new System.Drawing.Point(42, 124);
-            this.BatchModeBtn.Name = "BatchModeBtn";
-            this.BatchModeBtn.Size = new System.Drawing.Size(84, 28);
-            this.BatchModeBtn.TabIndex = 2;
-            this.BatchModeBtn.Text = "Batch Mode";
-            this.BatchModeBtn.UseVisualStyleBackColor = true;
-            this.BatchModeBtn.Click += new System.EventHandler(this.BatchModeBtn_Click);
-            this.BatchModeBtn.MouseHover += new System.EventHandler(this.BatchModeBtn_MouseHover);
             // 
             // ExtDpkBtn
             // 
@@ -166,9 +154,21 @@
             this.ExtFpkBtn.Click += new System.EventHandler(this.ExtFpkBtn_Click);
             this.ExtFpkBtn.MouseHover += new System.EventHandler(this.ExtFpkBtn_MouseHover);
             // 
+            // BatchModeBtn
+            // 
+            this.BatchModeBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.BatchModeBtn.Location = new System.Drawing.Point(238, 334);
+            this.BatchModeBtn.Name = "BatchModeBtn";
+            this.BatchModeBtn.Size = new System.Drawing.Size(91, 36);
+            this.BatchModeBtn.TabIndex = 2;
+            this.BatchModeBtn.Text = "Batch Mode";
+            this.BatchModeBtn.UseVisualStyleBackColor = true;
+            this.BatchModeBtn.Click += new System.EventHandler(this.BatchModeBtn_Click);
+            this.BatchModeBtn.MouseHover += new System.EventHandler(this.BatchModeBtn_MouseHover);
+            // 
             // ConvertSPK0Btn
             // 
-            this.ConvertSPK0Btn.Location = new System.Drawing.Point(45, 73);
+            this.ConvertSPK0Btn.Location = new System.Drawing.Point(41, 64);
             this.ConvertSPK0Btn.Name = "ConvertSPK0Btn";
             this.ConvertSPK0Btn.Size = new System.Drawing.Size(84, 28);
             this.ConvertSPK0Btn.TabIndex = 1;
@@ -179,7 +179,7 @@
             // 
             // ConvertZIMBtn
             // 
-            this.ConvertZIMBtn.Location = new System.Drawing.Point(45, 39);
+            this.ConvertZIMBtn.Location = new System.Drawing.Point(40, 30);
             this.ConvertZIMBtn.Name = "ConvertZIMBtn";
             this.ConvertZIMBtn.Size = new System.Drawing.Size(84, 28);
             this.ConvertZIMBtn.TabIndex = 0;
@@ -192,7 +192,7 @@
             // 
             this.AboutlinkLabel.AutoSize = true;
             this.AboutlinkLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.AboutlinkLabel.Location = new System.Drawing.Point(14, 589);
+            this.AboutlinkLabel.Location = new System.Drawing.Point(14, 656);
             this.AboutlinkLabel.Name = "AboutlinkLabel";
             this.AboutlinkLabel.Size = new System.Drawing.Size(38, 15);
             this.AboutlinkLabel.TabIndex = 6;
@@ -204,7 +204,7 @@
             // 
             this.HelpLinkLabel.AutoSize = true;
             this.HelpLinkLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.HelpLinkLabel.Location = new System.Drawing.Point(335, 589);
+            this.HelpLinkLabel.Location = new System.Drawing.Point(335, 656);
             this.HelpLinkLabel.Name = "HelpLinkLabel";
             this.HelpLinkLabel.Size = new System.Drawing.Size(33, 15);
             this.HelpLinkLabel.TabIndex = 8;
@@ -215,7 +215,7 @@
             // Versionlabel
             // 
             this.Versionlabel.AutoSize = true;
-            this.Versionlabel.Location = new System.Drawing.Point(176, 591);
+            this.Versionlabel.Location = new System.Drawing.Point(176, 658);
             this.Versionlabel.Name = "Versionlabel";
             this.Versionlabel.Size = new System.Drawing.Size(28, 13);
             this.Versionlabel.TabIndex = 7;
@@ -224,7 +224,7 @@
             // StatusLabel
             // 
             this.StatusLabel.AutoSize = true;
-            this.StatusLabel.Location = new System.Drawing.Point(14, 416);
+            this.StatusLabel.Location = new System.Drawing.Point(14, 484);
             this.StatusLabel.Name = "StatusLabel";
             this.StatusLabel.Size = new System.Drawing.Size(40, 13);
             this.StatusLabel.TabIndex = 4;
@@ -243,9 +243,9 @@
             // 
             this.ImgConvtGroupBox.Controls.Add(this.ConvertZIMBtn);
             this.ImgConvtGroupBox.Controls.Add(this.ConvertSPK0Btn);
-            this.ImgConvtGroupBox.Location = new System.Drawing.Point(196, 259);
+            this.ImgConvtGroupBox.Location = new System.Drawing.Point(17, 341);
             this.ImgConvtGroupBox.Name = "ImgConvtGroupBox";
-            this.ImgConvtGroupBox.Size = new System.Drawing.Size(167, 135);
+            this.ImgConvtGroupBox.Size = new System.Drawing.Size(167, 115);
             this.ImgConvtGroupBox.TabIndex = 3;
             this.ImgConvtGroupBox.TabStop = false;
             this.ImgConvtGroupBox.Text = "Image Conversion :";
@@ -253,9 +253,10 @@
             // BinExtractionGroupBox
             // 
             this.BinExtractionGroupBox.Controls.Add(this.ExtBinBtn);
-            this.BinExtractionGroupBox.Location = new System.Drawing.Point(195, 141);
+            this.BinExtractionGroupBox.Controls.Add(this.BINFileExtGrp);
+            this.BinExtractionGroupBox.Location = new System.Drawing.Point(17, 142);
             this.BinExtractionGroupBox.Name = "BinExtractionGroupBox";
-            this.BinExtractionGroupBox.Size = new System.Drawing.Size(168, 112);
+            this.BinExtractionGroupBox.Size = new System.Drawing.Size(168, 184);
             this.BinExtractionGroupBox.TabIndex = 2;
             this.BinExtractionGroupBox.TabStop = false;
             this.BinExtractionGroupBox.Text = "BIN Extraction :";
@@ -263,7 +264,7 @@
             // StatusTextBox
             // 
             this.StatusTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.StatusTextBox.Location = new System.Drawing.Point(13, 434);
+            this.StatusTextBox.Location = new System.Drawing.Point(13, 501);
             this.StatusTextBox.Multiline = true;
             this.StatusTextBox.Name = "StatusTextBox";
             this.StatusTextBox.ReadOnly = true;
@@ -273,7 +274,7 @@
             // 
             // StatusDelBtn
             // 
-            this.StatusDelBtn.Location = new System.Drawing.Point(153, 547);
+            this.StatusDelBtn.Location = new System.Drawing.Point(153, 614);
             this.StatusDelBtn.Name = "StatusDelBtn";
             this.StatusDelBtn.Size = new System.Drawing.Size(75, 23);
             this.StatusDelBtn.TabIndex = 10;
@@ -285,8 +286,9 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(381, 612);
+            this.ClientSize = new System.Drawing.Size(381, 683);
             this.Controls.Add(this.StatusDelBtn);
+            this.Controls.Add(this.BatchModeBtn);
             this.Controls.Add(this.StatusTextBox);
             this.Controls.Add(this.BinExtractionGroupBox);
             this.Controls.Add(this.ImgConvtGroupBox);
@@ -295,7 +297,6 @@
             this.Controls.Add(this.Versionlabel);
             this.Controls.Add(this.HelpLinkLabel);
             this.Controls.Add(this.AboutlinkLabel);
-            this.Controls.Add(this.BINFileExtGrp);
             this.Controls.Add(this.AppPictureBox);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));

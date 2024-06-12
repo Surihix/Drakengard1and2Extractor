@@ -161,9 +161,11 @@ namespace Drakengard1and2Extractor
         {
             try
             {
-                var fpkSelect = new OpenFileDialog();
-                fpkSelect.Filter = "FPK type files (*.fpk)" + $"|*.fpk";
-                fpkSelect.RestoreDirectory = true;
+                var fpkSelect = new OpenFileDialog
+                {
+                    Filter = "FPK type files (*.fpk)" + $"|*.fpk",
+                    RestoreDirectory = true
+                };
 
                 if (fpkSelect.ShowDialog() == DialogResult.OK)
                 {
@@ -217,9 +219,11 @@ namespace Drakengard1and2Extractor
         {
             try
             {
-                var dpkSelect = new OpenFileDialog();
-                dpkSelect.Filter = "DPK type files (*.dpk)" + $"|*.dpk";
-                dpkSelect.RestoreDirectory = true;
+                var dpkSelect = new OpenFileDialog
+                {
+                    Filter = "DPK type files (*.dpk)" + $"|*.dpk",
+                    RestoreDirectory = true
+                };
 
                 if (dpkSelect.ShowDialog() == DialogResult.OK)
                 {
@@ -273,9 +277,11 @@ namespace Drakengard1and2Extractor
         {
             try
             {
-                var kpsSelect = new OpenFileDialog();
-                kpsSelect.Filter = "KPS type files (*.kps)" + $"|*.kps";
-                kpsSelect.RestoreDirectory = true;
+                var kpsSelect = new OpenFileDialog
+                {
+                    Filter = "KPS type files (*.kps)" + $"|*.kps",
+                    RestoreDirectory = true
+                };
 
                 if (kpsSelect.ShowDialog() == DialogResult.OK)
                 {
@@ -332,7 +338,7 @@ namespace Drakengard1and2Extractor
 
         private void BatchModeBtn_MouseHover(object sender, EventArgs e)
         {
-            BatchModeToolTip.Show("Batch extracts all FPK or DPK files present in a directory.", BatchModeBtn);
+            BatchModeToolTip.Show("Open Batch Mode window for File Extraction and Image Conversion functions.", BatchModeBtn);
         }
         private void BatchModeBtn_Click(object sender, EventArgs e)
         {
@@ -349,9 +355,11 @@ namespace Drakengard1and2Extractor
         {
             try
             {
-                var zimSelect = new OpenFileDialog();
-                zimSelect.Filter = "ZIM type files (*.zim)" + $"|*.zim";
-                zimSelect.RestoreDirectory = true;
+                var zimSelect = new OpenFileDialog
+                {
+                    Filter = "ZIM type files (*.zim)" + $"|*.zim",
+                    RestoreDirectory = true
+                };
 
                 if (zimSelect.ShowDialog() == DialogResult.OK)
                 {
@@ -362,19 +370,43 @@ namespace Drakengard1and2Extractor
 
                     if (readHeader == "wZIM")
                     {
-                        System.Threading.Tasks.Task.Run(() =>
+                        StatusTextBox.AppendText("Converting " + Path.GetFileName(zimFile) + "....");
+                        StatusTextBox.AppendText(CommonMethods.NewLineChara);
+
+                        using (var bppReader = new BinaryReader(File.Open(zimFile, FileMode.Open, FileAccess.Read)))
                         {
-                            try
+                            bppReader.BaseStream.Position = 82;
+
+                            if (bppReader.ReadByte() == 64)
                             {
-                                LoggingMethods.LogMessage("Converting " + Path.GetFileName(zimFile) + "....");
-                                var converterWindow = new ZIMForm(zimFile);
-                                converterWindow.ShowDialog();
+                                CommonMethods.AppMsgBox("Detected 4bpp image.\nDo not use the alpha compensation setting when saving the image in png or dds formats.", "Warning", MessageBoxIcon.Warning);
                             }
-                            finally
+                        }
+
+                        ConverterWindow.IsClosedByConvtBtn = false;
+                        var converterWindow = new ZIMForm();
+                        converterWindow.ShowDialog();
+
+                        if (ConverterWindow.IsClosedByConvtBtn)
+                        {
+                            System.Threading.Tasks.Task.Run(() =>
                             {
-                                BeginInvoke(new Action(() => EnableDisableControls(true)));
-                            }
-                        });
+                                try
+                                {
+                                    LoggingMethods.LogMessage("Converting....");
+                                    ImgZIM.ConvertZIM(zimFile, ConverterWindow.AlphaIncrease, ConverterWindow.UnswizzlePixels, ConverterWindow.SaveAsIndex, true);
+                                }
+                                finally
+                                {
+                                    BeginInvoke(new Action(() => EnableDisableControls(true)));
+                                }
+                            });
+                        }
+                        else
+                        {
+                            StatusTextBox.AppendText("Conversion cancelled!");
+                            EnableDisableControls(true);
+                        }
                     }
                     else
                     {
@@ -419,19 +451,33 @@ namespace Drakengard1and2Extractor
 
                     if (readHeader == "SPK0")
                     {
-                        System.Threading.Tasks.Task.Run(() =>
+                        StatusTextBox.AppendText("Converting " + Path.GetFileName(spk0File) + "....");
+                        StatusTextBox.AppendText(CommonMethods.NewLineChara);
+
+                        ConverterWindow.IsClosedByConvtBtn = false;
+                        var converterWindow = new SPK0Form();
+                        converterWindow.ShowDialog();
+
+                        if (ConverterWindow.IsClosedByConvtBtn)
                         {
-                            try
+                            System.Threading.Tasks.Task.Run(() =>
                             {
-                                LoggingMethods.LogMessage("Converting " + Path.GetFileName(spk0File) + "....");
-                                var converterWindow = new SPK0Form(spk0File);
-                                converterWindow.ShowDialog();
-                            }
-                            finally
-                            {
-                                BeginInvoke(new Action(() => EnableDisableControls(true)));
-                            }
-                        });
+                                try
+                                {
+                                    LoggingMethods.LogMessage("Converting....");
+                                    ImgSPK0.ConvertSPK0(spk0File, ConverterWindow.AlphaIncrease, ConverterWindow.SaveAsIndex, true);
+                                }
+                                finally
+                                {
+                                    BeginInvoke(new Action(() => EnableDisableControls(true)));
+                                }
+                            });
+                        }
+                        else
+                        {
+                            StatusTextBox.AppendText("Conversion cancelled!");
+                            EnableDisableControls(true);
+                        }
                     }
                     else
                     {
@@ -503,6 +549,7 @@ namespace Drakengard1and2Extractor
             ConvertSPK0Btn.Enabled = isEnabled;
             Drk1RadioButton.Enabled = isEnabled;
             Drk2RadioButton.Enabled = isEnabled;
+            StatusDelBtn.Enabled = isEnabled;
         }
 
 
