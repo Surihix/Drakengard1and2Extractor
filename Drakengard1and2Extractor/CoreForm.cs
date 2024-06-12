@@ -438,9 +438,11 @@ namespace Drakengard1and2Extractor
         {
             try
             {
-                var spk0Select = new OpenFileDialog();
-                spk0Select.Filter = "SPK0 type files (*.spk0)" + $"|*.spk0";
-                spk0Select.RestoreDirectory = true;
+                var spk0Select = new OpenFileDialog
+                {
+                    Filter = "SPK0 type files (*.spk0)" + $"|*.spk0",
+                    RestoreDirectory = true
+                };
 
                 if (spk0Select.ShowDialog() == DialogResult.OK)
                 {

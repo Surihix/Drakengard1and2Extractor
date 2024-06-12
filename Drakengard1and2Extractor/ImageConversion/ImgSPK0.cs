@@ -62,7 +62,7 @@ namespace Drakengard1and2Extractor.ImageConversion
                             byte[] palBuffer = new byte[palSize];
                             grf1Stream.Read(palBuffer, 0, palBuffer.Length);
 
-                            byte[] finalizedPalBuffer = PS2Unswizzlers.UnSwizzlePalette(palBuffer);
+                            byte[] finalizedPalBuffer = PS2Unswizzlers.UnswizzlePalette(palBuffer);
 
 
                             uint imgReadPosStart = 20;

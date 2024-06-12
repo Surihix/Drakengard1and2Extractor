@@ -40,7 +40,7 @@ namespace Drakengard1and2Extractor.ImageConversion
 
                     if (unswizzlePixels && bppFlag == 48)
                     {
-                        byte[] unswizzledPixelsBuffer = PS2Unswizzlers.UnSwizzlePixels(pixelsBuffer, imgOptions);
+                        byte[] unswizzledPixelsBuffer = PS2Unswizzlers.UnswizzlePixels(pixelsBuffer, imgOptions);
                         pixelsBuffer = unswizzledPixelsBuffer;
                     }
 
@@ -62,7 +62,7 @@ namespace Drakengard1and2Extractor.ImageConversion
                     byte[] finalizedPalette = new byte[palSize];
                     if (bppFlag == 48)
                     {
-                        finalizedPalette = PS2Unswizzlers.UnSwizzlePalette(paletteBuffer);
+                        finalizedPalette = PS2Unswizzlers.UnswizzlePalette(paletteBuffer);
                     }
                     else
                     {
