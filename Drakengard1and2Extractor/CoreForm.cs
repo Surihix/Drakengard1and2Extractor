@@ -213,12 +213,20 @@ namespace Drakengard1and2Extractor
 
                     if (readHeader == "fpk")
                     {
+                        var generateLstPaths = false;
+                        var pathResult = MessageBox.Show("Try and generate file paths if a .lst file is available in the fpk file?\nWarning: This is an experimental option and if you have gotten any errors with the 'YES' option before for the currently selected fpk file, then select the 'NO' option.", "Path Generation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                        if (pathResult == DialogResult.Yes)
+                        {
+                            generateLstPaths = true;
+                        }
+
                         System.Threading.Tasks.Task.Run(() =>
                         {
                             try
                             {
                                 LoggingMethods.LogMessage("Extracting files from " + Path.GetFileName(fpkFile) + "....");
-                                FileFPK.ExtractFPK(fpkFile, true);
+                                FileFPK.ExtractFPK(fpkFile, generateLstPaths, true);
                             }
                             finally
                             {
@@ -331,7 +339,7 @@ namespace Drakengard1and2Extractor
                     {
                         var shiftJISParse = false;
 
-                        var shiftJISResult = MessageBox.Show("Parse the text data in Japanese Encoding (shift-jis) format ? ", "ShiftJIS", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                        var shiftJISResult = MessageBox.Show("Parse the text data in Japanese Encoding (shift-jis) format ?", "ShiftJIS", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
                         if (shiftJISResult == DialogResult.Yes)
                         {

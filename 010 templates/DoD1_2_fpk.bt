@@ -10,6 +10,7 @@
 //  ID Bytes: 66 70 6B
 //   History: 
 //   1.0   2024-03-15 Surihix: Initial version
+//   1.1   2024-06-14 Surihix: Added align offset
 //---------------------------------------------------
 
 LittleEndian();
@@ -47,8 +48,7 @@ struct FILE
     char magic[4]<bgcolor=cDkGreen>;
     char reserved[4]<bgcolor=cBlack>;    
     uint offsetEntries<bgcolor=cDkGreen>;
-
-    uint unk1<hidden=true, bgcolor=cRed>;
+    uint dataAlignPosition<comment="entries start position should be divisible by this value", bgcolor=cDkGreen>;
 
     char fpkHeaderData[8]<bgcolor=cDkGreen>;
     uint offsetTableSize<bgcolor=cDkGreen>;

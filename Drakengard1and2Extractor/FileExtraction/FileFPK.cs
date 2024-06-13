@@ -2,13 +2,14 @@
 using Drakengard1and2Extractor.Support.Lz0Helpers;
 using System;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace Drakengard1and2Extractor.FileExtraction
 {
     internal class FileFPK
     {
-        public static void ExtractFPK(string fpkFile, bool isSingleFile)
+        public static void ExtractFPK(string fpkFile, bool generateLstPaths, bool isSingleFile)
         {
             try
             {
@@ -57,22 +58,28 @@ namespace Drakengard1and2Extractor.FileExtraction
                                 fileExtn = string.Join("", fpkStructure.EntryExtnChars).Replace("\0", "");
                                 fileExtnFixed = "." + CommonMethods.ModifyExtnString(fileExtn);
 
-                                var currentFile = Path.Combine(extractDir, fName + $"{fileCount}" + fileExtnFixed);
-
-                                if (fileExtnFixed[1] == '/' || fileExtnFixed[1] == '\\')
+                                if (fileExtnFixed == ".lst")
                                 {
-                                    intialOffset += 16;
-                                    continue;
+                                    fpkStructure.HasLstFile = true;
                                 }
+
+                                var currentFile = Path.Combine(extractDir, fName + $"{fileCount}" + fileExtnFixed);
 
                                 using (FileStream outFileStream = new FileStream(currentFile, FileMode.OpenOrCreate, FileAccess.ReadWrite))
                                 {
                                     fpkDataStream.Seek(fpkStructure.EntryDataOffset, SeekOrigin.Begin);
                                     fpkDataStream.CopyStreamTo(outFileStream, fpkStructure.EntryDataSize, false);
 
+                                    tmpExtn = string.Empty;
+
                                     using (BinaryReader outFileReader = new BinaryReader(outFileStream))
                                     {
                                         tmpExtn = CommonMethods.GetFileHeader(outFileReader);
+                                    }
+
+                                    if (tmpExtn == "")
+                                    {
+                                        tmpExtn = fileExtnFixed;
                                     }
                                 }
 
@@ -101,6 +108,35 @@ namespace Drakengard1and2Extractor.FileExtraction
                         }
 
                         File.Delete(tmpArchiveFile);
+                    }
+                }
+
+                if (generateLstPaths && fpkStructure.HasLstFile)
+                {
+                    var lstFile = Path.Combine(extractDir, "FILE_1.lst");
+                    var linesBuffer = File.ReadAllLines(lstFile);
+                    var lineCount = linesBuffer.Length;
+
+                    var pathSeparatorChar = new string[] { "/", "\\", "/..", "\\.." };
+
+                    if (lineCount == fpkStructure.EntryCount)
+                    {
+                        var pathsFolder = Path.Combine(extractDir, "#Generated_Paths");
+                        CommonMethods.IfFileDirExistsDel(pathsFolder, CommonMethods.DelSwitch.directory);
+
+                        for (int l = 0; l < lineCount; l++)
+                        {
+                            var currentLine = linesBuffer[l];
+
+                            if (currentLine == "" || currentLine == " " || pathSeparatorChar.Contains(currentLine))
+                            {
+                                continue;
+                            }
+
+                            currentLine = currentLine.Replace(pathSeparatorChar[2], "").Replace(pathSeparatorChar[3], "");
+
+                            // Generate file path
+                        }
                     }
                 }
 

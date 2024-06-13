@@ -10,6 +10,7 @@
             public uint EntryDataOffset;
             public uint EntryDataSize;
             public char[] EntryExtnChars;
+            public bool HasLstFile;
         }
 
         public class DPK
