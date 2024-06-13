@@ -2,19 +2,12 @@
 using Drakengard1and2Extractor.Support.Lz0Helpers;
 using System;
 using System.IO;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace Drakengard1and2Extractor.FileExtraction
 {
     internal class FileFPK
     {
-        private static readonly string[] _KnownExtns = new string[]
-        {
-            ".fpk", ".dpk", ".zim", ".lz0", ".kps", ".kvm", ".spk0", ".emt", ".dcmr", ".dlgt", ".hi4", ".hd2", ".spf", 
-            ".chf", ".cmf", ".cff", ".cjf", ".cef"
-        };
-
         public static void ExtractFPK(string fpkFile, bool isSingleFile)
         {
             try
@@ -83,27 +76,23 @@ namespace Drakengard1and2Extractor.FileExtraction
                                     }
                                 }
 
-                                if (_KnownExtns.Contains(tmpExtn))
+                                var currentTmpFile = Path.Combine(extractDir, fName + $"{fileCount}" + tmpExtn);
+                                File.Move(currentFile, currentTmpFile);
+
+                                if (tmpExtn == ".lz0")
                                 {
-                                    var currentTmpFile = Path.Combine(extractDir, fName + $"{fileCount}" + tmpExtn);
+                                    var dcmpLz0Data = Lz0Decompression.ProcessLz0Data(currentTmpFile);
+                                    var outCurrentFile = Path.Combine(extractDir, fName + $"{fileCount}");
 
-                                    File.Move(currentFile, currentTmpFile);
+                                    File.WriteAllBytes(outCurrentFile, dcmpLz0Data);
+                                    File.Delete(currentTmpFile);
 
-                                    if (tmpExtn == ".lz0")
+                                    using (BinaryReader dcmpLz0Reader = new BinaryReader(File.Open(outCurrentFile, FileMode.Open, FileAccess.Read)))
                                     {
-                                        var dcmpLz0Data = Lz0Decompression.ProcessLz0Data(currentTmpFile);
-                                        var outCurrentFile = Path.Combine(extractDir, fName + $"{fileCount}");
-
-                                        File.WriteAllBytes(outCurrentFile, dcmpLz0Data);
-                                        File.Delete(currentTmpFile);
-
-                                        using (BinaryReader dcmpLz0Reader = new BinaryReader(File.Open(outCurrentFile, FileMode.Open, FileAccess.Read)))
-                                        {
-                                            realExtn = CommonMethods.GetFileHeader(dcmpLz0Reader);
-                                        }
-
-                                        File.Move(outCurrentFile, outCurrentFile + realExtn);
+                                        realExtn = CommonMethods.GetFileHeader(dcmpLz0Reader);
                                     }
+
+                                    File.Move(outCurrentFile, outCurrentFile + realExtn);
                                 }
 
                                 intialOffset += 16;

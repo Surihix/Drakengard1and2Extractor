@@ -7,7 +7,7 @@ namespace Drakengard1and2Extractor.ImageConversion
 {
     internal class ImgSPK0
     {
-        public static void ConvertSPK0(string spk0File, int spk0AlphaCompValue, int spk0SaveAsCBoxIndex, bool isSingleFile)
+        public static void ConvertSPK0(string spk0File, bool isSingleFile)
         {
             var extractDir = Path.Combine(Path.GetDirectoryName(spk0File), Path.GetFileName(spk0File) + "_extracted");
 
@@ -43,8 +43,6 @@ namespace Drakengard1and2Extractor.ImageConversion
                         spk0Stream.Seek(grf1SubChunkPos, SeekOrigin.Begin);
                         spk0Stream.CopyStreamTo(grf1Stream, grf1Size, false);
 
-                        var imgOptions = new ImgOptions();
-
                         using (BinaryReader grf1Reader = new BinaryReader(grf1Stream))
                         {
                             grf1Reader.BaseStream.Position = 4;
@@ -73,37 +71,35 @@ namespace Drakengard1and2Extractor.ImageConversion
                                 var imgStartPos = grf1Reader.ReadUInt32();
 
                                 grf1Reader.BaseStream.Position = imgStartPos + 96;
-                                imgOptions.Width = (int)grf1Reader.ReadUInt32();
-                                imgOptions.Height = (int)grf1Reader.ReadUInt32();
-                                var imgSize = imgOptions.Width * imgOptions.Height;
+                                ImgOptions.Width = (int)grf1Reader.ReadUInt32();
+                                ImgOptions.Height = (int)grf1Reader.ReadUInt32();
+                                var imgSize = ImgOptions.Width * ImgOptions.Height;
 
                                 grf1Stream.Seek(imgStartPos + 144, SeekOrigin.Begin);
                                 var pixelsBuffer = new byte[imgSize];
                                 _ = grf1Stream.Read(pixelsBuffer, 0, imgSize);
 
-                                imgOptions.AlphaIncrease = spk0AlphaCompValue;
-
 
                                 string outImgPath = string.Empty;
-                                switch (spk0SaveAsCBoxIndex)
+                                switch (ImgOptions.SaveAsIndex)
                                 {
                                     case 0:
                                         outImgPath = Path.Combine(extractDir, "GRF1_img_" + imgFCount + ".bmp");
-                                        imgOptions.ImageFormat = System.Drawing.Imaging.ImageFormat.Bmp;
+                                        ImgOptions.ImageFormat = System.Drawing.Imaging.ImageFormat.Bmp;
 
-                                        BmpPngExporter.CreateBmpPng(pixelsBuffer, palBuffer, imgOptions, outImgPath);
+                                        BmpPngExporter.CreateBmpPng(pixelsBuffer, palBuffer, outImgPath);
                                         break;
 
                                     case 1:
                                         outImgPath = Path.Combine(extractDir, "GRF1_img_" + imgFCount + ".dds");
-                                        DDSimgExporter.CreateDDS(pixelsBuffer, palBuffer, imgOptions, outImgPath);
+                                        DDSimgExporter.CreateDDS(pixelsBuffer, palBuffer, outImgPath);
                                         break;
 
                                     case 2:
                                         outImgPath = Path.Combine(extractDir, "GRF1_img_" + imgFCount + ".png");
-                                        imgOptions.ImageFormat = System.Drawing.Imaging.ImageFormat.Png;
+                                        ImgOptions.ImageFormat = System.Drawing.Imaging.ImageFormat.Png;
 
-                                        BmpPngExporter.CreateBmpPng(pixelsBuffer, palBuffer, imgOptions, outImgPath);
+                                        BmpPngExporter.CreateBmpPng(pixelsBuffer, palBuffer, outImgPath);
                                         break;
                                 }
 

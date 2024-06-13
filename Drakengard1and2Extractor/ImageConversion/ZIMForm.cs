@@ -39,11 +39,11 @@ namespace Drakengard1and2Extractor.ImageConversion
         }
         private void ConvertZIMImgBtn_Click(object sender, EventArgs e)
         {
-            ConverterWindow.SaveAsIndex = ZimSaveAsComboBox.SelectedIndex;
-            ConverterWindow.AlphaIncrease = (int)ZimAlphaCompNumericUpDown.Value;
-            ConverterWindow.UnswizzlePixels = UnSwizzleCheckBox.Checked;
+            ImgOptions.SaveAsIndex = ZimSaveAsComboBox.SelectedIndex;
+            ImgOptions.AlphaIncrease = (int)ZimAlphaCompNumericUpDown.Value;
+            ImgOptions.UnswizzlePixels = UnSwizzleCheckBox.Checked;
 
-            ConverterWindow.IsClosedByConvtBtn = true;
+            ImgOptions.IsClosedByConvtBtn = true;
 
             Dispose();
             Close();

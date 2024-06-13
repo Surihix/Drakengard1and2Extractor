@@ -36,6 +36,43 @@ namespace Drakengard1and2Extractor
         }
 
 
+        public void ChecklzoDll()
+        {
+            var x86DllSha256 = "d414fad15b356f33bf02479bd417d2df767ee102180aae718ef1135146da2884";
+            var x64DllSha256 = "ea006fafb08dd554657b1c81e45c92e88d663aca0c79c48ae1f3dca22e1e2314";
+            string dllBuildHash;
+
+            var appArchitecture = System.Runtime.InteropServices.RuntimeInformation.ProcessArchitecture;
+
+            using (var dllStream = new FileStream("minilzo.dll", FileMode.Open, FileAccess.Read))
+            {
+                using (System.Security.Cryptography.SHA256 dllSHA256 = System.Security.Cryptography.SHA256.Create())
+                {
+                    dllBuildHash = BitConverter.ToString(dllSHA256.ComputeHash(dllStream)).Replace("-", "").ToLower();
+                }
+            }
+
+            switch (appArchitecture)
+            {
+                case System.Runtime.InteropServices.Architecture.X86:
+                    if (!dllBuildHash.Equals(x86DllSha256))
+                    {
+                        CommonMethods.AppMsgBox("Detected incompatible minilz0.dll file.\nPlease check if the dll file included with this build of the app is the correct one.", "Error", MessageBoxIcon.Error);
+                        Environment.Exit(1);
+                    }
+                    break;
+
+                case System.Runtime.InteropServices.Architecture.X64:
+                    if (!dllBuildHash.Equals(x64DllSha256))
+                    {
+                        CommonMethods.AppMsgBox("Detected incompatible minilz0.dll file.\nPlease check if the dll file included with this build of the app is the correct one.", "Error", MessageBoxIcon.Error);
+                        Environment.Exit(1);
+                    }
+                    break;
+            }
+        }
+
+
         private void CoreForm_Shown(object sender, EventArgs e)
         {
             LoggingMethods.SetCoreFormStatusBox();
@@ -383,18 +420,18 @@ namespace Drakengard1and2Extractor
                             }
                         }
 
-                        ConverterWindow.IsClosedByConvtBtn = false;
+                        ImgOptions.IsClosedByConvtBtn = false;
                         var converterWindow = new ZIMForm();
                         converterWindow.ShowDialog();
 
-                        if (ConverterWindow.IsClosedByConvtBtn)
+                        if (ImgOptions.IsClosedByConvtBtn)
                         {
                             System.Threading.Tasks.Task.Run(() =>
                             {
                                 try
                                 {
                                     LoggingMethods.LogMessage("Converting....");
-                                    ImgZIM.ConvertZIM(zimFile, ConverterWindow.AlphaIncrease, ConverterWindow.UnswizzlePixels, ConverterWindow.SaveAsIndex, true);
+                                    ImgZIM.ConvertZIM(zimFile, true);
                                 }
                                 finally
                                 {
@@ -456,18 +493,18 @@ namespace Drakengard1and2Extractor
                         StatusTextBox.AppendText("Converting " + Path.GetFileName(spk0File) + "....");
                         StatusTextBox.AppendText(CommonMethods.NewLineChara);
 
-                        ConverterWindow.IsClosedByConvtBtn = false;
+                        ImgOptions.IsClosedByConvtBtn = false;
                         var converterWindow = new SPK0Form();
                         converterWindow.ShowDialog();
 
-                        if (ConverterWindow.IsClosedByConvtBtn)
+                        if (ImgOptions.IsClosedByConvtBtn)
                         {
                             System.Threading.Tasks.Task.Run(() =>
                             {
                                 try
                                 {
                                     LoggingMethods.LogMessage("Converting....");
-                                    ImgSPK0.ConvertSPK0(spk0File, ConverterWindow.AlphaIncrease, ConverterWindow.SaveAsIndex, true);
+                                    ImgSPK0.ConvertSPK0(spk0File, true);
                                 }
                                 finally
                                 {
@@ -499,43 +536,6 @@ namespace Drakengard1and2Extractor
                 CommonMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
                 LoggingMethods.LogMessage(CommonMethods.NewLineChara);
                 LoggingMethods.LogException("Exception: " + ex);
-            }
-        }
-
-
-        public void ChecklzoDll()
-        {
-            var x86DllSha256 = "d414fad15b356f33bf02479bd417d2df767ee102180aae718ef1135146da2884";
-            var x64DllSha256 = "ea006fafb08dd554657b1c81e45c92e88d663aca0c79c48ae1f3dca22e1e2314";
-            string dllBuildHash;
-
-            var appArchitecture = System.Runtime.InteropServices.RuntimeInformation.ProcessArchitecture;
-
-            using (var dllStream = new FileStream("minilzo.dll", FileMode.Open, FileAccess.Read))
-            {
-                using (System.Security.Cryptography.SHA256 dllSHA256 = System.Security.Cryptography.SHA256.Create())
-                {
-                    dllBuildHash = BitConverter.ToString(dllSHA256.ComputeHash(dllStream)).Replace("-", "").ToLower();
-                }
-            }
-
-            switch (appArchitecture)
-            {
-                case System.Runtime.InteropServices.Architecture.X86:
-                    if (!dllBuildHash.Equals(x86DllSha256))
-                    {
-                        CommonMethods.AppMsgBox("Detected incompatible minilz0.dll file.\nPlease check if the dll file included with this build of the app is the correct one.", "Error", MessageBoxIcon.Error);
-                        Environment.Exit(0);
-                    }
-                    break;
-
-                case System.Runtime.InteropServices.Architecture.X64:
-                    if (!dllBuildHash.Equals(x64DllSha256))
-                    {
-                        CommonMethods.AppMsgBox("Detected incompatible minilz0.dll file.\nPlease check if the dll file included with this build of the app is the correct one.", "Error", MessageBoxIcon.Error);
-                        Environment.Exit(0);
-                    }
-                    break;
             }
         }
 
@@ -577,6 +577,7 @@ namespace Drakengard1and2Extractor
             catch (Exception ex)
             {
                 CommonMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
+                LoggingMethods.LogException("Exception: " + ex);
             }
         }
     }

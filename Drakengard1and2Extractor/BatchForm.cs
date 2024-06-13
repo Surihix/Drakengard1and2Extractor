@@ -230,11 +230,11 @@ namespace Drakengard1and2Extractor
                     var zimDir = zimDirSelect.SelectedPath + "\\";
                     var zimFilesInDir = Directory.GetFiles(zimDir, "*.zim", SearchOption.TopDirectoryOnly);
 
-                    ConverterWindow.IsClosedByConvtBtn = false;
+                    ImgOptions.IsClosedByConvtBtn = false;
                     var converterWindow = new ZIMForm();
                     converterWindow.ShowDialog();
 
-                    if (ConverterWindow.IsClosedByConvtBtn)
+                    if (ImgOptions.IsClosedByConvtBtn)
                     {
                         System.Threading.Tasks.Task.Run(() =>
                         {
@@ -246,7 +246,7 @@ namespace Drakengard1and2Extractor
 
                                     if (readHeader == "wZIM")
                                     {
-                                        ImgZIM.ConvertZIM(zimFile, ConverterWindow.AlphaIncrease, ConverterWindow.UnswizzlePixels, ConverterWindow.SaveAsIndex, false);
+                                        ImgZIM.ConvertZIM(zimFile, false);
                                         LoggingMethods.LogMessage("Converted " + Path.GetFileName(zimFile));
                                     }
                                 }
@@ -301,11 +301,11 @@ namespace Drakengard1and2Extractor
                     var spk0Dir = spk0DirSelect.SelectedPath + "\\";
                     var spk0FilesInDir = Directory.GetFiles(spk0Dir, "*.spk0", SearchOption.TopDirectoryOnly);
 
-                    ConverterWindow.IsClosedByConvtBtn = false;
+                    ImgOptions.IsClosedByConvtBtn = false;
                     var converterWindow = new SPK0Form();
                     converterWindow.ShowDialog();
 
-                    if (ConverterWindow.IsClosedByConvtBtn)
+                    if (ImgOptions.IsClosedByConvtBtn)
                     {
                         System.Threading.Tasks.Task.Run(() =>
                         {
@@ -317,7 +317,7 @@ namespace Drakengard1and2Extractor
 
                                     if (readHeader == "SPK0")
                                     {
-                                        ImgSPK0.ConvertSPK0(spk0File, ConverterWindow.AlphaIncrease, ConverterWindow.SaveAsIndex, false);
+                                        ImgSPK0.ConvertSPK0(spk0File, false);
                                         LoggingMethods.LogMessage("Converted " + Path.GetFileName(spk0File));
                                     }
                                 }

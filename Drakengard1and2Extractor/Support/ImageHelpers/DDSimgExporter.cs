@@ -5,7 +5,7 @@ namespace Drakengard1and2Extractor.Support.ImageHelpers
 {
     internal class DDSimgExporter
     {
-        public static void CreateDDS(byte[] pixelsData, byte[] paletteData, ImgOptions imgOptions, string outImgPath)
+        public static void CreateDDS(byte[] pixelsData, byte[] paletteData, string outImgPath)
         {
             using (var ddsStream = new FileStream(outImgPath, FileMode.OpenOrCreate, FileAccess.Write))
             {
@@ -29,10 +29,10 @@ namespace Drakengard1and2Extractor.Support.ImageHelpers
                     ddsStreamWriter.Write(BitConverter.GetBytes((uint)4111));
 
                     _ = ddsStreamWriter.BaseStream.Position = 12;
-                    ddsStreamWriter.Write(BitConverter.GetBytes((uint)imgOptions.Height));
+                    ddsStreamWriter.Write(BitConverter.GetBytes((uint)ImgOptions.Height));
 
                     _ = ddsStreamWriter.BaseStream.Position = 16;
-                    ddsStreamWriter.Write(BitConverter.GetBytes((uint)imgOptions.Width));
+                    ddsStreamWriter.Write(BitConverter.GetBytes((uint)ImgOptions.Width));
 
                     _ = ddsStreamWriter.BaseStream.Position = 28;
                     ddsStreamWriter.Write(BitConverter.GetBytes(1));
@@ -46,7 +46,7 @@ namespace Drakengard1and2Extractor.Support.ImageHelpers
 
 
                     // Computes DDS pitch 
-                    uint pitch = ((uint)imgOptions.Width * 32 + 7) / 8;
+                    uint pitch = ((uint)ImgOptions.Width * 32 + 7) / 8;
 
                     _ = ddsStreamWriter.BaseStream.Position = 20;
                     ddsStreamWriter.Write(BitConverter.GetBytes(pitch));
@@ -74,7 +74,7 @@ namespace Drakengard1and2Extractor.Support.ImageHelpers
 
                     // Write the image data
                     long writePos = 128;
-                    for (int i = 0; i < imgOptions.Width * imgOptions.Height; i++)
+                    for (int i = 0; i < ImgOptions.Width * ImgOptions.Height; i++)
                     {
                         int palettePos = pixelsData[i];
                         palettePos *= 4;
@@ -84,10 +84,10 @@ namespace Drakengard1and2Extractor.Support.ImageHelpers
                         byte blue = paletteData[palettePos + 2];
                         int alpha = paletteData[palettePos + 3];
 
-                        alpha += imgOptions.AlphaIncrease;
-                        if (alpha > 128)
+                        alpha += ImgOptions.AlphaIncrease;
+                        if (alpha > 255)
                         {
-                            alpha = 128;
+                            alpha = 255;
                         }
 
                         byte[] writeArray = new byte[4];

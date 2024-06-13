@@ -4,23 +4,23 @@ namespace Drakengard1and2Extractor.Support.ImageHelpers
 {
     internal static class PS2Unswizzlers
     {
-        public static byte[] UnswizzlePixels(byte[] pixelBufferVar, ImgOptions imgOptions)
+        public static byte[] UnswizzlePixels(byte[] pixelBufferVar)
         {
             byte[] swizzleWorkBuffer = new byte[pixelBufferVar.Length - 0];
             Array.Copy(pixelBufferVar, 0, swizzleWorkBuffer, 0, swizzleWorkBuffer.Length);
 
-            for (int y = 0; y < imgOptions.Height; y++)
+            for (int y = 0; y < ImgOptions.Height; y++)
             {
-                for (int x = 0; x < imgOptions.Width; x++)
+                for (int x = 0; x < ImgOptions.Width; x++)
                 {
-                    int blockLocation = (y & (~0xf)) * imgOptions.Width + (x & (~0xf)) * 2;
+                    int blockLocation = (y & (~0xf)) * ImgOptions.Width + (x & (~0xf)) * 2;
                     int swapSelector = (((y + 2) >> 2) & 0x1) * 4;
                     int posY = (((y & (~3)) >> 1) + (y & 1)) & 0x7;
-                    int columnLocation = posY * imgOptions.Width * 2 + ((x + swapSelector) & 0x7) * 4;
+                    int columnLocation = posY * ImgOptions.Width * 2 + ((x + swapSelector) & 0x7) * 4;
 
                     int byteNum = ((y >> 1) & 1) + ((x >> 2) & 2);
 
-                    pixelBufferVar[0 + (y * imgOptions.Width) + x] = swizzleWorkBuffer[blockLocation + columnLocation + byteNum];
+                    pixelBufferVar[0 + (y * ImgOptions.Width) + x] = swizzleWorkBuffer[blockLocation + columnLocation + byteNum];
                 }
             }
 
