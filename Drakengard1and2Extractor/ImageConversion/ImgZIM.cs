@@ -76,14 +76,14 @@ namespace Drakengard1and2Extractor.ImageConversion
                             outImgPath = Path.Combine(extractDir, zimNameNoExtn + ".bmp");
                             ImgOptions.ImageFormat = System.Drawing.Imaging.ImageFormat.Bmp;
 
-                            CommonMethods.IfFileDirExistsDel(outImgPath, CommonMethods.DelSwitch.file);
+                            SharedMethods.IfFileDirExistsDel(outImgPath, SharedMethods.DelSwitch.file);
                             BmpPngExporter.CreateBmpPng(finalizedPixels, finalizedPalette, outImgPath);
                             break;
 
                         case 1:
                             outImgPath = Path.Combine(extractDir, zimNameNoExtn + ".dds");
 
-                            CommonMethods.IfFileDirExistsDel(outImgPath, CommonMethods.DelSwitch.file);
+                            SharedMethods.IfFileDirExistsDel(outImgPath, SharedMethods.DelSwitch.file);
                             DDSimgExporter.CreateDDS(finalizedPixels, finalizedPalette, outImgPath);
                             break;
 
@@ -91,7 +91,7 @@ namespace Drakengard1and2Extractor.ImageConversion
                             outImgPath = Path.Combine(extractDir, zimNameNoExtn + ".png");
                             ImgOptions.ImageFormat = System.Drawing.Imaging.ImageFormat.Png;
 
-                            CommonMethods.IfFileDirExistsDel(outImgPath, CommonMethods.DelSwitch.file);
+                            SharedMethods.IfFileDirExistsDel(outImgPath, SharedMethods.DelSwitch.file);
                             BmpPngExporter.CreateBmpPng(finalizedPixels, finalizedPalette, outImgPath);
                             break;
                     }
@@ -101,9 +101,9 @@ namespace Drakengard1and2Extractor.ImageConversion
             if (isSingleFile)
             {
                 LoggingMethods.LogMessage("Conversion has completed!");
-                LoggingMethods.LogMessage(CommonMethods.NewLineChara);
+                LoggingMethods.LogMessage(SharedMethods.NewLineChara);
 
-                CommonMethods.AppMsgBox("Converted " + Path.GetFileName(zimFile) + " file", "Success", MessageBoxIcon.Information);
+                SharedMethods.AppMsgBox("Converted " + Path.GetFileName(zimFile) + " file", "Success", MessageBoxIcon.Information);
             }
         }
 

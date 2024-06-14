@@ -11,7 +11,7 @@ namespace Drakengard1and2Extractor.ImageConversion
         {
             var extractDir = Path.Combine(Path.GetDirectoryName(spk0File), Path.GetFileName(spk0File) + "_extracted");
 
-            CommonMethods.IfFileDirExistsDel(extractDir, CommonMethods.DelSwitch.directory);
+            SharedMethods.IfFileDirExistsDel(extractDir, SharedMethods.DelSwitch.directory);
             Directory.CreateDirectory(extractDir);
 
             using (FileStream spk0Stream = new FileStream(spk0File, FileMode.Open, FileAccess.Read))
@@ -125,11 +125,11 @@ namespace Drakengard1and2Extractor.ImageConversion
 
             if (isSingleFile)
             {
-                LoggingMethods.LogMessage(CommonMethods.NewLineChara);
+                LoggingMethods.LogMessage(SharedMethods.NewLineChara);
                 LoggingMethods.LogMessage("Conversion has completed!");
-                LoggingMethods.LogMessage(CommonMethods.NewLineChara);
+                LoggingMethods.LogMessage(SharedMethods.NewLineChara);
 
-                CommonMethods.AppMsgBox("Converted " + Path.GetFileName(spk0File) + " file", "Success", MessageBoxIcon.Information);
+                SharedMethods.AppMsgBox("Converted " + Path.GetFileName(spk0File) + " file", "Success", MessageBoxIcon.Information);
             }
         }
     }

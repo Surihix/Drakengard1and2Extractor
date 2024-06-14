@@ -47,13 +47,9 @@ namespace Drakengard1and2Extractor
                     var fpkDir = fpkDirSelect.SelectedPath + "\\";
                     var fpkFilesInDir = Directory.GetFiles(fpkDir, "*.fpk", SearchOption.TopDirectoryOnly);
 
-                    var generateLstPaths = false;
-                    var pathResult = MessageBox.Show("Try and generate file paths if a .lst file is available in the fpk file?\nWarning: This is an experimental option and its recommended to select the 'NO' option in the current Batch Mode.", "Path Generation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+                    var pathResult = MessageBox.Show("Try and generate file paths if .lst files are available in the fpk files?\nWarning: This is an experimental option and if you are unsure of what to use, then its recommended to select the 'NO' option.", "Path Generation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
-                    if (pathResult == DialogResult.Yes)
-                    {
-                        generateLstPaths = true;
-                    }
+                    var generateLstPaths = SharedMethods.SetBoolFromDlgResult(pathResult);
 
                     System.Threading.Tasks.Task.Run(() =>
                     {
@@ -61,7 +57,7 @@ namespace Drakengard1and2Extractor
                         {
                             foreach (var fpkFile in fpkFilesInDir)
                             {
-                                var readHeader = CommonMethods.HeaderCheck(fpkFile);
+                                var readHeader = SharedMethods.HeaderCheck(fpkFile);
 
                                 if (readHeader == "fpk")
                                 {
@@ -72,10 +68,10 @@ namespace Drakengard1and2Extractor
                         }
                         finally
                         {
-                            LoggingMethods.LogMessage(CommonMethods.NewLineChara);
+                            LoggingMethods.LogMessage(SharedMethods.NewLineChara);
                             LoggingMethods.LogMessage("Batch extraction completed!");
 
-                            CommonMethods.AppMsgBox("Finished extracting fpk files from the folder", "Success", MessageBoxIcon.Information);
+                            SharedMethods.AppMsgBox("Finished extracting fpk files from the folder", "Success", MessageBoxIcon.Information);
                             BeginInvoke(new Action(() => EnableDisableControls(true)));
                         }
                     });
@@ -83,7 +79,7 @@ namespace Drakengard1and2Extractor
             }
             catch (Exception ex)
             {
-                CommonMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
+                SharedMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
                 LoggingMethods.LogException("Exception: " + ex);
                 Close();
             }
@@ -119,7 +115,7 @@ namespace Drakengard1and2Extractor
                         {
                             foreach (var dpkFile in dpkFilesInDir)
                             {
-                                var readHeader = CommonMethods.HeaderCheck(dpkFile);
+                                var readHeader = SharedMethods.HeaderCheck(dpkFile);
 
                                 if (readHeader == "dpk")
                                 {
@@ -130,10 +126,10 @@ namespace Drakengard1and2Extractor
                         }
                         finally
                         {
-                            LoggingMethods.LogMessage(CommonMethods.NewLineChara);
+                            LoggingMethods.LogMessage(SharedMethods.NewLineChara);
                             LoggingMethods.LogMessage("Batch extraction completed!");
 
-                            CommonMethods.AppMsgBox("Finished extracting dpk files from the folder", "Success", MessageBoxIcon.Information);
+                            SharedMethods.AppMsgBox("Finished extracting dpk files from the folder", "Success", MessageBoxIcon.Information);
                             BeginInvoke(new Action(() => EnableDisableControls(true)));
                         }
                     });
@@ -141,7 +137,7 @@ namespace Drakengard1and2Extractor
             }
             catch (Exception ex)
             {
-                CommonMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
+                SharedMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
                 LoggingMethods.LogException("Exception: " + ex);
                 Close();
             }
@@ -170,15 +166,10 @@ namespace Drakengard1and2Extractor
 
                     var kpsDir = kpsDirSelect.SelectedPath + "\\";
                     var kpsFilesInDir = Directory.GetFiles(kpsDir, "*.kps", SearchOption.TopDirectoryOnly);
-
-                    var shiftJISParse = false;
-
+                   
                     var shiftJISResult = MessageBox.Show("Parse the text data in Japanese Encoding (shift-jis) format ?", "ShiftJIS", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
-                    if (shiftJISResult == DialogResult.Yes)
-                    {
-                        shiftJISParse = true;
-                    }
+                    var shiftJISParse = SharedMethods.SetBoolFromDlgResult(shiftJISResult);
 
                     System.Threading.Tasks.Task.Run(() =>
                     {
@@ -186,7 +177,7 @@ namespace Drakengard1and2Extractor
                         {
                             foreach (var kpsFile in kpsFilesInDir)
                             {
-                                var readHeader = CommonMethods.HeaderCheck(kpsFile);
+                                var readHeader = SharedMethods.HeaderCheck(kpsFile);
 
                                 if (readHeader == "KPS_")
                                 {
@@ -197,10 +188,10 @@ namespace Drakengard1and2Extractor
                         }
                         finally
                         {
-                            LoggingMethods.LogMessage(CommonMethods.NewLineChara);
+                            LoggingMethods.LogMessage(SharedMethods.NewLineChara);
                             LoggingMethods.LogMessage("Batch extraction completed!");
 
-                            CommonMethods.AppMsgBox("Finished extracting kps files from the folder", "Success", MessageBoxIcon.Information);
+                            SharedMethods.AppMsgBox("Finished extracting kps files from the folder", "Success", MessageBoxIcon.Information);
                             BeginInvoke(new Action(() => EnableDisableControls(true)));
                         }
                     });
@@ -208,7 +199,7 @@ namespace Drakengard1and2Extractor
             }
             catch (Exception ex)
             {
-                CommonMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
+                SharedMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
                 LoggingMethods.LogException("Exception: " + ex);
                 Close();
             }
@@ -250,7 +241,7 @@ namespace Drakengard1and2Extractor
                             {
                                 foreach (var zimFile in zimFilesInDir)
                                 {
-                                    var readHeader = CommonMethods.HeaderCheck(zimFile);
+                                    var readHeader = SharedMethods.HeaderCheck(zimFile);
 
                                     if (readHeader == "wZIM")
                                     {
@@ -261,17 +252,17 @@ namespace Drakengard1and2Extractor
                             }
                             finally
                             {
-                                LoggingMethods.LogMessage(CommonMethods.NewLineChara);
+                                LoggingMethods.LogMessage(SharedMethods.NewLineChara);
                                 LoggingMethods.LogMessage("Batch conversion completed!");
 
-                                CommonMethods.AppMsgBox("Finished converting zim files from the folder", "Success", MessageBoxIcon.Information);
+                                SharedMethods.AppMsgBox("Finished converting zim files from the folder", "Success", MessageBoxIcon.Information);
                                 BeginInvoke(new Action(() => EnableDisableControls(true)));
                             }
                         });
                     }
                     else
                     {
-                        LoggingMethods.LogMessage(CommonMethods.NewLineChara);
+                        LoggingMethods.LogMessage(SharedMethods.NewLineChara);
                         LoggingMethods.LogMessage("Conversion cancelled!");
                         EnableDisableControls(true);
                     }
@@ -279,7 +270,7 @@ namespace Drakengard1and2Extractor
             }
             catch (Exception ex)
             {
-                CommonMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
+                SharedMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
                 LoggingMethods.LogException("Exception: " + ex);
                 Close();
             }
@@ -321,7 +312,7 @@ namespace Drakengard1and2Extractor
                             {
                                 foreach (var spk0File in spk0FilesInDir)
                                 {
-                                    var readHeader = CommonMethods.HeaderCheck(spk0File);
+                                    var readHeader = SharedMethods.HeaderCheck(spk0File);
 
                                     if (readHeader == "SPK0")
                                     {
@@ -332,17 +323,17 @@ namespace Drakengard1and2Extractor
                             }
                             finally
                             {
-                                LoggingMethods.LogMessage(CommonMethods.NewLineChara);
+                                LoggingMethods.LogMessage(SharedMethods.NewLineChara);
                                 LoggingMethods.LogMessage("Batch conversion completed!");
 
-                                CommonMethods.AppMsgBox("Finished converting spk0 files from the folder", "Success", MessageBoxIcon.Information);
+                                SharedMethods.AppMsgBox("Finished converting spk0 files from the folder", "Success", MessageBoxIcon.Information);
                                 BeginInvoke(new Action(() => EnableDisableControls(true)));
                             }
                         });
                     }
                     else
                     {
-                        LoggingMethods.LogMessage(CommonMethods.NewLineChara);
+                        LoggingMethods.LogMessage(SharedMethods.NewLineChara);
                         LoggingMethods.LogMessage("Conversion cancelled!");
                         EnableDisableControls(true);
                     }
@@ -350,7 +341,7 @@ namespace Drakengard1and2Extractor
             }
             catch (Exception ex)
             {
-                CommonMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
+                SharedMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
                 LoggingMethods.LogException("Exception: " + ex);
                 Close();
             }

@@ -73,7 +73,7 @@ namespace Drakengard1and2Extractor.FileExtraction
                                 writePos += outLineData.Length + 4 + currentLineNoData.Length;
                             }
 
-                            CommonMethods.IfFileDirExistsDel(outTxtFile, CommonMethods.DelSwitch.file);
+                            SharedMethods.IfFileDirExistsDel(outTxtFile, SharedMethods.DelSwitch.file);
 
                             outTxtStream.Seek(0, SeekOrigin.Begin);
                             File.WriteAllBytes(outTxtFile, outTxtStream.ToArray());
@@ -83,17 +83,17 @@ namespace Drakengard1and2Extractor.FileExtraction
 
                 if (isSingleFile)
                 {
-                    LoggingMethods.LogMessage(CommonMethods.NewLineChara);
+                    LoggingMethods.LogMessage(SharedMethods.NewLineChara);
                     LoggingMethods.LogMessage("Extraction has completed!");
-                    LoggingMethods.LogMessage(CommonMethods.NewLineChara);
+                    LoggingMethods.LogMessage(SharedMethods.NewLineChara);
 
-                    CommonMethods.AppMsgBox("Extracted " + Path.GetFileName(kpsFile) + " file", "Success", MessageBoxIcon.Information);
+                    SharedMethods.AppMsgBox("Extracted " + Path.GetFileName(kpsFile) + " file", "Success", MessageBoxIcon.Information);
                 }
             }
             catch (Exception ex)
             {
-                CommonMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
-                LoggingMethods.LogMessage(CommonMethods.NewLineChara);
+                SharedMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
+                LoggingMethods.LogMessage(SharedMethods.NewLineChara);
                 LoggingMethods.LogException("Exception: " + ex);
             }
         }

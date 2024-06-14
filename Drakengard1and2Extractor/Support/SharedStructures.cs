@@ -1,6 +1,6 @@
 ﻿namespace Drakengard1and2Extractor.Support
 {
-    internal class CommonStructures
+    internal class SharedStructures
     {
         public class FPK
         {

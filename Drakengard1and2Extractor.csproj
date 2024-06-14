@@ -211,8 +211,9 @@
     <Compile Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\VistaSaveFileDialog.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Drakengard1and2Extractor\Support\CommonMethods.cs" />
-    <Compile Include="Drakengard1and2Extractor\Support\CommonStructures.cs" />
+    <Compile Include="Drakengard1and2Extractor\Support\LstParser.cs" />
+    <Compile Include="Drakengard1and2Extractor\Support\SharedMethods.cs" />
+    <Compile Include="Drakengard1and2Extractor\Support\SharedStructures.cs" />
     <Compile Include="Drakengard1and2Extractor\Support\Lz0Helpers\Lz0Decompression.cs" />
     <Compile Include="Drakengard1and2Extractor\Support\ImageHelpers\BmpPngExporter.cs" />
     <Compile Include="Drakengard1and2Extractor\Support\ImageHelpers\DDSimgExporter.cs" />

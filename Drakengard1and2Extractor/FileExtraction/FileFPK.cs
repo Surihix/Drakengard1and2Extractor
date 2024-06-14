@@ -1,8 +1,8 @@
 ﻿using Drakengard1and2Extractor.Support;
 using Drakengard1and2Extractor.Support.Lz0Helpers;
 using System;
+using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace Drakengard1and2Extractor.FileExtraction
@@ -14,10 +14,11 @@ namespace Drakengard1and2Extractor.FileExtraction
             try
             {
                 var extractDir = Path.GetFullPath(fpkFile) + "_extracted";
-                CommonMethods.IfFileDirExistsDel(extractDir, CommonMethods.DelSwitch.directory);
+                SharedMethods.IfFileDirExistsDel(extractDir, SharedMethods.DelSwitch.directory);
                 Directory.CreateDirectory(extractDir);
 
-                var fpkStructure = new CommonStructures.FPK();
+                var fpkStructure = new SharedStructures.FPK();
+                var filesExtractedDict = new Dictionary<string, string>();
 
                 using (FileStream fpkStream = new FileStream(fpkFile, FileMode.Open, FileAccess.Read))
                 {
@@ -32,7 +33,7 @@ namespace Drakengard1and2Extractor.FileExtraction
 
                         var tmpArchiveFile = Path.Combine(extractDir, "_.archive");
 
-                        CommonMethods.IfFileDirExistsDel(tmpArchiveFile, CommonMethods.DelSwitch.file);
+                        SharedMethods.IfFileDirExistsDel(tmpArchiveFile, SharedMethods.DelSwitch.file);
 
                         using (FileStream fpkDataStream = new FileStream(tmpArchiveFile, FileMode.OpenOrCreate, FileAccess.ReadWrite))
                         {
@@ -56,11 +57,16 @@ namespace Drakengard1and2Extractor.FileExtraction
                                 Array.Reverse(fpkStructure.EntryExtnChars);
 
                                 fileExtn = string.Join("", fpkStructure.EntryExtnChars).Replace("\0", "");
-                                fileExtnFixed = "." + CommonMethods.ModifyExtnString(fileExtn);
+                                fileExtnFixed = "." + SharedMethods.ModifyExtnString(fileExtn);
 
                                 if (fileExtnFixed == ".lst")
                                 {
                                     fpkStructure.HasLstFile = true;
+                                }
+
+                                if (fileExtn.StartsWith("\\") || fileExtn.StartsWith("/"))
+                                {
+                                    fileExtnFixed = "";
                                 }
 
                                 var currentFile = Path.Combine(extractDir, fName + $"{fileCount}" + fileExtnFixed);
@@ -74,7 +80,7 @@ namespace Drakengard1and2Extractor.FileExtraction
 
                                     using (BinaryReader outFileReader = new BinaryReader(outFileStream))
                                     {
-                                        tmpExtn = CommonMethods.GetFileHeader(outFileReader);
+                                        tmpExtn = SharedMethods.GetFileHeader(outFileReader);
                                     }
 
                                     if (tmpExtn == "")
@@ -96,10 +102,16 @@ namespace Drakengard1and2Extractor.FileExtraction
 
                                     using (BinaryReader dcmpLz0Reader = new BinaryReader(File.Open(outCurrentFile, FileMode.Open, FileAccess.Read)))
                                     {
-                                        realExtn = CommonMethods.GetFileHeader(dcmpLz0Reader);
+                                        realExtn = SharedMethods.GetFileHeader(dcmpLz0Reader);
                                     }
 
                                     File.Move(outCurrentFile, outCurrentFile + realExtn);
+
+                                    filesExtractedDict.Add(fName + fileCount, outCurrentFile + realExtn);
+                                }
+                                else
+                                {
+                                    filesExtractedDict.Add(fName + fileCount, currentTmpFile);
                                 }
 
                                 intialOffset += 16;
@@ -113,46 +125,22 @@ namespace Drakengard1and2Extractor.FileExtraction
 
                 if (generateLstPaths && fpkStructure.HasLstFile)
                 {
-                    var lstFile = Path.Combine(extractDir, "FILE_1.lst");
-                    var linesBuffer = File.ReadAllLines(lstFile);
-                    var lineCount = linesBuffer.Length;
-
-                    var pathSeparatorChar = new string[] { "/", "\\", "/..", "\\.." };
-
-                    if (lineCount == fpkStructure.EntryCount)
-                    {
-                        var pathsFolder = Path.Combine(extractDir, "#Generated_Paths");
-                        CommonMethods.IfFileDirExistsDel(pathsFolder, CommonMethods.DelSwitch.directory);
-
-                        for (int l = 0; l < lineCount; l++)
-                        {
-                            var currentLine = linesBuffer[l];
-
-                            if (currentLine == "" || currentLine == " " || pathSeparatorChar.Contains(currentLine))
-                            {
-                                continue;
-                            }
-
-                            currentLine = currentLine.Replace(pathSeparatorChar[2], "").Replace(pathSeparatorChar[3], "");
-
-                            // Generate file path
-                        }
-                    }
+                    LstParser.ProcessLstFile(fpkStructure, extractDir, filesExtractedDict);
                 }
 
                 if (isSingleFile)
                 {
-                    LoggingMethods.LogMessage(CommonMethods.NewLineChara);
+                    LoggingMethods.LogMessage(SharedMethods.NewLineChara);
                     LoggingMethods.LogMessage("Extraction has completed!");
-                    LoggingMethods.LogMessage(CommonMethods.NewLineChara);
+                    LoggingMethods.LogMessage(SharedMethods.NewLineChara);
 
-                    CommonMethods.AppMsgBox("Extracted " + Path.GetFileName(fpkFile) + " file", "Success", MessageBoxIcon.Information);
+                    SharedMethods.AppMsgBox("Extracted " + Path.GetFileName(fpkFile) + " file", "Success", MessageBoxIcon.Information);
                 }
             }
             catch (Exception ex)
             {
-                CommonMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
-                LoggingMethods.LogMessage(CommonMethods.NewLineChara);
+                SharedMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
+                LoggingMethods.LogMessage(SharedMethods.NewLineChara);
                 LoggingMethods.LogException("Exception: " + ex);
             }
         }

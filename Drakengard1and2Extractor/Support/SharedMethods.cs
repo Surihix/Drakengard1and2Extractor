@@ -4,10 +4,9 @@ using System.Windows.Forms;
 
 namespace Drakengard1and2Extractor.Support
 {
-    internal class CommonMethods
+    internal class SharedMethods
     {
         public static readonly string NewLineChara = Environment.NewLine;
-
 
         public static void AppMsgBox(string msg, string msgHeader, MessageBoxIcon msgType)
         {
@@ -29,6 +28,19 @@ namespace Drakengard1and2Extractor.Support
             header = header.Replace("\0", "");
 
             return header;
+        }
+
+
+        public static bool SetBoolFromDlgResult(DialogResult dialogResult)
+        {
+            if (dialogResult == DialogResult.Yes)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
 
@@ -60,10 +72,10 @@ namespace Drakengard1and2Extractor.Support
 
         public static string ModifyExtnString(string readStringLetters)
         {
-            var modifiedString = readStringLetters.Replace("|", "").Replace("?", "").Replace(":", "").
-                Replace("<", "").Replace(">", "").Replace("*", "").Replace("0eng", "0eng.fpk").
-                Replace("0jpn", "0jpn.fpk").Replace("1uk", "1uk.fpk").Replace("2fre", "2fre.fpk").Replace("3ger", "3ger.fpk").
-                Replace("4ita", "4ita.fpk").Replace("5spa", "5spa.fpk");
+            var modifiedString = readStringLetters.Replace("|", "").Replace("?", "").Replace(":", "").Replace("<", "").
+                Replace(">", "").Replace("*", "").Replace("0eng", "0eng.fpk").Replace("0jpn", "0jpn.fpk").
+                Replace("1uk", "1uk.fpk").Replace("2fre", "2fre.fpk").Replace("3ger", "3ger.fpk").Replace("4ita", "4ita.fpk").
+                Replace("5spa", "5spa.fpk");
 
             return modifiedString;
         }
@@ -130,7 +142,6 @@ namespace Drakengard1and2Extractor.Support
                 case "CEFh":
                     realExtn = ".cef";
                     break;
-
             }
             if (foundExtn.StartsWith("bh"))
             {
