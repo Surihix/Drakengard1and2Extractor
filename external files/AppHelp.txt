@@ -1,0 +1,145 @@
+Please adjust the text font if in case this help file doesn't look correct.
+
+
+This text file contains information on how to use the app as well as provides information on some of the extracted file formats. 
+Before proceeding to use this app, make sure to copy the files from your ISO rip of the game onto your PC's storage drive (HDD or SSD).
+
+======================================================================================================================================================================
+======================================================================================================================================================================
+
+
+
+File Type (.bin) :
+
+This is the format of the main archive files of these games. each of the bin file holds data of a specific category.
+
+Make sure to select the correct game from the "Game Selection: " group before pressing the "Extract BIN" button. 
+
+When you are done selecting a valid bin file, the extraction process should begin and all of the files inside the bin file 
+will extract inside a "BIN-FILENAME_extracted" folder which would be present next to the bin file that you had selected.
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+File Type (.fpk) :
+
+Majority of the files stored inside the "image" category bin files, will extract with this particular format. 
+The fpk file is a archive type file that can hold other type of files or even more fpk files inside it. the "Extract FPK" button should 
+extract this particular file type.
+
+Some of the fpk files contain 3d model data and for these fpk files, you can directly use the "Drakengard 1/2 PS2 tool" viewer app from the xentax website
+to view and dump the model data. whether a fpk file contains model data or not is something that you would have to check yourself manually with that 
+viewer app.
+
+That app will only show or export models that are skinned or has a rig setup. this would include character models, weapon models, and 
+few environment prop models.
+
+When you are done determing and selecting a valid fpk file, the extraction process should begin and all of the files inside the fpk file 
+will extract inside a "FPK-FILENAME_extracted" folder which would be present next to the fpk file that you had selected.
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+File Type (.dpk) :
+
+Files inside the "image" category bin file from Drakengard 2 will extract with this particular format. the "Extract DPK" button should extract this 
+particular file type. 
+
+When you are done selecting a valid dpk file, the extraction process should begin and all of the files inside the dpk file 
+will extract inside a "DPK-FILENAME_extracted" folder which would be present next to the dpk file that you had selected.
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+File Type (.kps) :
+
+
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+Batch Mode:
+
+This option will open a seperate window by which you can extract/convert multiple fpk, dpk, kps, zim, and spk0 files that are present 
+in a folder. 
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+File Type (.zim) :
+
+This is the format used for image files from both the games.
+
+Use the "Convert ZIM" button in the app and select a zim file. once a valid zim file is selected, you will be presented with a window 
+having options to convert and save the image file to commonly viewable image format like bmp, dds or png. 
+
+Once you are done setting up the parameters in the converter window, click on the "Convert" button and the image file will be converted and saved next 
+to the zim file that you had selected.
+
+
+Notes on image conversion:
+
+1. When saving the image in dds or png formats, increase the Alpha Compensation value to retain some of the image details that would 
+   otherwise get hidden with the default alpha channel value. optimal value to use would be 100.
+
+2. If in case the converted image looks corrupt or messed up, tick the "Unswizzle 8bpp image data" checkbox and then click the convert button to 
+   convert the image again.	 
+
+3. The converted dds formats will only open on image viewer apps that support R8G8B8A8 DDS format. image editing apps like GIMP or 
+   Adobe PhotoShop, should be able to open this image file.
+
+4. When converting a 4bpp image to dds or png, do not adjust the Alpha Compensation value. a warning messagebox will appear if your selectd zim file 
+   is a 4bpp image.
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+File Type (.spk0) :
+
+This is the format used for skybox related data and for skybox image files. 
+
+Use the "Convert SPK0" button in the app and select a spk0 file. once a valid spk0 file is selected, you will be presented with a window 
+having options to convert and save all of the extracted image files to commonly viewable image format like bmp, dds or png. 
+
+Refer to the "Notes on image conversion:" points provided for the zim file type explanation. ignore the second point as it does not apply 
+for skybox image files.
+
+Once you are done setting up the parameters in the converter window, the SPK0 file should begin extracting and all of the image files
+will be converted and saved in the format that you have selected in the converter window.
+
+The files will all extract inside a SPK0-FILENAME_extracted folder which would be present next to the spk0 file that you had selected.
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+File Type (.pss) :
+
+Files inside the "movie" category bin files will extract with this particular format. these files are pre rendered video clips that are 
+commonly known as FMVs.
+
+Install PSSPlex and use the Demultiplex option in that tool on the .pss files. this will convert the file to a video format that is supported 
+by most media players.
+
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
+File Type (.cads) :
+
+Files inside the "SNDIMG", "BGM", or "VOICE" category bin files will extract with this format. these are audio files that are 
+used only for the game's music and voice over files.
+
+Use vgmstream to convert the .cads file to .wav format.
+Or 
+Setup foobar2000 media player and install the vgmstream component to this player. this should allow you to directly play the .cads file inside foobar2000.
+
+
+======================================================================================================================================================================
+======================================================================================================================================================================

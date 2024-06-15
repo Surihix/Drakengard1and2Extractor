@@ -101,7 +101,7 @@ namespace Drakengard1and2Extractor.FileExtraction
 
         private static byte[] ParseLineData(bool shiftJISParse, byte[] currentLineData)
         {
-            var outLineData = new byte[] { };
+            byte[] outLineData;
             var processedLineData = new List<byte>();
 
             if (shiftJISParse)
@@ -151,7 +151,7 @@ namespace Drakengard1and2Extractor.FileExtraction
                     }
                     else
                     {
-                        processedLineData.AddRange(_ANSIEncoding.GetBytes("{0x" + b.ToString("X2") + "}"));
+                        processedLineData.AddRange(GetNonStringByteInHex(_ANSIEncoding, b));
                     }
                 }
 
@@ -172,11 +172,17 @@ namespace Drakengard1and2Extractor.FileExtraction
             }
             else
             {
-                processedLineData.AddRange(_ShiftJISEncoding.GetBytes("{0x" + b.ToString("X2") + "}"));
+                processedLineData.AddRange(GetNonStringByteInHex(_ShiftJISEncoding, b));
             }
         }
 
+        private static byte[] GetNonStringByteInHex(Encoding encodingToUse, byte b)
+        {
+            return encodingToUse.GetBytes("#" + b.ToString("X2") + "# ");
+        }
 
+
+        #region Character Checks
         private static bool Check2CharaShiftJIS(byte b1, byte b2)
         {
             var isChara = new bool();
@@ -451,7 +457,6 @@ namespace Drakengard1and2Extractor.FileExtraction
             return isChara;
         }
 
-
         private static bool Check1CharaShiftJIS(byte b)
         {
             var isChara = new bool();
@@ -470,7 +475,6 @@ namespace Drakengard1and2Extractor.FileExtraction
 
             return isChara;
         }
-
 
         private static bool CheckAnsiChara(byte b)
         {
@@ -514,5 +518,6 @@ namespace Drakengard1and2Extractor.FileExtraction
 
             return isChara;
         }
+        #endregion
     }
 }

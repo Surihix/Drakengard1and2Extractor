@@ -42,6 +42,9 @@ namespace Drakengard1and2Extractor
                 if (fpkDirSelect.ShowDialog(currentWindow.Handle) == true)
                 {
                     EnableDisableControls(false);
+
+                    SharedMethods.CheckLzoDll(false);
+
                     LoggingMethods.LogMessage("Extracting fpk files....");
 
                     var fpkDir = fpkDirSelect.SelectedPath + "\\";
@@ -57,9 +60,9 @@ namespace Drakengard1and2Extractor
                         {
                             foreach (var fpkFile in fpkFilesInDir)
                             {
-                                var readHeader = SharedMethods.HeaderCheck(fpkFile);
+                                var foundHeader = SharedMethods.GetHeaderString(fpkFile);
 
-                                if (readHeader == "fpk")
+                                if (foundHeader == "fpk")
                                 {
                                     FileFPK.ExtractFPK(fpkFile, generateLstPaths, false);
                                     LoggingMethods.LogMessage("Extracted " + Path.GetFileName(fpkFile));
@@ -115,9 +118,9 @@ namespace Drakengard1and2Extractor
                         {
                             foreach (var dpkFile in dpkFilesInDir)
                             {
-                                var readHeader = SharedMethods.HeaderCheck(dpkFile);
+                                var foundHeader = SharedMethods.GetHeaderString(dpkFile);
 
-                                if (readHeader == "dpk")
+                                if (foundHeader == "dpk")
                                 {
                                     FileDPK.ExtractDPK(dpkFile, false);
                                     LoggingMethods.LogMessage("Extracted " + Path.GetFileName(dpkFile));
@@ -166,7 +169,7 @@ namespace Drakengard1and2Extractor
 
                     var kpsDir = kpsDirSelect.SelectedPath + "\\";
                     var kpsFilesInDir = Directory.GetFiles(kpsDir, "*.kps", SearchOption.TopDirectoryOnly);
-                   
+
                     var shiftJISResult = MessageBox.Show("Parse the text data in Japanese Encoding (shift-jis) format ?", "ShiftJIS", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
                     var shiftJISParse = SharedMethods.SetBoolFromDlgResult(shiftJISResult);
@@ -177,9 +180,9 @@ namespace Drakengard1and2Extractor
                         {
                             foreach (var kpsFile in kpsFilesInDir)
                             {
-                                var readHeader = SharedMethods.HeaderCheck(kpsFile);
+                                var foundHeader = SharedMethods.GetHeaderString(kpsFile);
 
-                                if (readHeader == "KPS_")
+                                if (foundHeader == "KPS_")
                                 {
                                     FileKPS.ExtractKPS(kpsFile, shiftJISParse, false);
                                     LoggingMethods.LogMessage("Extracted " + Path.GetFileName(kpsFile));
@@ -241,9 +244,9 @@ namespace Drakengard1and2Extractor
                             {
                                 foreach (var zimFile in zimFilesInDir)
                                 {
-                                    var readHeader = SharedMethods.HeaderCheck(zimFile);
+                                    var foundHeader = SharedMethods.GetHeaderString(zimFile);
 
-                                    if (readHeader == "wZIM")
+                                    if (foundHeader == "wZIM")
                                     {
                                         ImgZIM.ConvertZIM(zimFile, false);
                                         LoggingMethods.LogMessage("Converted " + Path.GetFileName(zimFile));
@@ -312,9 +315,9 @@ namespace Drakengard1and2Extractor
                             {
                                 foreach (var spk0File in spk0FilesInDir)
                                 {
-                                    var readHeader = SharedMethods.HeaderCheck(spk0File);
+                                    var foundHeader = SharedMethods.GetHeaderString(spk0File);
 
-                                    if (readHeader == "SPK0")
+                                    if (foundHeader == "SPK0")
                                     {
                                         ImgSPK0.ConvertSPK0(spk0File, false);
                                         LoggingMethods.LogMessage("Converted " + Path.GetFileName(spk0File));

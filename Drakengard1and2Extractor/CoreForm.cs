@@ -14,13 +14,7 @@ namespace Drakengard1and2Extractor
         {
             InitializeComponent();
 
-            if (!File.Exists("minilzo.dll"))
-            {
-                SharedMethods.AppMsgBox("Missing minilz0.dll file.\nPlease check if this dll file is present next to the exe file.", "Error", MessageBoxIcon.Error);
-                Environment.Exit(1);
-            }
-
-            ChecklzoDll();
+            SharedMethods.CheckLzoDll(true);
 
             if (!File.Exists("AppHelp.txt"))
             {
@@ -33,43 +27,6 @@ namespace Drakengard1and2Extractor
             StatusTextBox.Text = "App was launched!";
             StatusTextBox.AppendText(SharedMethods.NewLineChara);
             StatusTextBox.AppendText(SharedMethods.NewLineChara);
-        }
-
-
-        private void ChecklzoDll()
-        {
-            var x86DllSha256 = "d414fad15b356f33bf02479bd417d2df767ee102180aae718ef1135146da2884";
-            var x64DllSha256 = "ea006fafb08dd554657b1c81e45c92e88d663aca0c79c48ae1f3dca22e1e2314";
-            string dllBuildHash;
-
-            var appArchitecture = System.Runtime.InteropServices.RuntimeInformation.ProcessArchitecture;
-
-            using (var dllStream = new FileStream("minilzo.dll", FileMode.Open, FileAccess.Read))
-            {
-                using (System.Security.Cryptography.SHA256 dllSHA256 = System.Security.Cryptography.SHA256.Create())
-                {
-                    dllBuildHash = BitConverter.ToString(dllSHA256.ComputeHash(dllStream)).Replace("-", "").ToLower();
-                }
-            }
-
-            switch (appArchitecture)
-            {
-                case System.Runtime.InteropServices.Architecture.X86:
-                    if (!dllBuildHash.Equals(x86DllSha256))
-                    {
-                        SharedMethods.AppMsgBox("Detected incompatible minilz0.dll file.\nPlease check if the dll file included with this build of the app is the correct one.", "Error", MessageBoxIcon.Error);
-                        Environment.Exit(1);
-                    }
-                    break;
-
-                case System.Runtime.InteropServices.Architecture.X64:
-                    if (!dllBuildHash.Equals(x64DllSha256))
-                    {
-                        SharedMethods.AppMsgBox("Detected incompatible minilz0.dll file.\nPlease check if the dll file included with this build of the app is the correct one.", "Error", MessageBoxIcon.Error);
-                        Environment.Exit(1);
-                    }
-                    break;
-            }
         }
 
 
@@ -111,9 +68,11 @@ namespace Drakengard1and2Extractor
 
                         EnableDisableControls(false);
 
-                        var readHeader = SharedMethods.HeaderCheck(mbinFile);
+                        SharedMethods.CheckLzoDll(false);
 
-                        if (readHeader == "fpk")
+                        var foundHeader = SharedMethods.GetHeaderString(mbinFile);
+
+                        if (foundHeader == "fpk")
                         {
                             var pathResult = MessageBox.Show("Try and generate file paths if a .lst file is available in the fpk file?\nWarning: This is an experimental option and if you have gotten any errors with the 'YES' option before for the currently selected fpk file, then select the 'NO' option.", "Path Generation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
@@ -153,9 +112,9 @@ namespace Drakengard1and2Extractor
 
                         EnableDisableControls(false);
 
-                        var readHeader = SharedMethods.HeaderCheck(mbinFile);
+                        var foundHeader = SharedMethods.GetHeaderString(mbinFile);
 
-                        if (readHeader == "dpk")
+                        if (foundHeader == "dpk")
                         {
                             System.Threading.Tasks.Task.Run(() =>
                             {
@@ -213,9 +172,11 @@ namespace Drakengard1and2Extractor
                     var fpkFile = fpkSelect.FileName;
                     EnableDisableControls(false);
 
-                    var readHeader = SharedMethods.HeaderCheck(fpkFile);
+                    SharedMethods.CheckLzoDll(false);
 
-                    if (readHeader == "fpk")
+                    var foundHeader = SharedMethods.GetHeaderString(fpkFile);
+
+                    if (foundHeader == "fpk")
                     {
                         var pathResult = MessageBox.Show("Try and generate file paths if a .lst file is available in the fpk file?\nWarning: This is an experimental option and if you have gotten any errors with the 'YES' option before for the currently selected fpk file, then select the 'NO' option.", "Path Generation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
@@ -275,9 +236,9 @@ namespace Drakengard1and2Extractor
                     var dpkFile = dpkSelect.FileName;
                     EnableDisableControls(false);
 
-                    var readHeader = SharedMethods.HeaderCheck(dpkFile);
+                    var foundHeader = SharedMethods.GetHeaderString(dpkFile);
 
-                    if (readHeader == "dpk")
+                    if (foundHeader == "dpk")
                     {
                         System.Threading.Tasks.Task.Run(() =>
                         {
@@ -333,9 +294,9 @@ namespace Drakengard1and2Extractor
                     var kpsFile = kpsSelect.FileName;
                     EnableDisableControls(false);
 
-                    var readHeader = SharedMethods.HeaderCheck(kpsFile);
+                    var foundHeader = SharedMethods.GetHeaderString(kpsFile);
 
-                    if (readHeader == "KPS_")
+                    if (foundHeader == "KPS_")
                     {
                         var shiftJISResult = MessageBox.Show("Parse the text data in Japanese Encoding (shift-jis) format ?", "ShiftJIS", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
@@ -406,9 +367,9 @@ namespace Drakengard1and2Extractor
                     var zimFile = zimSelect.FileName;
                     EnableDisableControls(false);
 
-                    var readHeader = SharedMethods.HeaderCheck(zimFile);
+                    var foundHeader = SharedMethods.GetHeaderString(zimFile);
 
-                    if (readHeader == "wZIM")
+                    if (foundHeader == "wZIM")
                     {
                         StatusTextBox.AppendText("Converting " + Path.GetFileName(zimFile) + "....");
                         StatusTextBox.AppendText(SharedMethods.NewLineChara);
@@ -489,9 +450,9 @@ namespace Drakengard1and2Extractor
                     var spk0File = spk0Select.FileName;
                     EnableDisableControls(false);
 
-                    var readHeader = SharedMethods.HeaderCheck(spk0File);
+                    var foundHeader = SharedMethods.GetHeaderString(spk0File);
 
-                    if (readHeader == "SPK0")
+                    if (foundHeader == "SPK0")
                     {
                         StatusTextBox.AppendText("Converting " + Path.GetFileName(spk0File) + "....");
                         StatusTextBox.AppendText(SharedMethods.NewLineChara);

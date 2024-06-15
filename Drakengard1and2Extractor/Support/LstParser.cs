@@ -8,7 +8,7 @@ namespace Drakengard1and2Extractor.Support
 {
     internal class LstParser
     {
-        public static void ProcessLstFile(SharedStructures.FPK fpkStructure, string extractDir, Dictionary<string, string> filesExtractedDict)
+        public static void ProcessLstFile(SharedStructures.FPK fpkStructure, bool isSingleFile, string extractDir, Dictionary<string, string> filesExtractedDict)
         {
             try
             {
@@ -21,8 +21,11 @@ namespace Drakengard1and2Extractor.Support
 
                     if (lineCount == fpkStructure.EntryCount)
                     {
-                        LoggingMethods.LogMessage(SharedMethods.NewLineChara);
-                        LoggingMethods.LogMessage("Generating paths....");
+                        if (isSingleFile)
+                        {
+                            LoggingMethods.LogMessage(SharedMethods.NewLineChara);
+                            LoggingMethods.LogMessage("Generating paths....");
+                        }
 
                         var generatedPathsFolder = Path.Combine(extractDir, "#Generated_Paths");
                         SharedMethods.IfFileDirExistsDel(generatedPathsFolder, SharedMethods.DelSwitch.directory);

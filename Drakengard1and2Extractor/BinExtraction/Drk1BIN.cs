@@ -38,11 +38,21 @@ namespace Drakengard1and2Extractor.BinExtraction
                         fpkStructure.FPKbinDataOffset = mainBinReader.ReadUInt32();
                         fpkStructure.FPKbinDataSize = mainBinReader.ReadUInt32();
 
-                        var tmpArchiveFile = Path.Combine(extractDir, "_.archive");
+                        mainBinReader.BaseStream.Position = 64;
+                        var binNameInFile = mainBinReader.ReadStringTillNull();
+                        binNameInFile = binNameInFile.Replace("/", "").Replace("\\", "");
+                        fpkStructure.FPKbinName = SharedMethods.ModifyString(binNameInFile);
 
-                        SharedMethods.IfFileDirExistsDel(tmpArchiveFile, SharedMethods.DelSwitch.file);
+                        if (fpkStructure.FPKbinName == "")
+                        {
+                            fpkStructure.FPKbinName = fpkStructure.FallBackName;
+                        }
 
-                        using (FileStream binStream = new FileStream(tmpArchiveFile, FileMode.OpenOrCreate, FileAccess.ReadWrite))
+                        var subBinFile = Path.Combine(extractDir, fpkStructure.FPKbinName);
+
+                        SharedMethods.IfFileDirExistsDel(subBinFile, SharedMethods.DelSwitch.file);
+
+                        using (FileStream binStream = new FileStream(subBinFile, FileMode.OpenOrCreate, FileAccess.ReadWrite))
                         {
                             mainBinStream.Seek(fpkStructure.FPKbinDataOffset, SeekOrigin.Begin);
                             mainBinStream.CopyStreamTo(binStream, fpkStructure.FPKbinDataSize, false);
@@ -77,7 +87,7 @@ namespace Drakengard1and2Extractor.BinExtraction
                                 else
                                 {
                                     fileExtn = string.Join("", fpkStructure.EntryExtnChars).Replace("\0", "");
-                                    fileExtnFixed = "." + SharedMethods.ModifyExtnString(fileExtn);
+                                    fileExtnFixed = "." + SharedMethods.ModifyString(fileExtn);
 
                                     if (fileExtnFixed == ".lst")
                                     {
@@ -144,14 +154,12 @@ namespace Drakengard1and2Extractor.BinExtraction
                                 fileCount++;
                             }
                         }
-
-                        File.Delete(tmpArchiveFile);
                     }
                 }
 
                 if (generateLstPaths && fpkStructure.HasLstFile)
                 {
-                    LstParser.ProcessLstFile(fpkStructure, extractDir, filesExtractedDict);
+                    LstParser.ProcessLstFile(fpkStructure, true, extractDir, filesExtractedDict);
                 }
 
                 LoggingMethods.LogMessage(SharedMethods.NewLineChara);

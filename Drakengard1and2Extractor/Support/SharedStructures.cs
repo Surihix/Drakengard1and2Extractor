@@ -7,6 +7,8 @@
             public uint EntryCount;
             public uint FPKbinDataOffset;
             public uint FPKbinDataSize;
+            public string FPKbinName;
+            public string FallBackName = "fpkDataBin";
             public uint EntryDataOffset;
             public uint EntryDataSize;
             public char[] EntryExtnChars;
