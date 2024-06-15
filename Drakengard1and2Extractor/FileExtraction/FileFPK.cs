@@ -41,7 +41,7 @@ namespace Drakengard1and2Extractor.FileExtraction
                             fpkStructure.FPKbinName = fpkStructure.FallBackName;
                         }
 
-                        var fpkBinFile = Path.Combine(extractDir, "_.archive");
+                        var fpkBinFile = Path.Combine(extractDir, fpkStructure.FPKbinName);
 
                         SharedMethods.IfFileDirExistsDel(fpkBinFile, SharedMethods.DelSwitch.file);
 
