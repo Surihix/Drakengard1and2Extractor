@@ -15,6 +15,11 @@ This is the format of the main archive files of these games. each of the bin fil
 
 Make sure to select the correct game from the "Game Selection: " group before pressing the "Extract BIN" button. 
 
+Once you have clicked the button, you will be prompted with a choice on whether to generate paths if a lst file is 
+present inside the bin file. refer to the explanation given for the "File Type (.fpk):" section. as of now only the 
+movie bin files have the lst file and if you are extracting a movie bin file, then select the "YES" option in the choice messagebox.
+
+
 When you are done selecting a valid bin file, the extraction process should begin and all of the files inside the bin file 
 will extract inside a "BIN-FILENAME_extracted" folder which would be present next to the bin file that you had selected.
 
@@ -26,14 +31,27 @@ File Type (.fpk) :
 
 Majority of the files stored inside the "image" category bin files, will extract with this particular format. 
 The fpk file is a archive type file that can hold other type of files or even more fpk files inside it. the "Extract FPK" button should 
-extract this particular file type.
+extract the files that are stored inside this archive file. once you have clicked the button, you will be prompted with a choice on whether to 
+generate paths if a lst file is present inside the fpk file.
 
-Some of the fpk files contain 3d model data and for these fpk files, you can directly use the "Drakengard 1/2 PS2 tool" viewer app from the xentax website
-to view and dump the model data. whether a fpk file contains model data or not is something that you would have to check yourself manually with that 
+The lst files contain the filenames and the virtual path of each file that is stored inside the fpk file. unfortunately these lst files aren't 
+always present in all the fpk files and so the path generation function will only work if the lst file exists.
+
+The path generation function is highly experimental and choosing the "YES" option in the choice media, will allow it to try and generate the 
+paths from the lst file by creating the appropriate directories inside a #Generated_Paths folder, which will be created inside the extracted fpk folder.
+ 
+The files will first extract without the paths inside the extracted fpk folder and after that the path generation function will try and generate the paths
+for each of the extracted file. once each file path is generated, they will be copied over into the #Generated_Paths folder. 
+
+
+3d Model fpk files:
+
+Some of the fpk files contain 3d model data and for these fpk files, you can directly use the "Drakengard 1/2 PS2 tool" viewer app from the xentax website,
+which allows you to view and dump the model data. whether a fpk file contains model data or not is something that you would have to check yourself manually with that 
 viewer app.
 
-That app will only show or export models that are skinned or has a rig setup. this would include character models, weapon models, and 
-few environment prop models.
+That app will only show or export models that are skinned or has a rig. this would include character models, weapon models, and 
+few of the environment prop models.
 
 When you are done determing and selecting a valid fpk file, the extraction process should begin and all of the files inside the fpk file 
 will extract inside a "FPK-FILENAME_extracted" folder which would be present next to the fpk file that you had selected.
@@ -56,7 +74,29 @@ will extract inside a "DPK-FILENAME_extracted" folder which would be present nex
 
 File Type (.kps) :
 
+This is one of the two formats used for text files from both these games. the text characters can be stored in ANSI encoding, Shift-JIS encoding or in 
+both of the encodings.
 
+The "Extract KPS" button should extract the KPS file's text data to a text file. once you have clicked this button, you will be prompted with a choice on 
+whether to parse the text data in Shift-JIS Japanese encoding. 
+
+Choosing the "YES" option would set the program to parse the character bytes in Shift-JIS encoding and finally converts the parsed bytes to UTF-8. 
+Choosing the "NO" option would set the program to parse the character bytes in ANSI encoding and finally converts the parsed bytes to UTF-8.
+
+
+Due to encoding differences, the following issues can occur in the extracted text file:
+
+1. If the text data contains any of the special characters from ANSI encoding that aren't available in Shift-JIS, then those characters will 
+be replaced with dot symbols. the chances of this occuring is a bit rare as most of the kps files do not mix and match different encodings.
+
+2. If the text data contains Japanese characters, and the parsing is set to ANSI, then the characters will appear gibberish and 
+not make any sense. if this happens, then let the program parse the text in Shift-JIS. 
+
+When in doubt as to which encoding to use, select the "YES" option when prompted and let the program parse the text data in Shift-JIS encoding. 
+experiment with both the options and see which one generates the correct text data in the extracted text file.
+
+The text data would also contain non character bytes which would be represented as hexadecimal numbers inside these # # characters, in the 
+extracted text file.
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
