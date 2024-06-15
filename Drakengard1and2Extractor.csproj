@@ -13,6 +13,21 @@
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
     <TargetFrameworkProfile />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -211,8 +226,10 @@
     <Compile Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\VistaSaveFileDialog.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="Drakengard1and2Extractor\Support\CommonMethods.cs" />
-    <Compile Include="Drakengard1and2Extractor\Support\CommonStructures.cs" />
+    <Compile Include="Drakengard1and2Extractor\Support\Extensions\BinaryReaderHelpers.cs" />
+    <Compile Include="Drakengard1and2Extractor\Support\LstParser.cs" />
+    <Compile Include="Drakengard1and2Extractor\Support\SharedMethods.cs" />
+    <Compile Include="Drakengard1and2Extractor\Support\SharedStructures.cs" />
     <Compile Include="Drakengard1and2Extractor\Support\Lz0Helpers\Lz0Decompression.cs" />
     <Compile Include="Drakengard1and2Extractor\Support\ImageHelpers\BmpPngExporter.cs" />
     <Compile Include="Drakengard1and2Extractor\Support\ImageHelpers\DDSimgExporter.cs" />
@@ -302,6 +319,27 @@
     <Content Include="images\about_img.png" />
     <Content Include="images\app_img.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.8">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.8 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>set dllFile=$(SolutionDir)external files\minilz0\$(PlatformName)\minilzo.dll
+set helpTxt=$(SolutionDir)external files\AppHelp.txt
+
+echo %25dllFile%25
+echo %25helpTxt%25
+
+if exist "%25dllFile%25" copy "%25dllFile%25" "$(TargetDir)minilzo.dll"
+if exist "%25helpTxt%25" copy "%25helpTxt%25" "$(TargetDir)AppHelp.txt"</PostBuildEvent>
+  </PropertyGroup>
 </Project>

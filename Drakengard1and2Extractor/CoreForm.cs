@@ -14,25 +14,19 @@ namespace Drakengard1and2Extractor
         {
             InitializeComponent();
 
-            if (!File.Exists("minilzo.dll"))
-            {
-                CommonMethods.AppMsgBox("Missing minilz0.dll file.\nPlease check if this dll file is present next to the exe file.", "Error", MessageBoxIcon.Error);
-                Environment.Exit(1);
-            }
-
-            ChecklzoDll();
+            SharedMethods.CheckLzoDll(true);
 
             if (!File.Exists("AppHelp.txt"))
             {
-                CommonMethods.AppMsgBox("The AppHelp.txt file is missing\nPlease ensure that this file is present next to the app to use the Help option.", "Warning", MessageBoxIcon.Warning);
+                SharedMethods.AppMsgBox("The AppHelp.txt file is missing\nPlease ensure that this file is present next to the app to use the Help option.", "Warning", MessageBoxIcon.Warning);
             }
 
             Drk1RadioButton.Checked = true;
 
             StatusTextBox.BackColor = System.Drawing.SystemColors.Window;
             StatusTextBox.Text = "App was launched!";
-            StatusTextBox.AppendText(CommonMethods.NewLineChara);
-            StatusTextBox.AppendText(CommonMethods.NewLineChara);
+            StatusTextBox.AppendText(SharedMethods.NewLineChara);
+            StatusTextBox.AppendText(SharedMethods.NewLineChara);
         }
 
 
@@ -69,21 +63,27 @@ namespace Drakengard1and2Extractor
                     if (Drk1RadioButton.Checked)
                     {
                         StatusTextBox.AppendText("Game is set to Drakengard 1");
-                        StatusTextBox.AppendText(CommonMethods.NewLineChara);
-                        StatusTextBox.AppendText(CommonMethods.NewLineChara);
+                        StatusTextBox.AppendText(SharedMethods.NewLineChara);
+                        StatusTextBox.AppendText(SharedMethods.NewLineChara);
 
                         EnableDisableControls(false);
 
-                        var readHeader = CommonMethods.HeaderCheck(mbinFile);
+                        SharedMethods.CheckLzoDll(false);
 
-                        if (readHeader == "fpk")
+                        var foundHeader = SharedMethods.GetHeaderString(mbinFile);
+
+                        if (foundHeader == "fpk")
                         {
+                            var pathResult = MessageBox.Show("Try and generate file paths if a .lst file is available in the fpk file?\nWarning: This is an experimental option and if you have gotten any errors with the 'YES' option before for the currently selected fpk file, then select the 'NO' option.", "Path Generation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                            var generateLstPaths = SharedMethods.SetBoolFromDlgResult(pathResult);
+
                             System.Threading.Tasks.Task.Run(() =>
                             {
                                 try
                                 {
                                     LoggingMethods.LogMessage("Extracting files from " + Path.GetFileName(mbinFile) + "....");
-                                    Drk1BIN.ExtractBin(mbinFile);
+                                    Drk1BIN.ExtractBin(mbinFile, generateLstPaths);
                                 }
                                 finally
                                 {
@@ -94,9 +94,9 @@ namespace Drakengard1and2Extractor
                         else
                         {
                             StatusTextBox.AppendText("Error: Unable to detect fpk header");
-                            StatusTextBox.AppendText(CommonMethods.NewLineChara);
+                            StatusTextBox.AppendText(SharedMethods.NewLineChara);
 
-                            CommonMethods.AppMsgBox("This is not a valid Drakengard 1 .bin file", "Error", MessageBoxIcon.Error);
+                            SharedMethods.AppMsgBox("This is not a valid Drakengard 1 .bin file", "Error", MessageBoxIcon.Error);
                             StatusTextBox.AppendText("Extraction failed!");
 
                             EnableDisableControls(true);
@@ -107,14 +107,14 @@ namespace Drakengard1and2Extractor
                     if (Drk2RadioButton.Checked)
                     {
                         StatusTextBox.AppendText("Game is set to Drakengard 2");
-                        StatusTextBox.AppendText(CommonMethods.NewLineChara);
-                        StatusTextBox.AppendText(CommonMethods.NewLineChara);
+                        StatusTextBox.AppendText(SharedMethods.NewLineChara);
+                        StatusTextBox.AppendText(SharedMethods.NewLineChara);
 
                         EnableDisableControls(false);
 
-                        var readHeader = CommonMethods.HeaderCheck(mbinFile);
+                        var foundHeader = SharedMethods.GetHeaderString(mbinFile);
 
-                        if (readHeader == "dpk")
+                        if (foundHeader == "dpk")
                         {
                             System.Threading.Tasks.Task.Run(() =>
                             {
@@ -132,9 +132,9 @@ namespace Drakengard1and2Extractor
                         else
                         {
                             StatusTextBox.AppendText("Error: Unable to detect dpk header");
-                            StatusTextBox.AppendText(CommonMethods.NewLineChara);
+                            StatusTextBox.AppendText(SharedMethods.NewLineChara);
 
-                            CommonMethods.AppMsgBox("This is not a valid Drakengard 2 .bin file", "Error", MessageBoxIcon.Error);
+                            SharedMethods.AppMsgBox("This is not a valid Drakengard 2 .bin file", "Error", MessageBoxIcon.Error);
                             StatusTextBox.AppendText("Extraction failed!");
 
                             EnableDisableControls(true);
@@ -145,8 +145,8 @@ namespace Drakengard1and2Extractor
             }
             catch (Exception ex)
             {
-                CommonMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
-                LoggingMethods.LogMessage(CommonMethods.NewLineChara);
+                SharedMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
+                LoggingMethods.LogMessage(SharedMethods.NewLineChara);
                 LoggingMethods.LogException("Exception: " + ex);
             }
         }
@@ -172,16 +172,22 @@ namespace Drakengard1and2Extractor
                     var fpkFile = fpkSelect.FileName;
                     EnableDisableControls(false);
 
-                    var readHeader = CommonMethods.HeaderCheck(fpkFile);
+                    SharedMethods.CheckLzoDll(false);
 
-                    if (readHeader == "fpk")
+                    var foundHeader = SharedMethods.GetHeaderString(fpkFile);
+
+                    if (foundHeader == "fpk")
                     {
+                        var pathResult = MessageBox.Show("Try and generate file paths if a .lst file is available in the fpk file?\nWarning: This is an experimental option and if you have gotten any errors with the 'YES' option before for the currently selected fpk file, then select the 'NO' option.", "Path Generation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+
+                        var generateLstPaths = SharedMethods.SetBoolFromDlgResult(pathResult);
+
                         System.Threading.Tasks.Task.Run(() =>
                         {
                             try
                             {
                                 LoggingMethods.LogMessage("Extracting files from " + Path.GetFileName(fpkFile) + "....");
-                                FileFPK.ExtractFPK(fpkFile, true);
+                                FileFPK.ExtractFPK(fpkFile, generateLstPaths, true);
                             }
                             finally
                             {
@@ -192,9 +198,9 @@ namespace Drakengard1and2Extractor
                     else
                     {
                         StatusTextBox.AppendText("Error: Unable to detect fpk header");
-                        StatusTextBox.AppendText(CommonMethods.NewLineChara);
+                        StatusTextBox.AppendText(SharedMethods.NewLineChara);
 
-                        CommonMethods.AppMsgBox("Unable to detect fpk header", "Error", MessageBoxIcon.Error);
+                        SharedMethods.AppMsgBox("Unable to detect fpk header", "Error", MessageBoxIcon.Error);
                         StatusTextBox.AppendText("Extraction failed!");
 
                         EnableDisableControls(true);
@@ -204,8 +210,8 @@ namespace Drakengard1and2Extractor
             }
             catch (Exception ex)
             {
-                CommonMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
-                LoggingMethods.LogMessage(CommonMethods.NewLineChara);
+                SharedMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
+                LoggingMethods.LogMessage(SharedMethods.NewLineChara);
                 LoggingMethods.LogException("Exception: " + ex);
             }
         }
@@ -230,9 +236,9 @@ namespace Drakengard1and2Extractor
                     var dpkFile = dpkSelect.FileName;
                     EnableDisableControls(false);
 
-                    var readHeader = CommonMethods.HeaderCheck(dpkFile);
+                    var foundHeader = SharedMethods.GetHeaderString(dpkFile);
 
-                    if (readHeader == "dpk")
+                    if (foundHeader == "dpk")
                     {
                         System.Threading.Tasks.Task.Run(() =>
                         {
@@ -250,9 +256,9 @@ namespace Drakengard1and2Extractor
                     else
                     {
                         StatusTextBox.AppendText("Error: Unable to detect dpk header");
-                        StatusTextBox.AppendText(CommonMethods.NewLineChara);
+                        StatusTextBox.AppendText(SharedMethods.NewLineChara);
 
-                        CommonMethods.AppMsgBox("Unable to detect dpk header", "Error", MessageBoxIcon.Error);
+                        SharedMethods.AppMsgBox("Unable to detect dpk header", "Error", MessageBoxIcon.Error);
                         StatusTextBox.AppendText("Extraction failed!");
 
                         EnableDisableControls(true);
@@ -262,8 +268,8 @@ namespace Drakengard1and2Extractor
             }
             catch (Exception ex)
             {
-                CommonMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
-                LoggingMethods.LogMessage(CommonMethods.NewLineChara);
+                SharedMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
+                LoggingMethods.LogMessage(SharedMethods.NewLineChara);
                 LoggingMethods.LogException("Exception: " + ex);
             }
         }
@@ -288,18 +294,13 @@ namespace Drakengard1and2Extractor
                     var kpsFile = kpsSelect.FileName;
                     EnableDisableControls(false);
 
-                    var readHeader = CommonMethods.HeaderCheck(kpsFile);
+                    var foundHeader = SharedMethods.GetHeaderString(kpsFile);
 
-                    if (readHeader == "KPS_")
+                    if (foundHeader == "KPS_")
                     {
-                        var shiftJISParse = false;
+                        var shiftJISResult = MessageBox.Show("Parse the text data in Japanese Encoding (shift-jis) format ?", "ShiftJIS", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
 
-                        var shiftJISResult = MessageBox.Show("Parse the text data in Japanese Encoding (shift-jis) format ? ", "ShiftJIS", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
-
-                        if (shiftJISResult == DialogResult.Yes)
-                        {
-                            shiftJISParse = true;
-                        }
+                        var shiftJISParse = SharedMethods.SetBoolFromDlgResult(shiftJISResult);
 
                         System.Threading.Tasks.Task.Run(() =>
                         {
@@ -317,9 +318,9 @@ namespace Drakengard1and2Extractor
                     else
                     {
                         StatusTextBox.AppendText("Error: Unable to detect kps header");
-                        StatusTextBox.AppendText(CommonMethods.NewLineChara);
+                        StatusTextBox.AppendText(SharedMethods.NewLineChara);
 
-                        CommonMethods.AppMsgBox("Unable to detect kps header", "Error", MessageBoxIcon.Error);
+                        SharedMethods.AppMsgBox("Unable to detect kps header", "Error", MessageBoxIcon.Error);
                         StatusTextBox.AppendText("Extraction failed!");
 
                         EnableDisableControls(true);
@@ -329,8 +330,8 @@ namespace Drakengard1and2Extractor
             }
             catch (Exception ex)
             {
-                CommonMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
-                LoggingMethods.LogMessage(CommonMethods.NewLineChara);
+                SharedMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
+                LoggingMethods.LogMessage(SharedMethods.NewLineChara);
                 LoggingMethods.LogException("Exception: " + ex);
             }
         }
@@ -366,12 +367,12 @@ namespace Drakengard1and2Extractor
                     var zimFile = zimSelect.FileName;
                     EnableDisableControls(false);
 
-                    var readHeader = CommonMethods.HeaderCheck(zimFile);
+                    var foundHeader = SharedMethods.GetHeaderString(zimFile);
 
-                    if (readHeader == "wZIM")
+                    if (foundHeader == "wZIM")
                     {
                         StatusTextBox.AppendText("Converting " + Path.GetFileName(zimFile) + "....");
-                        StatusTextBox.AppendText(CommonMethods.NewLineChara);
+                        StatusTextBox.AppendText(SharedMethods.NewLineChara);
 
                         using (var bppReader = new BinaryReader(File.Open(zimFile, FileMode.Open, FileAccess.Read)))
                         {
@@ -379,22 +380,22 @@ namespace Drakengard1and2Extractor
 
                             if (bppReader.ReadByte() == 64)
                             {
-                                CommonMethods.AppMsgBox("Detected 4bpp image.\nDo not use the alpha compensation setting when saving the image in png or dds formats.", "Warning", MessageBoxIcon.Warning);
+                                SharedMethods.AppMsgBox("Detected 4bpp image.\nDo not use the alpha compensation setting when saving the image in png or dds formats.", "Warning", MessageBoxIcon.Warning);
                             }
                         }
 
-                        ConverterWindow.IsClosedByConvtBtn = false;
+                        ImgOptions.IsClosedByConvtBtn = false;
                         var converterWindow = new ZIMForm();
                         converterWindow.ShowDialog();
 
-                        if (ConverterWindow.IsClosedByConvtBtn)
+                        if (ImgOptions.IsClosedByConvtBtn)
                         {
                             System.Threading.Tasks.Task.Run(() =>
                             {
                                 try
                                 {
                                     LoggingMethods.LogMessage("Converting....");
-                                    ImgZIM.ConvertZIM(zimFile, ConverterWindow.AlphaIncrease, ConverterWindow.UnswizzlePixels, ConverterWindow.SaveAsIndex, true);
+                                    ImgZIM.ConvertZIM(zimFile, true);
                                 }
                                 finally
                                 {
@@ -411,9 +412,9 @@ namespace Drakengard1and2Extractor
                     else
                     {
                         StatusTextBox.AppendText("Error: Unable to detect zim header");
-                        StatusTextBox.AppendText(CommonMethods.NewLineChara);
+                        StatusTextBox.AppendText(SharedMethods.NewLineChara);
 
-                        CommonMethods.AppMsgBox("Unable to detect zim header", "Error", MessageBoxIcon.Error);
+                        SharedMethods.AppMsgBox("Unable to detect zim header", "Error", MessageBoxIcon.Error);
                         StatusTextBox.AppendText("Conversion failed!");
 
                         EnableDisableControls(true);
@@ -423,8 +424,8 @@ namespace Drakengard1and2Extractor
             }
             catch (Exception ex)
             {
-                CommonMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
-                LoggingMethods.LogMessage(CommonMethods.NewLineChara);
+                SharedMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
+                LoggingMethods.LogMessage(SharedMethods.NewLineChara);
                 LoggingMethods.LogException("Exception: " + ex);
             }
         }
@@ -449,25 +450,25 @@ namespace Drakengard1and2Extractor
                     var spk0File = spk0Select.FileName;
                     EnableDisableControls(false);
 
-                    var readHeader = CommonMethods.HeaderCheck(spk0File);
+                    var foundHeader = SharedMethods.GetHeaderString(spk0File);
 
-                    if (readHeader == "SPK0")
+                    if (foundHeader == "SPK0")
                     {
                         StatusTextBox.AppendText("Converting " + Path.GetFileName(spk0File) + "....");
-                        StatusTextBox.AppendText(CommonMethods.NewLineChara);
+                        StatusTextBox.AppendText(SharedMethods.NewLineChara);
 
-                        ConverterWindow.IsClosedByConvtBtn = false;
+                        ImgOptions.IsClosedByConvtBtn = false;
                         var converterWindow = new SPK0Form();
                         converterWindow.ShowDialog();
 
-                        if (ConverterWindow.IsClosedByConvtBtn)
+                        if (ImgOptions.IsClosedByConvtBtn)
                         {
                             System.Threading.Tasks.Task.Run(() =>
                             {
                                 try
                                 {
                                     LoggingMethods.LogMessage("Converting....");
-                                    ImgSPK0.ConvertSPK0(spk0File, ConverterWindow.AlphaIncrease, ConverterWindow.SaveAsIndex, true);
+                                    ImgSPK0.ConvertSPK0(spk0File, true);
                                 }
                                 finally
                                 {
@@ -484,9 +485,9 @@ namespace Drakengard1and2Extractor
                     else
                     {
                         StatusTextBox.AppendText("Error: Unable to detect spk0 header");
-                        StatusTextBox.AppendText(CommonMethods.NewLineChara);
+                        StatusTextBox.AppendText(SharedMethods.NewLineChara);
 
-                        CommonMethods.AppMsgBox("Unable to detect spk0 header", "Error", MessageBoxIcon.Error);
+                        SharedMethods.AppMsgBox("Unable to detect spk0 header", "Error", MessageBoxIcon.Error);
                         StatusTextBox.AppendText("Conversion failed!");
 
                         EnableDisableControls(true);
@@ -496,46 +497,9 @@ namespace Drakengard1and2Extractor
             }
             catch (Exception ex)
             {
-                CommonMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
-                LoggingMethods.LogMessage(CommonMethods.NewLineChara);
+                SharedMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
+                LoggingMethods.LogMessage(SharedMethods.NewLineChara);
                 LoggingMethods.LogException("Exception: " + ex);
-            }
-        }
-
-
-        public void ChecklzoDll()
-        {
-            var x86DllSha256 = "d414fad15b356f33bf02479bd417d2df767ee102180aae718ef1135146da2884";
-            var x64DllSha256 = "ea006fafb08dd554657b1c81e45c92e88d663aca0c79c48ae1f3dca22e1e2314";
-            string dllBuildHash;
-
-            var appArchitecture = System.Runtime.InteropServices.RuntimeInformation.ProcessArchitecture;
-
-            using (var dllStream = new FileStream("minilzo.dll", FileMode.Open, FileAccess.Read))
-            {
-                using (System.Security.Cryptography.SHA256 dllSHA256 = System.Security.Cryptography.SHA256.Create())
-                {
-                    dllBuildHash = BitConverter.ToString(dllSHA256.ComputeHash(dllStream)).Replace("-", "").ToLower();
-                }
-            }
-
-            switch (appArchitecture)
-            {
-                case System.Runtime.InteropServices.Architecture.X86:
-                    if (!dllBuildHash.Equals(x86DllSha256))
-                    {
-                        CommonMethods.AppMsgBox("Detected incompatible minilz0.dll file.\nPlease check if the dll file included with this build of the app is the correct one.", "Error", MessageBoxIcon.Error);
-                        Environment.Exit(0);
-                    }
-                    break;
-
-                case System.Runtime.InteropServices.Architecture.X64:
-                    if (!dllBuildHash.Equals(x64DllSha256))
-                    {
-                        CommonMethods.AppMsgBox("Detected incompatible minilz0.dll file.\nPlease check if the dll file included with this build of the app is the correct one.", "Error", MessageBoxIcon.Error);
-                        Environment.Exit(0);
-                    }
-                    break;
             }
         }
 
@@ -576,7 +540,8 @@ namespace Drakengard1and2Extractor
             }
             catch (Exception ex)
             {
-                CommonMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
+                SharedMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
+                LoggingMethods.LogException("Exception: " + ex);
             }
         }
     }

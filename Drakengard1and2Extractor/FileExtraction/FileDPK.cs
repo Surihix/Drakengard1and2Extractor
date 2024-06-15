@@ -13,10 +13,10 @@ namespace Drakengard1and2Extractor.FileExtraction
             try
             {
                 var extractDir = Path.GetFullPath(dpkFile) + "_extracted";
-                CommonMethods.IfFileDirExistsDel(extractDir, CommonMethods.DelSwitch.directory);
+                SharedMethods.IfFileDirExistsDel(extractDir, SharedMethods.DelSwitch.directory);
                 Directory.CreateDirectory(extractDir);
 
-                var dpkStructure = new CommonStructures.DPK();
+                var dpkStructure = new SharedStructures.DPK();
 
                 using (FileStream dpkStream = new FileStream(dpkFile, FileMode.Open, FileAccess.Read))
                 {
@@ -48,7 +48,7 @@ namespace Drakengard1and2Extractor.FileExtraction
 
                             using (BinaryReader outFileReader = new BinaryReader(File.Open(currentFile, FileMode.Open, FileAccess.Read)))
                             {
-                                realExtn = CommonMethods.GetFileHeader(outFileReader);
+                                realExtn = SharedMethods.GetFileHeader(outFileReader);
                             }
 
                             File.Move(currentFile, currentFile + realExtn);
@@ -62,7 +62,7 @@ namespace Drakengard1and2Extractor.FileExtraction
 
                                 using (BinaryReader dcmpLz0Reader = new BinaryReader(File.Open(currentFile, FileMode.Open, FileAccess.Read)))
                                 {
-                                    realExtn = CommonMethods.GetFileHeader(dcmpLz0Reader);
+                                    realExtn = SharedMethods.GetFileHeader(dcmpLz0Reader);
                                 }
 
                                 File.Move(currentFile, currentFile + realExtn);
@@ -80,17 +80,17 @@ namespace Drakengard1and2Extractor.FileExtraction
 
                 if (isSingleFile)
                 {
-                    LoggingMethods.LogMessage(CommonMethods.NewLineChara);
+                    LoggingMethods.LogMessage(SharedMethods.NewLineChara);
                     LoggingMethods.LogMessage("Extraction has completed!");
-                    LoggingMethods.LogMessage(CommonMethods.NewLineChara);
+                    LoggingMethods.LogMessage(SharedMethods.NewLineChara);
 
-                    CommonMethods.AppMsgBox("Extracted " + Path.GetFileName(dpkFile) + " file", "Success", MessageBoxIcon.Information);
+                    SharedMethods.AppMsgBox("Extracted " + Path.GetFileName(dpkFile) + " file", "Success", MessageBoxIcon.Information);
                 }
             }
             catch (Exception ex)
             {
-                CommonMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
-                LoggingMethods.LogMessage(CommonMethods.NewLineChara);
+                SharedMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
+                LoggingMethods.LogMessage(SharedMethods.NewLineChara);
                 LoggingMethods.LogException("Exception: " + ex);
             }
         }

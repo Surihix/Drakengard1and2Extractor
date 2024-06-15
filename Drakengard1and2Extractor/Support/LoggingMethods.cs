@@ -24,21 +24,21 @@ namespace Drakengard1and2Extractor.Support
         {
             _statusTxtBox.BeginInvoke((Action)(() =>
             {
-                var lines = _statusTxtBox.Text.Split(CommonMethods.NewLineChara.ToCharArray());
+                var lines = _statusTxtBox.Text.Split(SharedMethods.NewLineChara.ToCharArray());
                 if (lines.Length > 700)
                 {
-                    _statusTxtBox.Text = string.Join(CommonMethods.NewLineChara, lines.Skip(700));
+                    _statusTxtBox.Text = string.Join(SharedMethods.NewLineChara, lines.Skip(700));
                 }
-                _statusTxtBox.AppendText(message + CommonMethods.NewLineChara);
+                _statusTxtBox.AppendText(message + SharedMethods.NewLineChara);
             }));
         }
 
 
         public static void LogException(string exceptionMsg)
         {
-            CommonMethods.AppMsgBox("Exception recorded in 'Exception.txt' file", "Exception", MessageBoxIcon.Warning);
+            SharedMethods.AppMsgBox("Exception recorded in 'Exception.txt' file", "Exception", MessageBoxIcon.Warning);
 
-            var newLineChars = CommonMethods.NewLineChara + CommonMethods.NewLineChara;
+            var newLineChars = SharedMethods.NewLineChara + SharedMethods.NewLineChara;
             File.AppendAllText("Exception.txt", newLineChars + exceptionMsg + newLineChars);
         }
     }

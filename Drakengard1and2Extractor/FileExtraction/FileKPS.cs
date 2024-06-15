@@ -73,7 +73,7 @@ namespace Drakengard1and2Extractor.FileExtraction
                                 writePos += outLineData.Length + 4 + currentLineNoData.Length;
                             }
 
-                            CommonMethods.IfFileDirExistsDel(outTxtFile, CommonMethods.DelSwitch.file);
+                            SharedMethods.IfFileDirExistsDel(outTxtFile, SharedMethods.DelSwitch.file);
 
                             outTxtStream.Seek(0, SeekOrigin.Begin);
                             File.WriteAllBytes(outTxtFile, outTxtStream.ToArray());
@@ -83,17 +83,17 @@ namespace Drakengard1and2Extractor.FileExtraction
 
                 if (isSingleFile)
                 {
-                    LoggingMethods.LogMessage(CommonMethods.NewLineChara);
+                    LoggingMethods.LogMessage(SharedMethods.NewLineChara);
                     LoggingMethods.LogMessage("Extraction has completed!");
-                    LoggingMethods.LogMessage(CommonMethods.NewLineChara);
+                    LoggingMethods.LogMessage(SharedMethods.NewLineChara);
 
-                    CommonMethods.AppMsgBox("Extracted " + Path.GetFileName(kpsFile) + " file", "Success", MessageBoxIcon.Information);
+                    SharedMethods.AppMsgBox("Extracted " + Path.GetFileName(kpsFile) + " file", "Success", MessageBoxIcon.Information);
                 }
             }
             catch (Exception ex)
             {
-                CommonMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
-                LoggingMethods.LogMessage(CommonMethods.NewLineChara);
+                SharedMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
+                LoggingMethods.LogMessage(SharedMethods.NewLineChara);
                 LoggingMethods.LogException("Exception: " + ex);
             }
         }
@@ -101,7 +101,7 @@ namespace Drakengard1and2Extractor.FileExtraction
 
         private static byte[] ParseLineData(bool shiftJISParse, byte[] currentLineData)
         {
-            var outLineData = new byte[] { };
+            byte[] outLineData;
             var processedLineData = new List<byte>();
 
             if (shiftJISParse)
@@ -151,7 +151,7 @@ namespace Drakengard1and2Extractor.FileExtraction
                     }
                     else
                     {
-                        processedLineData.AddRange(_ANSIEncoding.GetBytes("{0x" + b.ToString("X2") + "}"));
+                        processedLineData.AddRange(GetNonStringByteInHex(_ANSIEncoding, b));
                     }
                 }
 
@@ -172,11 +172,17 @@ namespace Drakengard1and2Extractor.FileExtraction
             }
             else
             {
-                processedLineData.AddRange(_ShiftJISEncoding.GetBytes("{0x" + b.ToString("X2") + "}"));
+                processedLineData.AddRange(GetNonStringByteInHex(_ShiftJISEncoding, b));
             }
         }
 
+        private static byte[] GetNonStringByteInHex(Encoding encodingToUse, byte b)
+        {
+            return encodingToUse.GetBytes("#" + b.ToString("X2") + "# ");
+        }
 
+
+        #region Character Checks
         private static bool Check2CharaShiftJIS(byte b1, byte b2)
         {
             var isChara = new bool();
@@ -451,7 +457,6 @@ namespace Drakengard1and2Extractor.FileExtraction
             return isChara;
         }
 
-
         private static bool Check1CharaShiftJIS(byte b)
         {
             var isChara = new bool();
@@ -470,7 +475,6 @@ namespace Drakengard1and2Extractor.FileExtraction
 
             return isChara;
         }
-
 
         private static bool CheckAnsiChara(byte b)
         {
@@ -514,5 +518,6 @@ namespace Drakengard1and2Extractor.FileExtraction
 
             return isChara;
         }
+        #endregion
     }
 }

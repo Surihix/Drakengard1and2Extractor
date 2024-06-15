@@ -1,29 +1,24 @@
 ﻿using Drakengard1and2Extractor.Support;
 using Drakengard1and2Extractor.Support.Lz0Helpers;
 using System;
+using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace Drakengard1and2Extractor.FileExtraction
 {
     internal class FileFPK
     {
-        private static readonly string[] _KnownExtns = new string[]
-        {
-            ".fpk", ".dpk", ".zim", ".lz0", ".kps", ".kvm", ".spk0", ".emt", ".dcmr", ".dlgt", ".hi4", ".hd2", ".spf", 
-            ".chf", ".cmf", ".cff", ".cjf", ".cef"
-        };
-
-        public static void ExtractFPK(string fpkFile, bool isSingleFile)
+        public static void ExtractFPK(string fpkFile, bool generateLstPaths, bool isSingleFile)
         {
             try
             {
                 var extractDir = Path.GetFullPath(fpkFile) + "_extracted";
-                CommonMethods.IfFileDirExistsDel(extractDir, CommonMethods.DelSwitch.directory);
+                SharedMethods.IfFileDirExistsDel(extractDir, SharedMethods.DelSwitch.directory);
                 Directory.CreateDirectory(extractDir);
 
-                var fpkStructure = new CommonStructures.FPK();
+                var fpkStructure = new SharedStructures.FPK();
+                var filesExtractedDict = new Dictionary<string, string>();
 
                 using (FileStream fpkStream = new FileStream(fpkFile, FileMode.Open, FileAccess.Read))
                 {
@@ -36,11 +31,21 @@ namespace Drakengard1and2Extractor.FileExtraction
                         fpkStructure.FPKbinDataOffset = fpkReader.ReadUInt32();
                         fpkStructure.FPKbinDataSize = fpkReader.ReadUInt32();
 
-                        var tmpArchiveFile = Path.Combine(extractDir, "_.archive");
+                        fpkReader.BaseStream.Position = 64;
+                        var binNameInFile = fpkReader.ReadStringTillNull();
+                        binNameInFile = binNameInFile.Replace("/", "").Replace("\\", "");
+                        fpkStructure.FPKbinName = SharedMethods.ModifyString(binNameInFile);
 
-                        CommonMethods.IfFileDirExistsDel(tmpArchiveFile, CommonMethods.DelSwitch.file);
+                        if (fpkStructure.FPKbinName == "")
+                        {
+                            fpkStructure.FPKbinName = fpkStructure.FallBackName;
+                        }
 
-                        using (FileStream fpkDataStream = new FileStream(tmpArchiveFile, FileMode.OpenOrCreate, FileAccess.ReadWrite))
+                        var fpkBinFile = Path.Combine(extractDir, fpkStructure.FPKbinName);
+
+                        SharedMethods.IfFileDirExistsDel(fpkBinFile, SharedMethods.DelSwitch.file);
+
+                        using (FileStream fpkDataStream = new FileStream(fpkBinFile, FileMode.OpenOrCreate, FileAccess.ReadWrite))
                         {
                             fpkStream.Seek(fpkStructure.FPKbinDataOffset, SeekOrigin.Begin);
                             fpkStream.CopyStreamTo(fpkDataStream, fpkStructure.FPKbinDataSize, false);
@@ -62,72 +67,88 @@ namespace Drakengard1and2Extractor.FileExtraction
                                 Array.Reverse(fpkStructure.EntryExtnChars);
 
                                 fileExtn = string.Join("", fpkStructure.EntryExtnChars).Replace("\0", "");
-                                fileExtnFixed = "." + CommonMethods.ModifyExtnString(fileExtn);
+                                fileExtnFixed = "." + SharedMethods.ModifyString(fileExtn);
+
+                                if (fileExtnFixed == ".lst")
+                                {
+                                    fpkStructure.HasLstFile = true;
+                                }
+
+                                if (fileExtn.StartsWith("\\") || fileExtn.StartsWith("/"))
+                                {
+                                    fileExtnFixed = "";
+                                }
 
                                 var currentFile = Path.Combine(extractDir, fName + $"{fileCount}" + fileExtnFixed);
-
-                                if (fileExtnFixed[1] == '/' || fileExtnFixed[1] == '\\')
-                                {
-                                    intialOffset += 16;
-                                    continue;
-                                }
 
                                 using (FileStream outFileStream = new FileStream(currentFile, FileMode.OpenOrCreate, FileAccess.ReadWrite))
                                 {
                                     fpkDataStream.Seek(fpkStructure.EntryDataOffset, SeekOrigin.Begin);
                                     fpkDataStream.CopyStreamTo(outFileStream, fpkStructure.EntryDataSize, false);
 
+                                    tmpExtn = string.Empty;
+
                                     using (BinaryReader outFileReader = new BinaryReader(outFileStream))
                                     {
-                                        tmpExtn = CommonMethods.GetFileHeader(outFileReader);
+                                        tmpExtn = SharedMethods.GetFileHeader(outFileReader);
+                                    }
+
+                                    if (tmpExtn == "")
+                                    {
+                                        tmpExtn = fileExtnFixed;
                                     }
                                 }
 
-                                if (_KnownExtns.Contains(tmpExtn))
+                                var currentTmpFile = Path.Combine(extractDir, fName + $"{fileCount}" + tmpExtn);
+                                File.Move(currentFile, currentTmpFile);
+
+                                if (tmpExtn == ".lz0")
                                 {
-                                    var currentTmpFile = Path.Combine(extractDir, fName + $"{fileCount}" + tmpExtn);
+                                    var dcmpLz0Data = Lz0Decompression.ProcessLz0Data(currentTmpFile);
+                                    var outCurrentFile = Path.Combine(extractDir, fName + $"{fileCount}");
 
-                                    File.Move(currentFile, currentTmpFile);
+                                    File.WriteAllBytes(outCurrentFile, dcmpLz0Data);
+                                    File.Delete(currentTmpFile);
 
-                                    if (tmpExtn == ".lz0")
+                                    using (BinaryReader dcmpLz0Reader = new BinaryReader(File.Open(outCurrentFile, FileMode.Open, FileAccess.Read)))
                                     {
-                                        var dcmpLz0Data = Lz0Decompression.ProcessLz0Data(currentTmpFile);
-                                        var outCurrentFile = Path.Combine(extractDir, fName + $"{fileCount}");
-
-                                        File.WriteAllBytes(outCurrentFile, dcmpLz0Data);
-                                        File.Delete(currentTmpFile);
-
-                                        using (BinaryReader dcmpLz0Reader = new BinaryReader(File.Open(outCurrentFile, FileMode.Open, FileAccess.Read)))
-                                        {
-                                            realExtn = CommonMethods.GetFileHeader(dcmpLz0Reader);
-                                        }
-
-                                        File.Move(outCurrentFile, outCurrentFile + realExtn);
+                                        realExtn = SharedMethods.GetFileHeader(dcmpLz0Reader);
                                     }
+
+                                    File.Move(outCurrentFile, outCurrentFile + realExtn);
+
+                                    filesExtractedDict.Add(fName + fileCount, outCurrentFile + realExtn);
+                                }
+                                else
+                                {
+                                    filesExtractedDict.Add(fName + fileCount, currentTmpFile);
                                 }
 
                                 intialOffset += 16;
                                 fileCount++;
                             }
                         }
-
-                        File.Delete(tmpArchiveFile);
                     }
+                }
+
+                if (generateLstPaths && fpkStructure.HasLstFile)
+                {
+                    LstParser.ProcessLstFile(fpkStructure, isSingleFile, extractDir, filesExtractedDict);
                 }
 
                 if (isSingleFile)
                 {
-                    LoggingMethods.LogMessage(CommonMethods.NewLineChara);
+                    LoggingMethods.LogMessage(SharedMethods.NewLineChara);
                     LoggingMethods.LogMessage("Extraction has completed!");
-                    LoggingMethods.LogMessage(CommonMethods.NewLineChara);
+                    LoggingMethods.LogMessage(SharedMethods.NewLineChara);
 
-                    CommonMethods.AppMsgBox("Extracted " + Path.GetFileName(fpkFile) + " file", "Success", MessageBoxIcon.Information);
+                    SharedMethods.AppMsgBox("Extracted " + Path.GetFileName(fpkFile) + " file", "Success", MessageBoxIcon.Information);
                 }
             }
             catch (Exception ex)
             {
-                CommonMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
-                LoggingMethods.LogMessage(CommonMethods.NewLineChara);
+                SharedMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
+                LoggingMethods.LogMessage(SharedMethods.NewLineChara);
                 LoggingMethods.LogException("Exception: " + ex);
             }
         }

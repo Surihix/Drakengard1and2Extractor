@@ -4,15 +4,15 @@ namespace Drakengard1and2Extractor.Support.ImageHelpers
 {
     internal class BmpPngExporter
     {
-        public static void CreateBmpPng(byte[] pixelData, byte[] paletteData, ImgOptions imgOptions, string outImgPath)
+        public static void CreateBmpPng(byte[] pixelData, byte[] paletteData, string outImgPath)
         {
-            using (Bitmap finalImg = new Bitmap(imgOptions.Width, imgOptions.Height))
+            using (Bitmap finalImg = new Bitmap(ImgOptions.Width, ImgOptions.Height))
             {
-                for (int y = 0; y < imgOptions.Height; y++)
+                for (int y = 0; y < ImgOptions.Height; y++)
                 {
-                    for (int x = 0; x < imgOptions.Width; x++)
+                    for (int x = 0; x < ImgOptions.Width; x++)
                     {
-                        var currentPixel = (y * imgOptions.Width) + x;
+                        var currentPixel = (y * ImgOptions.Width) + x;
                         int palettePos = pixelData[currentPixel];
                         palettePos *= 4;
 
@@ -21,10 +21,10 @@ namespace Drakengard1and2Extractor.Support.ImageHelpers
                         byte blue = paletteData[palettePos + 2];
                         int alpha = paletteData[palettePos + 3];
 
-                        alpha += imgOptions.AlphaIncrease;
-                        if (alpha > 128)
+                        alpha += ImgOptions.AlphaIncrease;
+                        if (alpha > 255)
                         {
-                            alpha = 128;
+                            alpha = 255;
                         }
 
                         var pixelColor = Color.FromArgb(alpha, red, green, blue);
@@ -32,7 +32,7 @@ namespace Drakengard1and2Extractor.Support.ImageHelpers
                     }
                 }
 
-                finalImg.Save(outImgPath, imgOptions.ImageFormat);
+                finalImg.Save(outImgPath, ImgOptions.ImageFormat);
             }
         }
     }

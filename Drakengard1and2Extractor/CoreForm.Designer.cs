@@ -68,7 +68,7 @@
             // 
             this.BINFileExtGrp.Controls.Add(this.Drk2RadioButton);
             this.BINFileExtGrp.Controls.Add(this.Drk1RadioButton);
-            this.BINFileExtGrp.Location = new System.Drawing.Point(13, 31);
+            this.BINFileExtGrp.Location = new System.Drawing.Point(14, 31);
             this.BINFileExtGrp.Name = "BINFileExtGrp";
             this.BINFileExtGrp.Size = new System.Drawing.Size(140, 79);
             this.BINFileExtGrp.TabIndex = 0;

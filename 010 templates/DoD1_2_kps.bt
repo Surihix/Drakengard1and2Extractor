@@ -1,0 +1,61 @@
+//-----------------------------------------------------
+//--- 010 Editor v12.0.1 Binary Template
+//
+//      File: DoD1_2_kps.bt
+//   Authors: Surihix
+//   Version: 1.0
+//   Purpose: Parse Drakengard 1 & 2 kps text files
+//  Category: Drakengard 1 & 2 kps files
+// File Mask: *.kps
+//  ID Bytes: 4B 50 53 5F
+//   History: 
+//   1.0   2024-03-21 Surihix: Initial version
+//-----------------------------------------------------
+
+LittleEndian();
+
+struct FILE
+{
+    char kpsHeader[4]<bgcolor=cDkGreen>;
+    char dateVersion[11]<bgcolor=cDkGreen>;
+    char reserved[5]<bgcolor=cBlack>;
+    uint offsetTable<bgcolor=cDkGreen>;
+    uint linesCount<bgcolor=cDkGreen>;
+
+    local uint bytesTillTable = offsetTable - FTell();
+    char reserved2[bytesTillTable]<bgcolor=cBlack>;
+
+    local int l = 0;
+    local ulong fileLength = FileSize();
+    local ulong nextPos = 0;
+    local uint lineSize;
+
+    for (l = 0; l < linesCount; l++)
+    {
+        struct LINEDATA
+        {
+            uint lineOffset<bgcolor=cDkGreen>;
+            nextPos = FTell();
+
+            if (l == linesCount - 1)
+            {
+                lineSize = fileLength - lineOffset;
+            }
+            else
+            {
+               uint nextOffsetTmp<hidden=true>;
+               lineSize = nextOffsetTmp - lineOffset;
+            }
+ 
+            FSeek(lineOffset);      
+            char line[lineSize]<bgcolor=cLtGreen>;
+
+            if (l != linesCount)
+            {
+               FSeek(nextPos);
+            }
+
+        }lineData<name="Line Data">;
+    }
+
+}file<name="KPS file", open=true>;

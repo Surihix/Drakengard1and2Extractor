@@ -10,6 +10,8 @@
 //  ID Bytes: 66 70 6B
 //   History: 
 //   1.0   2024-03-15 Surihix: Initial version
+//   1.1   2024-06-14 Surihix: Added align offset
+//   1.2   2024-06-15 Surihix: Added fpk type offset
 //---------------------------------------------------
 
 LittleEndian();
@@ -47,14 +49,12 @@ struct FILE
     char magic[4]<bgcolor=cDkGreen>;
     char reserved[4]<bgcolor=cBlack>;    
     uint offsetEntries<bgcolor=cDkGreen>;
+    uint dataAlignPosition<comment="entries start position should be divisible by this value", bgcolor=cDkGreen>;
 
-    uint unk1<hidden=true, bgcolor=cRed>;
-
-    char fpkHeaderData[8]<bgcolor=cDkGreen>;
+    char fpkHeaderData[8]<comment="same in all the files", bgcolor=cDkGreen>;
     uint offsetTableSize<bgcolor=cDkGreen>;
     char reserved2[8]<bgcolor=cBlack>;
-
-    uint unk4<hidden=true, bgcolor=cRed>;
+    uint fpkTypeFlag<comment="0 = large fpk, 1 = small fpk", bgcolor=cDkGreen>;
 
     uint fpkDataStartOffset<bgcolor=cDkGreen>;
     uint fpkDataSize<bgcolor=cDkGreen>;

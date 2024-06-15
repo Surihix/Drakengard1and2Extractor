@@ -33,10 +33,10 @@ namespace Drakengard1and2Extractor.ImageConversion
         }
         private void ConvertSPK0ImgBtn_Click(object sender, EventArgs e)
         {
-            ConverterWindow.SaveAsIndex = Spk0SaveAsComboBox.SelectedIndex;
-            ConverterWindow.AlphaIncrease = (int)Spk0AlphaCompNumericUpDown.Value;
+            ImgOptions.SaveAsIndex = Spk0SaveAsComboBox.SelectedIndex;
+            ImgOptions.AlphaIncrease = (int)Spk0AlphaCompNumericUpDown.Value;
 
-            ConverterWindow.IsClosedByConvtBtn = true;
+            ImgOptions.IsClosedByConvtBtn = true;
 
             Dispose();
             Close();
