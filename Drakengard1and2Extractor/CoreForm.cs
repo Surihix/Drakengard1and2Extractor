@@ -98,6 +98,8 @@ namespace Drakengard1and2Extractor
 
                             SharedMethods.AppMsgBox("This is not a valid Drakengard 1 .bin file", "Error", MessageBoxIcon.Error);
                             StatusTextBox.AppendText("Extraction failed!");
+                            StatusTextBox.AppendText(SharedMethods.NewLineChara);
+                            StatusTextBox.AppendText(SharedMethods.NewLineChara);
 
                             EnableDisableControls(true);
                             return;
@@ -136,6 +138,8 @@ namespace Drakengard1and2Extractor
 
                             SharedMethods.AppMsgBox("This is not a valid Drakengard 2 .bin file", "Error", MessageBoxIcon.Error);
                             StatusTextBox.AppendText("Extraction failed!");
+                            StatusTextBox.AppendText(SharedMethods.NewLineChara);
+                            StatusTextBox.AppendText(SharedMethods.NewLineChara);
 
                             EnableDisableControls(true);
                             return;
@@ -202,6 +206,8 @@ namespace Drakengard1and2Extractor
 
                         SharedMethods.AppMsgBox("Unable to detect fpk header", "Error", MessageBoxIcon.Error);
                         StatusTextBox.AppendText("Extraction failed!");
+                        StatusTextBox.AppendText(SharedMethods.NewLineChara);
+                        StatusTextBox.AppendText(SharedMethods.NewLineChara);
 
                         EnableDisableControls(true);
                         return;
@@ -260,6 +266,8 @@ namespace Drakengard1and2Extractor
 
                         SharedMethods.AppMsgBox("Unable to detect dpk header", "Error", MessageBoxIcon.Error);
                         StatusTextBox.AppendText("Extraction failed!");
+                        StatusTextBox.AppendText(SharedMethods.NewLineChara);
+                        StatusTextBox.AppendText(SharedMethods.NewLineChara);
 
                         EnableDisableControls(true);
                         return;
@@ -322,6 +330,8 @@ namespace Drakengard1and2Extractor
 
                         SharedMethods.AppMsgBox("Unable to detect kps header", "Error", MessageBoxIcon.Error);
                         StatusTextBox.AppendText("Extraction failed!");
+                        StatusTextBox.AppendText(SharedMethods.NewLineChara);
+                        StatusTextBox.AppendText(SharedMethods.NewLineChara);
 
                         EnableDisableControls(true);
                         return;
@@ -416,6 +426,8 @@ namespace Drakengard1and2Extractor
 
                         SharedMethods.AppMsgBox("Unable to detect zim header", "Error", MessageBoxIcon.Error);
                         StatusTextBox.AppendText("Conversion failed!");
+                        StatusTextBox.AppendText(SharedMethods.NewLineChara);
+                        StatusTextBox.AppendText(SharedMethods.NewLineChara);
 
                         EnableDisableControls(true);
                         return;
@@ -489,6 +501,8 @@ namespace Drakengard1and2Extractor
 
                         SharedMethods.AppMsgBox("Unable to detect spk0 header", "Error", MessageBoxIcon.Error);
                         StatusTextBox.AppendText("Conversion failed!");
+                        StatusTextBox.AppendText(SharedMethods.NewLineChara);
+                        StatusTextBox.AppendText(SharedMethods.NewLineChara);
 
                         EnableDisableControls(true);
                         return;
@@ -516,6 +530,8 @@ namespace Drakengard1and2Extractor
             Drk1RadioButton.Enabled = isEnabled;
             Drk2RadioButton.Enabled = isEnabled;
             StatusDelBtn.Enabled = isEnabled;
+            AboutlinkLabel.Enabled = isEnabled;
+            HelpLinkLabel.Enabled = isEnabled;
         }
 
 

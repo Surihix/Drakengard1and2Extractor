@@ -21,7 +21,10 @@ movie bin files have the lst file and if you are extracting a movie bin file, th
 
 
 When you are done selecting a valid bin file, the extraction process should begin and all of the files inside the bin file 
-will extract inside a "BIN-FILENAME_extracted" folder which would be present next to the bin file that you had selected.
+will extract inside a "BIN-FILENAME_extracted" folder which would be present next to the bin file that you had selected. 
+
+A trimmed version of the bin file will be created inside the extracted folder which will be used for the extraction process.
+You need not have to extract this trimmed bin file again with the extract button.
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
