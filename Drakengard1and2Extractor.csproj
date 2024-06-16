@@ -333,7 +333,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>set dllFile=$(SolutionDir)external files\minilz0\$(PlatformName)\minilzo.dll
+    <PostBuildEvent>set dllFile=$(SolutionDir)external files\minilzo files\minilzo_$(PlatformName)\minilzo.dll
 set helpTxt=$(SolutionDir)external files\AppHelp.txt
 
 echo %25dllFile%25
