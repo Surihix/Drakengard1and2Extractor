@@ -8,7 +8,7 @@ This small C# Winforms based GUI app should help in extracting and converting fe
 - Use the minilz0.dll files included in the external files folder along with the *Minilz0Function.cs* file, to use the minilz0 decompressor in your compiled builds.
 - If you want to understand the structure of the files that are supported by this tool, then open the file in 010 hex editor and run the appropriate bt templates present inside the [010 templates folder](https://github.com/Surihix/Drakengard1and2Extractor/tree/master/010%20templates).
 - The following package's classes were used for the modern open folder dialog window:
-<br>**Ookii.Dialogs.WinForms** - https://github.com/ookii-dialogs/ookii-dialogs-winforms/tree/master
+<br>**Ookii.Dialogs.WinForms** - https://github.com/ookii-dialogs/ookii-dialogs-winforms
 
 # Credits
 [**Bartz24**](https://github.com/Bartz24) - for helping with minilzo dll function
