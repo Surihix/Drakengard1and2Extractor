@@ -9,7 +9,7 @@ This small C# Winforms based GUI app should help in extracting and converting fe
 - If you want to understand the structure of the files that are supported by this tool, then open the file in 010 hex editor and run the appropriate bt template present inside the [010 templates folder](https://github.com/Surihix/Drakengard1and2Extractor/tree/master/010%20templates).
 
 # Credits
-<br>[**Bartz24**](https://github.com/Bartz24) - for helping with minilzo dll function
+[**Bartz24**](https://github.com/Bartz24) - for helping with minilzo dll function
 
 # Special Thanks
 [**Joschuka**](https://github.com/Joschuka)
