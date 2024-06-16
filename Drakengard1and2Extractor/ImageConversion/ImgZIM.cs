@@ -31,7 +31,6 @@ namespace Drakengard1and2Extractor.ImageConversion
                     zimReader.BaseStream.Position = 82;
                     var bppFlag = zimReader.ReadByte();
 
-                    // Process pixel data
                     zimStream.Seek(352, SeekOrigin.Begin);
                     byte[] pixelsBuffer = new byte[pixelSize];
                     _ = zimStream.Read(pixelsBuffer, 0, pixelsBuffer.Length);
@@ -52,7 +51,6 @@ namespace Drakengard1and2Extractor.ImageConversion
                         finalizedPixels = pixelsBuffer;
                     }
 
-                    // Process palette data
                     zimStream.Seek(paletteSection + 160, SeekOrigin.Begin);
                     byte[] paletteBuffer = new byte[palSize];
                     _ = zimStream.Read(paletteBuffer, 0, paletteBuffer.Length);
@@ -67,8 +65,7 @@ namespace Drakengard1and2Extractor.ImageConversion
                         finalizedPalette = paletteBuffer;
                     }
 
-                    // Convert according to the
-                    // specified format
+
                     string outImgPath;
                     switch (ImgOptions.SaveAsIndex)
                     {
@@ -100,6 +97,7 @@ namespace Drakengard1and2Extractor.ImageConversion
 
             if (isSingleFile)
             {
+                LoggingMethods.LogMessage(SharedMethods.NewLineChara);
                 LoggingMethods.LogMessage("Conversion has completed!");
                 LoggingMethods.LogMessage(SharedMethods.NewLineChara);
 

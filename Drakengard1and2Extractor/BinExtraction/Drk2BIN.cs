@@ -102,6 +102,7 @@ namespace Drakengard1and2Extractor.BinExtraction
 
                 LoggingMethods.LogMessage(SharedMethods.NewLineChara);
                 LoggingMethods.LogMessage("Extraction has completed!");
+                LoggingMethods.LogMessage(SharedMethods.NewLineChara);
 
                 SharedMethods.AppMsgBox("Extracted " + Path.GetFileName(mainBinFile) + " file", "Success", MessageBoxIcon.Information);
             }
