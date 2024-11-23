@@ -35,13 +35,22 @@ namespace Drakengard1and2Extractor.ImageConversion
                     byte[] pixelsBuffer = new byte[pixelSize];
                     _ = zimStream.Read(pixelsBuffer, 0, pixelsBuffer.Length);
 
-                    if (ImgOptions.UnswizzlePixels && bppFlag == 48)
+                    if (ImgOptions.UnswizzlePixels)
                     {
-                        byte[] unswizzledPixelsBuffer = PS2Unswizzlers.UnswizzlePixels(pixelsBuffer);
-                        pixelsBuffer = unswizzledPixelsBuffer;
+                        if (bppFlag == 48)
+                        {
+                            byte[] unswizzledPixelsBuffer = PS2Unswizzlers.UnswizzlePixels8bpp(pixelsBuffer);
+                            pixelsBuffer = unswizzledPixelsBuffer;
+                        }
+                        else
+                        {
+                            byte[] unswizzledPixelsBuffer = PS2Unswizzlers.UnswizzlePixels4bpp(pixelsBuffer);
+                            pixelsBuffer = unswizzledPixelsBuffer;
+                        }
                     }
 
                     byte[] finalizedPixels = new byte[pixelSize];
+
                     if (bppFlag == 64)
                     {
                         finalizedPixels = ConvertPixelsTo8Bpp(pixelsBuffer);

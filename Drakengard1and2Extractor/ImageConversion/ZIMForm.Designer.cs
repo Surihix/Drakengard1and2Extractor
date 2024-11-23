@@ -100,9 +100,9 @@
             this.UnSwizzleCheckBox.AutoSize = true;
             this.UnSwizzleCheckBox.Location = new System.Drawing.Point(15, 107);
             this.UnSwizzleCheckBox.Name = "UnSwizzleCheckBox";
-            this.UnSwizzleCheckBox.Size = new System.Drawing.Size(155, 17);
+            this.UnSwizzleCheckBox.Size = new System.Drawing.Size(128, 17);
             this.UnSwizzleCheckBox.TabIndex = 6;
-            this.UnSwizzleCheckBox.Text = "Unswizzle 8bpp image data";
+            this.UnSwizzleCheckBox.Text = "Unswizzle image data";
             this.UnSwizzleCheckBox.UseVisualStyleBackColor = true;
             this.UnSwizzleCheckBox.MouseHover += new System.EventHandler(this.UnSwizzleCheckBox_MouseHover);
             // 
