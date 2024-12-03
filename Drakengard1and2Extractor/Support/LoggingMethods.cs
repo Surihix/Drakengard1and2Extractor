@@ -7,29 +7,53 @@ namespace Drakengard1and2Extractor.Support
 {
     internal class LoggingMethods
     {
-        private static TextBox _statusTxtBox { get; set; }
+        private static TextBox StatusTxtBox { get; set; }
+        private static string LastMessage { get; set; }
+
 
         public static void SetCoreFormStatusBox()
         {
-            _statusTxtBox = Application.OpenForms["CoreForm"].Controls["StatusTextBox"] as TextBox;
+            StatusTxtBox = Application.OpenForms["CoreForm"].Controls["StatusTextBox"] as TextBox;
         }
 
         public static void SetBatchFormStatusBox()
         {
-            _statusTxtBox = Application.OpenForms["BatchForm"].Controls["BatchStatusTextBox"] as TextBox;
+            StatusTxtBox = Application.OpenForms["BatchForm"].Controls["BatchStatusTextBox"] as TextBox;
         }
 
 
         public static void LogMessage(string message)
         {
-            _statusTxtBox.BeginInvoke((Action)(() =>
+            StatusTxtBox.Invoke((Action)(() =>
             {
-                var lines = _statusTxtBox.Text.Split(SharedMethods.NewLineChara.ToCharArray());
+                var lines = StatusTxtBox.Text.Split(SharedMethods.NewLineChara.ToCharArray());
                 if (lines.Length > 700)
                 {
-                    _statusTxtBox.Text = string.Join(SharedMethods.NewLineChara, lines.Skip(700));
+                    StatusTxtBox.Text = string.Join(SharedMethods.NewLineChara, lines.Skip(700));
                 }
-                _statusTxtBox.AppendText(message + SharedMethods.NewLineChara);
+                StatusTxtBox.AppendText(message + SharedMethods.NewLineChara);
+                StatusTxtBox.ScrollToCaret();
+            }));
+        }
+
+
+        public static void LogMessageConstant(string message)
+        {
+            StatusTxtBox.Invoke((Action)(() =>
+            {
+                var text = StatusTxtBox.Text;
+
+                if (LastMessage != null)
+                {
+                    text = text.Replace(LastMessage, "");
+                }
+
+                LastMessage = message;
+                text += message;
+
+                StatusTxtBox.Text = text;
+                StatusTxtBox.SelectionStart = StatusTxtBox.Text.Length;
+                StatusTxtBox.ScrollToCaret();
             }));
         }
 

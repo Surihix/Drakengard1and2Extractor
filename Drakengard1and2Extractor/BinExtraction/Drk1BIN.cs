@@ -148,7 +148,7 @@ namespace Drakengard1and2Extractor.BinExtraction
                                     }
                                 }
 
-                                LoggingMethods.LogMessage($"Extracted '{fname}{fileCount}'");
+                                LoggingMethods.LogMessageConstant($"Extracted '{fname}{fileCount}'");
 
                                 intialOffset += 16;
                                 fileCount++;
