@@ -536,6 +536,7 @@ namespace Drakengard1and2Extractor
             ExtFpkBtn.Enabled = isEnabled;
             ExtDpkBtn.Enabled = isEnabled;
             ExtKpsBtn.Enabled = isEnabled;
+            RpkToolsBtn.Enabled = isEnabled;
             BatchModeBtn.Enabled = isEnabled;
             ConvertZIMBtn.Enabled = isEnabled;
             ConvertSPK0Btn.Enabled = isEnabled;
