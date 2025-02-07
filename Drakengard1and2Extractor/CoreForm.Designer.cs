@@ -57,6 +57,8 @@
             this.StatusTextBox = new System.Windows.Forms.TextBox();
             this.StatusDelBtn = new System.Windows.Forms.Button();
             this.KPStoolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.RpkToolsBtn = new System.Windows.Forms.Button();
+            this.RpkToolsToolTip = new System.Windows.Forms.ToolTip(this.components);
             this.BINFileExtGrp.SuspendLayout();
             this.FileExtGrp.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.AppPictureBox)).BeginInit();
@@ -157,7 +159,7 @@
             // BatchModeBtn
             // 
             this.BatchModeBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.BatchModeBtn.Location = new System.Drawing.Point(238, 334);
+            this.BatchModeBtn.Location = new System.Drawing.Point(242, 390);
             this.BatchModeBtn.Name = "BatchModeBtn";
             this.BatchModeBtn.Size = new System.Drawing.Size(91, 36);
             this.BatchModeBtn.TabIndex = 2;
@@ -282,11 +284,24 @@
             this.StatusDelBtn.UseVisualStyleBackColor = true;
             this.StatusDelBtn.Click += new System.EventHandler(this.StatusDelBtn_Click);
             // 
+            // RpkToolsBtn
+            // 
+            this.RpkToolsBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.RpkToolsBtn.Location = new System.Drawing.Point(229, 312);
+            this.RpkToolsBtn.Name = "RpkToolsBtn";
+            this.RpkToolsBtn.Size = new System.Drawing.Size(115, 36);
+            this.RpkToolsBtn.TabIndex = 12;
+            this.RpkToolsBtn.Text = "Repack tools";
+            this.RpkToolsBtn.UseVisualStyleBackColor = true;
+            this.RpkToolsBtn.Click += new System.EventHandler(this.RpkToolsBtn_Click);
+            this.RpkToolsBtn.MouseHover += new System.EventHandler(this.RpkToolsBtn_MouseHover);
+            // 
             // CoreForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(381, 683);
+            this.Controls.Add(this.RpkToolsBtn);
             this.Controls.Add(this.StatusDelBtn);
             this.Controls.Add(this.BatchModeBtn);
             this.Controls.Add(this.StatusTextBox);
@@ -343,6 +358,8 @@
         private System.Windows.Forms.Button ExtKpsBtn;
         private System.Windows.Forms.Button StatusDelBtn;
         private System.Windows.Forms.ToolTip KPStoolTip;
+        private System.Windows.Forms.Button RpkToolsBtn;
+        private System.Windows.Forms.ToolTip RpkToolsToolTip;
     }
 }
 

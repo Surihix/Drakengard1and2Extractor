@@ -1,4 +1,5 @@
 ﻿using Drakengard1and2Extractor.BinExtraction;
+using Drakengard1and2Extractor.Drakengard1and2Extractor.FileRepack;
 using Drakengard1and2Extractor.FileExtraction;
 using Drakengard1and2Extractor.ImageConversion;
 using Drakengard1and2Extractor.Support;
@@ -344,6 +345,17 @@ namespace Drakengard1and2Extractor
                 LoggingMethods.LogMessage(SharedMethods.NewLineChara);
                 LoggingMethods.LogException("Exception: " + ex);
             }
+        }
+
+
+        private void RpkToolsBtn_MouseHover(object sender, EventArgs e)
+        {
+            RpkToolsToolTip.Show("Open Repack tools window (experimental)", RpkToolsBtn);
+        }
+        private void RpkToolsBtn_Click(object sender, EventArgs e)
+        {
+            var repackToolsForm = new RepackForm();
+            repackToolsForm.ShowDialog();
         }
 
 

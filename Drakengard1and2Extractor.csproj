@@ -128,6 +128,14 @@
       <DependentUpon>BatchForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Drakengard1and2Extractor\FileExtraction\FileKPS.cs" />
+    <Compile Include="Drakengard1and2Extractor\RepackForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Drakengard1and2Extractor\RepackForm.Designer.cs">
+      <DependentUpon>RepackForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Drakengard1and2Extractor\FileRepack\RpkFPK.cs" />
+    <Compile Include="Drakengard1and2Extractor\FileRepack\RpkTXTtoKPS.cs" />
     <Compile Include="Drakengard1and2Extractor\ImageConversion\ImgSPK0.cs" />
     <Compile Include="Drakengard1and2Extractor\ImageConversion\ImgZIM.cs" />
     <Compile Include="Drakengard1and2Extractor\ImageConversion\ZIMForm.cs">
@@ -278,6 +286,9 @@
       <DependentUpon>ProgressDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\Properties\Resources.resx" />
+    <EmbeddedResource Include="Drakengard1and2Extractor\RepackForm.resx">
+      <DependentUpon>RepackForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>
