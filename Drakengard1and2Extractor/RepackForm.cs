@@ -1,5 +1,7 @@
 ﻿using Drakengard1and2Extractor.Support;
+using Ookii.Dialogs.WinForms;
 using System;
+using System.IO;
 using System.Windows.Forms;
 
 namespace Drakengard1and2Extractor.FileRepack
@@ -9,6 +11,8 @@ namespace Drakengard1and2Extractor.FileRepack
         public RepackForm()
         {
             InitializeComponent();
+
+            Drk1RadioButton.Checked = true;
 
             RepackStatusTextBox.BackColor = System.Drawing.SystemColors.Window;
         }
@@ -35,7 +39,50 @@ namespace Drakengard1and2Extractor.FileRepack
         }
         private void RpkFpkBtn_Click(object sender, EventArgs e)
         {
+            try
+            {
+                var fpkSelect = new OpenFileDialog
+                {
+                    Filter = "FPK type files (*.fpk)" + $"|*.fpk",
+                    RestoreDirectory = true
+                };
 
+                if (fpkSelect.ShowDialog() == DialogResult.OK)
+                {
+                    var fpkDirSelect = new VistaFolderBrowserDialog
+                    {
+                        Description = "Select the unpacked fpk folder",
+                        UseDescriptionForTitle = true
+                    };
+
+                    var currentWindow = (RepackForm)Application.OpenForms[1];
+                    if (fpkDirSelect.ShowDialog(currentWindow.Handle) == true)
+                    {
+                        var fpkFile = fpkSelect.FileName;
+                        var fpkDir = fpkDirSelect.SelectedPath;
+                        EnableDisableControls(false);
+
+                        System.Threading.Tasks.Task.Run(() =>
+                        {
+                            try
+                            {
+                                LoggingMethods.LogMessage("Extracting files from " + Path.GetFileName(fpkFile) + "....");
+                                RpkFPK.RepackFPK(fpkFile, fpkDir);
+                            }
+                            finally
+                            {
+                                BeginInvoke(new Action(() => EnableDisableControls(true)));
+                            }
+                        });
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                SharedMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
+                LoggingMethods.LogMessage(SharedMethods.NewLineChara);
+                LoggingMethods.LogException("Exception: " + ex);
+            }
         }
 
 
