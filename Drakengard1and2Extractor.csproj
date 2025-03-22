@@ -128,6 +128,7 @@
       <DependentUpon>BatchForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Drakengard1and2Extractor\FileExtraction\FileKPS.cs" />
+    <Compile Include="Drakengard1and2Extractor\FileRepack\RpkDPK.cs" />
     <Compile Include="Drakengard1and2Extractor\RepackForm.cs">
       <SubType>Form</SubType>
     </Compile>

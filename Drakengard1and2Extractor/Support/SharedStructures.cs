@@ -5,6 +5,8 @@
         public class FPK
         {
             public uint EntryCount;
+            public uint HeaderSize;
+            public uint EntryTableSize;
             public uint FPKbinDataOffset;
             public uint FPKbinDataSize;
             public string FPKbinName;

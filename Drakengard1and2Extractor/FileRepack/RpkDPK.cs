@@ -1,6 +1,6 @@
 ﻿namespace Drakengard1and2Extractor.FileRepack
 {
-    internal class RpkFPK
+    internal class RpkDPK
     {
 
     }

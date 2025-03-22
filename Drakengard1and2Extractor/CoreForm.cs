@@ -1,5 +1,5 @@
 ﻿using Drakengard1and2Extractor.BinExtraction;
-using Drakengard1and2Extractor.Drakengard1and2Extractor.FileRepack;
+using Drakengard1and2Extractor.FileRepack;
 using Drakengard1and2Extractor.FileExtraction;
 using Drakengard1and2Extractor.ImageConversion;
 using Drakengard1and2Extractor.Support;
@@ -160,7 +160,6 @@ namespace Drakengard1and2Extractor
         private void ExtFpkBtn_MouseHover(object sender, EventArgs e)
         {
             FPKtoolTip.Show("Extract a .fpk file.", ExtFpkBtn);
-
         }
         private void ExtFpkBtn_Click(object sender, EventArgs e)
         {

@@ -21,6 +21,11 @@ namespace Drakengard1and2Extractor.Support
             StatusTxtBox = Application.OpenForms["BatchForm"].Controls["BatchStatusTextBox"] as TextBox;
         }
 
+        public static void SetRepackFormStatusBox()
+        {
+            StatusTxtBox = Application.OpenForms["RepackForm"].Controls["RepackStatusTextBox"] as TextBox;
+        }
+
 
         public static void LogMessage(string message)
         {
