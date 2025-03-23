@@ -127,6 +127,8 @@
     <Compile Include="Drakengard1and2Extractor\BatchForm.Designer.cs">
       <DependentUpon>BatchForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Drakengard1and2Extractor\BinRepack\RpkDrk2BIN.cs" />
+    <Compile Include="Drakengard1and2Extractor\BinRepack\RpkDrk1BIN.cs" />
     <Compile Include="Drakengard1and2Extractor\FileExtraction\FileKPS.cs" />
     <Compile Include="Drakengard1and2Extractor\FileRepack\RpkDPK.cs" />
     <Compile Include="Drakengard1and2Extractor\RepackForm.cs">
@@ -136,7 +138,7 @@
       <DependentUpon>RepackForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Drakengard1and2Extractor\FileRepack\RpkFPK.cs" />
-    <Compile Include="Drakengard1and2Extractor\FileRepack\RpkTXTtoKPS.cs" />
+    <Compile Include="Drakengard1and2Extractor\FileRepack\RpkKPS.cs" />
     <Compile Include="Drakengard1and2Extractor\ImageConversion\ImgSPK0.cs" />
     <Compile Include="Drakengard1and2Extractor\ImageConversion\ImgZIM.cs" />
     <Compile Include="Drakengard1and2Extractor\ImageConversion\ZIMForm.cs">

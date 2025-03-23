@@ -2,11 +2,11 @@
 using System;
 using System.Windows.Forms;
 
-namespace Drakengard1and2Extractor.FileRepack
+namespace Drakengard1and2Extractor.BinRepack
 {
-    internal class RpkDPK
+    internal class RpkDrk1BIN
     {
-        public static void RepackDPK(string dpkFile, string unpackedDpkDir)
+        public static void RepackBin(string mbinFile, string unpackedMbinDir)
         {
             try
             {

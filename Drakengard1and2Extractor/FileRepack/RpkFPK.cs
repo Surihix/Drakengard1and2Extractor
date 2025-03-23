@@ -11,7 +11,12 @@ namespace Drakengard1and2Extractor.FileRepack
         {
             try
             {
+                var unpackedFilesInDir = Directory.GetFiles(unpackedFpkDir, "*.*", SearchOption.TopDirectoryOnly);
+                var processLimit = unpackedFilesInDir.Length - 1;
+                var unpackedFilesDict = SharedMethods.GetFilesInDirForRepack(unpackedFilesInDir, processLimit);
+
                 var fpkStructure = new SharedStructures.FPK();
+                var hasRepacked = false;
 
                 using (BinaryReader fpkReader = new BinaryReader(File.Open(fpkFile, FileMode.Open, FileAccess.Read)))
                 {
@@ -31,72 +36,138 @@ namespace Drakengard1and2Extractor.FileRepack
 
                     var entryTableOffset = fpkStructure.FPKbinName == "image.bin" ? 160 : 128;
 
-                    using (MemoryStream newFpkStream = new MemoryStream())
+                    if (unpackedFilesDict.Keys.Count >= fpkStructure.EntryCount)
                     {
-                        using (BinaryWriter newFpkWriter = new BinaryWriter(newFpkStream))
+                        using (MemoryStream newFpkHeaderStream = new MemoryStream())
                         {
-                            newFpkWriter.BaseStream.Position = 0;
-                            newFpkWriter.Write(System.Text.Encoding.UTF8.GetBytes(fpkStructure.FPKMagic));
-                            newFpkWriter.Write(fpkStructure.Reserved);
-                            newFpkWriter.Write(fpkStructure.EntryCount);
-                            newFpkWriter.Write(fpkStructure.EntryAlignPosition);
-                            newFpkWriter.Write(fpkStructure.FpkHeaderSize);
-                            newFpkWriter.Write(fpkStructure.FpkHeaderSize);
-                            newFpkWriter.Write(fpkStructure.EntryTableSize);
-                            newFpkWriter.Write(fpkStructure.Reserved2);
-                            newFpkWriter.Write(fpkStructure.FPKtypeFlag);
-                            newFpkWriter.Write(fpkStructure.FPKbinDataOffset);
-                            newFpkWriter.Write((uint)0);
-                            newFpkWriter.Write(fpkStructure.Reserved3);
-                            newFpkWriter.Write(System.Text.Encoding.UTF8.GetBytes(fpkStructure.FPKbinName));
-
-                            newFpkWriter.BaseStream.PadNull(entryTableOffset - newFpkWriter.BaseStream.Position);
-                            
-                            fpkReader.BaseStream.Position = entryTableOffset;
-                            string fileExtn;
-                            string fileExtnFixed;
-                            var fName = "FILE_";
-
-                            for (int e = 1; e < fpkStructure.EntryCount + 1; e++)
+                            using (BinaryWriter newFpkHeaderWriter = new BinaryWriter(newFpkHeaderStream))
                             {
-                                fpkReader.BaseStream.Position += 12;
-                                fpkStructure.EntryExtnChars = fpkReader.ReadChars(4);
-                                Array.Reverse(fpkStructure.EntryExtnChars);
+                                newFpkHeaderWriter.BaseStream.Position = 0;
+                                newFpkHeaderWriter.Write(System.Text.Encoding.UTF8.GetBytes(fpkStructure.FPKMagic));
+                                newFpkHeaderWriter.Write(fpkStructure.Reserved);
+                                newFpkHeaderWriter.Write(fpkStructure.EntryCount);
+                                newFpkHeaderWriter.Write(fpkStructure.EntryAlignPosition);
+                                newFpkHeaderWriter.Write(fpkStructure.FpkHeaderSize);
+                                newFpkHeaderWriter.Write(fpkStructure.FpkHeaderSize2);
+                                newFpkHeaderWriter.Write(fpkStructure.EntryTableSize);
+                                newFpkHeaderWriter.Write(fpkStructure.Reserved2);
+                                newFpkHeaderWriter.Write(fpkStructure.FPKtypeFlag);
+                                newFpkHeaderWriter.Write(fpkStructure.FPKbinDataOffset);
+                                newFpkHeaderWriter.Write((uint)0);
+                                newFpkHeaderWriter.Write(fpkStructure.Reserved3);
+                                newFpkHeaderWriter.Write(System.Text.Encoding.UTF8.GetBytes(fpkStructure.FPKbinName));
 
-                                fileExtn = string.Join("", fpkStructure.EntryExtnChars).Replace("\0", "");
-                                fileExtnFixed = "." + SharedMethods.ModifyString(fileExtn);
+                                newFpkHeaderWriter.BaseStream.PadNull(entryTableOffset - newFpkHeaderWriter.BaseStream.Position);
 
-                                if (fileExtn.StartsWith("\\") || fileExtn.StartsWith("/"))
+                                fpkReader.BaseStream.Position = entryTableOffset;
+
+                                using (MemoryStream newFpkStream = new MemoryStream())
                                 {
-                                    fileExtnFixed = "";
-                                }
+                                    newFpkHeaderWriter.BaseStream.Position = entryTableOffset;
+                                    string currentKey;
+                                    long currentOffset = 0;
 
-                                var currentFile = Path.Combine(unpackedFpkDir, fName + $"{e}" + fileExtnFixed);
+                                    for (int e = 1; e < fpkStructure.EntryCount + 1; e++)
+                                    {
+                                        if (e != 1)
+                                        {
+                                            PadFixedAmountOfBytes(ref currentOffset, fpkStructure.EntryAlignPosition, newFpkStream);
+                                        }
 
-                                if (!File.Exists(currentFile))
-                                {
-                                    
-                                }
-                                else
-                                {
+                                        currentKey = $"FILE_{e}";
+                                        var currentFile = unpackedFilesDict[currentKey];
 
+                                        fpkStructure.EntryDataOffset = (uint)currentOffset;
+                                        fpkStructure.EntryDataSize = (uint)new FileInfo(currentFile).Length;
+
+                                        using (var currentFileStream = new FileStream(currentFile, FileMode.Open, FileAccess.Read))
+                                        {
+                                            currentFileStream.Seek(0, SeekOrigin.Begin);
+                                            currentFileStream.CopyStreamTo(newFpkStream, fpkStructure.EntryDataSize, false);
+                                        }
+
+                                        newFpkHeaderWriter.Write(fpkReader.ReadUInt32());
+                                        newFpkHeaderWriter.Write(fpkStructure.EntryDataOffset);
+                                        newFpkHeaderWriter.Write(fpkStructure.EntryDataSize);
+                                        fpkReader.BaseStream.Position += 8;
+
+                                        if (entryTableOffset == 128)
+                                        {
+                                            newFpkHeaderWriter.Write(fpkReader.ReadUInt32());
+                                        }
+                                        else
+                                        {
+                                            _ = fpkReader.ReadUInt32();
+                                            newFpkHeaderWriter.Write((uint)0);
+                                        }
+
+                                        currentOffset = newFpkStream.Position;
+                                    }
+
+                                    PadFixedAmountOfBytes(ref currentOffset, fpkStructure.EntryAlignPosition, newFpkStream);
+
+                                    newFpkHeaderWriter.BaseStream.PadNull(fpkStructure.FPKbinDataOffset - newFpkHeaderWriter.BaseStream.Position);
+
+                                    newFpkHeaderWriter.BaseStream.Position = 44;
+                                    newFpkHeaderWriter.Write((uint)newFpkStream.Length);
+
+                                    using (var newFpkFileStream = new FileStream(fpkFile + ".new", FileMode.Append, FileAccess.Write))
+                                    {
+                                        newFpkHeaderStream.Seek(0, SeekOrigin.Begin);
+                                        newFpkHeaderStream.CopyTo(newFpkFileStream);
+
+                                        newFpkStream.Seek(0, SeekOrigin.Begin);
+                                        newFpkStream.CopyTo(newFpkFileStream);
+                                    }
                                 }
                             }
                         }
+
+                        hasRepacked = true;
                     }
                 }
 
-                LoggingMethods.LogMessage(SharedMethods.NewLineChara);
-                LoggingMethods.LogMessage("Repacking has completed!");
-                LoggingMethods.LogMessage(SharedMethods.NewLineChara);
+                if (hasRepacked)
+                {
+                    SharedMethods.IfFileDirExistsDel(fpkFile + ".old", SharedMethods.DelSwitch.file);
+                    File.Move(fpkFile, fpkFile + ".old");
+                    File.Move(fpkFile + ".new", fpkFile);
 
-                SharedMethods.AppMsgBox("Repacked " + Path.GetFileName(fpkFile) + " file", "Success", MessageBoxIcon.Information);
+                    LoggingMethods.LogMessage(SharedMethods.NewLineChara);
+                    LoggingMethods.LogMessage("Repacking has completed!");
+                    LoggingMethods.LogMessage(SharedMethods.NewLineChara);
+
+                    SharedMethods.AppMsgBox("Repacked " + Path.GetFileName(fpkFile) + " file", "Success", MessageBoxIcon.Information);
+                }
+                else
+                {
+                    LoggingMethods.LogMessage(SharedMethods.NewLineChara);
+                    LoggingMethods.LogMessage("Missing files. Repacking failed!");
+                    LoggingMethods.LogMessage(SharedMethods.NewLineChara);
+                }
             }
             catch (Exception ex)
             {
                 SharedMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
                 LoggingMethods.LogMessage(SharedMethods.NewLineChara);
                 LoggingMethods.LogException("Exception: " + ex);
+            }
+        }
+
+
+        private static void PadFixedAmountOfBytes(ref long offset, uint padValue, Stream streamToPad)
+        {
+            if (offset % padValue != 0)
+            {
+                var remainder = offset % padValue;
+                var increaseBytes = padValue - remainder;
+                var newPos = offset + increaseBytes;
+                var nullBytesAmount = newPos - offset;
+
+                streamToPad.Seek(offset, SeekOrigin.Begin);
+                streamToPad.PadNull(nullBytesAmount);
+
+                offset = streamToPad.Position;
             }
         }
     }

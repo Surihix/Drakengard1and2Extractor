@@ -1,12 +1,16 @@
 ﻿using Drakengard1and2Extractor.Support;
 using System;
+using System.Text;
 using System.Windows.Forms;
 
 namespace Drakengard1and2Extractor.FileRepack
 {
-    internal class RpkDPK
+    internal class RpkKPS
     {
-        public static void RepackDPK(string dpkFile, string unpackedDpkDir)
+        private static readonly Encoding _ShiftJISEncoding = Encoding.GetEncoding(932);
+        private static readonly Encoding _ANSIEncoding = Encoding.GetEncoding(1252);
+
+        public static void RepackKPS(string txtFile, bool shiftJISParse)
         {
             try
             {
