@@ -208,7 +208,7 @@ namespace Drakengard1and2Extractor.Support
         }
 
 
-        public static Dictionary<string, string> GetFilesInDirForRepack(string[] unpackedFilesInDir, int processLimit)
+        public static Dictionary<string, string> GetFilesInDirForRepack(string[] unpackedFilesInDir, uint processLimit)
         {
             var filesInDirDict = new Dictionary<string, string>();
             
@@ -238,6 +238,23 @@ namespace Drakengard1and2Extractor.Support
             }
 
             return filesInDirDict;
+        }
+
+
+        public static void PadFixedAmountOfBytes(ref long offset, uint padValue, Stream streamToPad)
+        {
+            if (offset % padValue != 0)
+            {
+                var remainder = offset % padValue;
+                var increaseBytes = padValue - remainder;
+                var newPos = offset + increaseBytes;
+                var nullBytesAmount = newPos - offset;
+
+                streamToPad.Seek(offset, SeekOrigin.Begin);
+                streamToPad.PadNull(nullBytesAmount);
+
+                offset = streamToPad.Position;
+            }
         }
     }
 }

@@ -11,10 +11,6 @@ namespace Drakengard1and2Extractor.FileRepack
         {
             try
             {
-                var unpackedFilesInDir = Directory.GetFiles(unpackedFpkDir, "*.*", SearchOption.TopDirectoryOnly);
-                var processLimit = unpackedFilesInDir.Length - 1;
-                var unpackedFilesDict = SharedMethods.GetFilesInDirForRepack(unpackedFilesInDir, processLimit);
-
                 var fpkStructure = new SharedStructures.FPK();
                 var hasRepacked = false;
 
@@ -23,8 +19,8 @@ namespace Drakengard1and2Extractor.FileRepack
                     fpkReader.BaseStream.Position = 8;
                     fpkStructure.EntryCount = fpkReader.ReadUInt32();
                     fpkStructure.EntryAlignPosition = fpkReader.ReadUInt32();
-                    fpkStructure.FpkHeaderSize = fpkReader.ReadUInt32();
-                    fpkStructure.FpkHeaderSize2 = fpkReader.ReadUInt32();
+                    fpkStructure.FPKHeaderSize = fpkReader.ReadUInt32();
+                    fpkStructure.FPKHeaderSize2 = fpkReader.ReadUInt32();
                     fpkStructure.EntryTableSize = fpkReader.ReadUInt32();
 
                     fpkReader.BaseStream.Position += 8;
@@ -34,7 +30,10 @@ namespace Drakengard1and2Extractor.FileRepack
                     fpkReader.BaseStream.Position += 20;
                     fpkStructure.FPKbinName = fpkReader.ReadStringTillNull();
 
-                    var entryTableOffset = fpkStructure.FPKbinName == "image.bin" ? 160 : 128;
+                    var entryTableOffset = 128;
+
+                    var unpackedFilesInDir = Directory.GetFiles(unpackedFpkDir, "*.*", SearchOption.TopDirectoryOnly);
+                    var unpackedFilesDict = SharedMethods.GetFilesInDirForRepack(unpackedFilesInDir, fpkStructure.EntryCount);
 
                     if (unpackedFilesDict.Keys.Count >= fpkStructure.EntryCount)
                     {
@@ -47,8 +46,8 @@ namespace Drakengard1and2Extractor.FileRepack
                                 newFpkHeaderWriter.Write(fpkStructure.Reserved);
                                 newFpkHeaderWriter.Write(fpkStructure.EntryCount);
                                 newFpkHeaderWriter.Write(fpkStructure.EntryAlignPosition);
-                                newFpkHeaderWriter.Write(fpkStructure.FpkHeaderSize);
-                                newFpkHeaderWriter.Write(fpkStructure.FpkHeaderSize2);
+                                newFpkHeaderWriter.Write(fpkStructure.FPKHeaderSize);
+                                newFpkHeaderWriter.Write(fpkStructure.FPKHeaderSize2);
                                 newFpkHeaderWriter.Write(fpkStructure.EntryTableSize);
                                 newFpkHeaderWriter.Write(fpkStructure.Reserved2);
                                 newFpkHeaderWriter.Write(fpkStructure.FPKtypeFlag);
@@ -71,7 +70,7 @@ namespace Drakengard1and2Extractor.FileRepack
                                     {
                                         if (e != 1)
                                         {
-                                            PadFixedAmountOfBytes(ref currentOffset, fpkStructure.EntryAlignPosition, newFpkStream);
+                                            SharedMethods.PadFixedAmountOfBytes(ref currentOffset, fpkStructure.EntryAlignPosition, newFpkStream);
                                         }
 
                                         currentKey = $"FILE_{e}";
@@ -80,7 +79,7 @@ namespace Drakengard1and2Extractor.FileRepack
                                         fpkStructure.EntryDataOffset = (uint)currentOffset;
                                         fpkStructure.EntryDataSize = (uint)new FileInfo(currentFile).Length;
 
-                                        using (var currentFileStream = new FileStream(currentFile, FileMode.Open, FileAccess.Read))
+                                        using (FileStream currentFileStream = new FileStream(currentFile, FileMode.Open, FileAccess.Read))
                                         {
                                             currentFileStream.Seek(0, SeekOrigin.Begin);
                                             currentFileStream.CopyStreamTo(newFpkStream, fpkStructure.EntryDataSize, false);
@@ -90,28 +89,21 @@ namespace Drakengard1and2Extractor.FileRepack
                                         newFpkHeaderWriter.Write(fpkStructure.EntryDataOffset);
                                         newFpkHeaderWriter.Write(fpkStructure.EntryDataSize);
                                         fpkReader.BaseStream.Position += 8;
-
-                                        if (entryTableOffset == 128)
-                                        {
-                                            newFpkHeaderWriter.Write(fpkReader.ReadUInt32());
-                                        }
-                                        else
-                                        {
-                                            _ = fpkReader.ReadUInt32();
-                                            newFpkHeaderWriter.Write((uint)0);
-                                        }
+                                        newFpkHeaderWriter.Write(fpkReader.ReadUInt32());
 
                                         currentOffset = newFpkStream.Position;
                                     }
 
-                                    PadFixedAmountOfBytes(ref currentOffset, fpkStructure.EntryAlignPosition, newFpkStream);
+                                    SharedMethods.PadFixedAmountOfBytes(ref currentOffset, fpkStructure.EntryAlignPosition, newFpkStream);
 
                                     newFpkHeaderWriter.BaseStream.PadNull(fpkStructure.FPKbinDataOffset - newFpkHeaderWriter.BaseStream.Position);
 
                                     newFpkHeaderWriter.BaseStream.Position = 44;
                                     newFpkHeaderWriter.Write((uint)newFpkStream.Length);
 
-                                    using (var newFpkFileStream = new FileStream(fpkFile + ".new", FileMode.Append, FileAccess.Write))
+                                    SharedMethods.IfFileDirExistsDel(fpkFile + ".new", SharedMethods.DelSwitch.file);
+
+                                    using (FileStream newFpkFileStream = new FileStream(fpkFile + ".new", FileMode.Append, FileAccess.Write))
                                     {
                                         newFpkHeaderStream.Seek(0, SeekOrigin.Begin);
                                         newFpkHeaderStream.CopyTo(newFpkFileStream);
@@ -151,23 +143,6 @@ namespace Drakengard1and2Extractor.FileRepack
                 SharedMethods.AppMsgBox("" + ex, "Error", MessageBoxIcon.Error);
                 LoggingMethods.LogMessage(SharedMethods.NewLineChara);
                 LoggingMethods.LogException("Exception: " + ex);
-            }
-        }
-
-
-        private static void PadFixedAmountOfBytes(ref long offset, uint padValue, Stream streamToPad)
-        {
-            if (offset % padValue != 0)
-            {
-                var remainder = offset % padValue;
-                var increaseBytes = padValue - remainder;
-                var newPos = offset + increaseBytes;
-                var nullBytesAmount = newPos - offset;
-
-                streamToPad.Seek(offset, SeekOrigin.Begin);
-                streamToPad.PadNull(nullBytesAmount);
-
-                offset = streamToPad.Position;
             }
         }
     }

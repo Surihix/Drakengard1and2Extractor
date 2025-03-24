@@ -1,9 +1,9 @@
-//---------------------------------------------------
+//--------------------------------------------------------------
 //--- 010 Editor v12.0.1 Binary Template
 //
 //      File: DoD1_2_fpk.bt
 //   Authors: Surihix
-//   Version: 1.0
+//   Version: 1.3
 //   Purpose: Parse Drakengard 1 & 2's .fpk files
 //  Category: Drakengard 1 & 2 fpk files
 // File Mask: *.fpk
@@ -12,11 +12,31 @@
 //   1.0   2024-03-15 Surihix: Initial version
 //   1.1   2024-06-14 Surihix: Added align offset
 //   1.2   2024-06-15 Surihix: Updated offset names
-//---------------------------------------------------
+//   1.3   2025-03-23 Surihix: Re arranged and added offsets
+//--------------------------------------------------------------
 
 LittleEndian();
 
 local uint offsetTableStart = 128;
+local uint binDataOffset = 0;
+
+typedef struct ENTRY
+{
+    ubyte reserved[4]<bgcolor=cBlack>;
+    uint entryStart<bgcolor=cDkGreen>;
+    uint entryDataSize<bgcolor=cDkGreen>;
+    char entryExtn[4]<comment="if valid string, then treat either as extension or sub-directory name", bgcolor=cDkGreen, optimize=false>;
+    
+    if (entryExtn[3] != 0x2F && entryDataSize != 0)
+    {
+       local uint p = FTell();
+       FSeek(binDataOffset + entryStart);
+       
+       ubyte entryData[entryDataSize]<bgcolor=cLtGreen>;
+       FSeek(p);
+    }
+}Entry;
+
 
 typedef struct ARCHIVENAME
 {
@@ -45,48 +65,32 @@ typedef struct ARCHIVENAME
 
 
 struct FILE
-{    
+{   
     char magic[4]<bgcolor=cDkGreen>;
-    char reserved[4]<bgcolor=cBlack>;    
+    Assert(magic == "fpk\0");
+
+    ubyte reserved[4]<bgcolor=cBlack>;    
     uint entryCount<bgcolor=cDkGreen>;
-    uint dataAlignPosition<comment="entries start position should be divisible by this value", bgcolor=cDkGreen>;
-    char fpkHeaderData[8]<comment="same in all the files", bgcolor=cDkGreen>;
-    uint offsetTableSize<bgcolor=cDkGreen>;
-    char reserved2[8]<bgcolor=cBlack>;
+    uint entryAlignPosition<comment="entries start position should be divisible by this value", bgcolor=cDkGreen>;
+    uint fpkHeaderSize<bgcolor=cDkGreen>;
+    uint fpkHeaderSize2<comment="repeated", bgcolor=cDkGreen>;
+    uint entryTableSize<bgcolor=cDkGreen>;
+    ubyte reserved2[8]<bgcolor=cBlack>;
     uint fpkTypeFlag<comment="0 = large fpk, 1 = small fpk", bgcolor=cDkGreen>;
     uint fpkBinDataOffset<bgcolor=cDkGreen>;
+    binDataOffset = fpkBinDataOffset;
+
     uint fpkBinDataSize<bgcolor=cDkGreen>;
-    char reserved3[16]<bgcolor=cBlack>;   
-    archiveName name[1]<name="fpk name", optimize=false>;
+    ubyte reserved3[16]<bgcolor=cBlack>;
+  
+    archiveName name<name="fpk name", optimize=false>;
     
     local uint areaTillTable = offsetTableStart - FTell();
-    char reserved4[areaTillTable]<bgcolor=cBlack>;
-
-    FSeek(offsetTableStart);
-    local uint p = FTell();
-    local int e = 0;
-       
-    for (e = 0; e < entryCount; e++) 
-    { 
-        struct ENTRY
-        {             
-             char reserved5[4]<bgcolor=cBlack>;
-             uint entryStart<bgcolor=cDkGreen>;
-             uint entryDataSize<bgcolor=cDkGreen>;
-             char entryExtn[4]<comment="if valid string, then read in reverse", bgcolor=cDkGreen>;
-             p = FTell(); 
-
-             if (entryExtn[3] != 0x2F && entryDataSize != 0)
-             {
-                FSeek(fpkBinDataOffset + entryStart);
-                char entryData[entryDataSize]<bgcolor=cLtGreen>;
-                FSeek(p);
-             }
-             else
-             {
-                FSeek(p);
-             }
-        }entry<name="Entry">;
-     }   
+    ubyte reserved4[areaTillTable]<bgcolor=cBlack>;
+        
+    struct ENTRYTABLE
+    {   
+        Entry entry[entryCount]<name="Entry", optimize=false>;
+    }EntryTable<name="Entry Table">;
      
 }fpkFile<open=true, name="FPK file">;

@@ -8,8 +8,8 @@
             public byte[] Reserved = new byte[4] { 0x00, 0x00, 0x00, 0x00 };
             public uint EntryCount;
             public uint EntryAlignPosition;
-            public uint FpkHeaderSize;
-            public uint FpkHeaderSize2;
+            public uint FPKHeaderSize;
+            public uint FPKHeaderSize2;
             public uint EntryTableSize;
             public byte[] Reserved2 = new byte[8] { 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
             public uint FPKtypeFlag;
@@ -31,7 +31,17 @@
 
         public class DPK
         {
+            public string DPKMagic = "dpk\0";
+            public uint DPKHeaderSize;
+            public uint UnkFlag = 1;
+            public uint DPKDataOffset;
             public uint EntryCount;
+            public byte[] Reserved = new byte[12]
+            {
+                0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00
+            };
+
+            public byte[] EntryNameMD5Hash = new byte[16];
             public uint EntryDataSize;
             public uint EntryDataOffset;
         }
