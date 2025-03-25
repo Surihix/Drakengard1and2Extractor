@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace Drakengard1and2Extractor.FileExtraction
 {
-    internal class FileKPS
+    internal class ExtKPS
     {
         private static readonly byte[] _NewLineBytes = new byte[] { 0x0D, 0x0A };
 

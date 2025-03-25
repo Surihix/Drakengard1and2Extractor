@@ -84,7 +84,7 @@ namespace Drakengard1and2Extractor
                                 try
                                 {
                                     LoggingMethods.LogMessage("Extracting files from " + Path.GetFileName(mbinFile) + "....");
-                                    Drk1BIN.ExtractBin(mbinFile, generateLstPaths);
+                                    ExtDrk1BIN.ExtractBin(mbinFile, generateLstPaths);
                                 }
                                 finally
                                 {
@@ -124,7 +124,7 @@ namespace Drakengard1and2Extractor
                                 try
                                 {
                                     LoggingMethods.LogMessage("Extracting files from " + Path.GetFileName(mbinFile) + "....");
-                                    Drk2BIN.ExtractBin(mbinFile);
+                                    ExtDrk2BIN.ExtractBin(mbinFile);
                                 }
                                 finally
                                 {
@@ -191,7 +191,7 @@ namespace Drakengard1and2Extractor
                             try
                             {
                                 LoggingMethods.LogMessage("Extracting files from " + Path.GetFileName(fpkFile) + "....");
-                                FileFPK.ExtractFPK(fpkFile, generateLstPaths, true);
+                                ExtFPK.ExtractFPK(fpkFile, generateLstPaths, true);
                             }
                             finally
                             {
@@ -251,7 +251,7 @@ namespace Drakengard1and2Extractor
                             try
                             {
                                 LoggingMethods.LogMessage("Extracting files from " + Path.GetFileName(dpkFile) + "....");
-                                FileDPK.ExtractDPK(dpkFile, true);
+                                ExtDPK.ExtractDPK(dpkFile, true);
                             }
                             finally
                             {
@@ -315,7 +315,7 @@ namespace Drakengard1and2Extractor
                             try
                             {
                                 LoggingMethods.LogMessage("Extracting " + Path.GetFileName(kpsFile) + "....");
-                                FileKPS.ExtractKPS(kpsFile, shiftJISParse, true);
+                                ExtKPS.ExtractKPS(kpsFile, shiftJISParse, true);
                             }
                             finally
                             {

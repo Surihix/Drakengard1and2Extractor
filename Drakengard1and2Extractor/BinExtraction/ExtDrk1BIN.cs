@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace Drakengard1and2Extractor.BinExtraction
 {
-    internal class Drk1BIN
+    internal class ExtDrk1BIN
     {
         public static void ExtractBin(string mainBinFile, bool generateLstPaths)
         {
@@ -71,11 +71,11 @@ namespace Drakengard1and2Extractor.BinExtraction
                                 fpkStructure.EntryDataOffset = mainBinReader.ReadUInt32();
                                 fpkStructure.EntryDataSize = mainBinReader.ReadUInt32();
 
-                                if (fpkStructure.EntryDataOffset == 0 && fpkStructure.EntryDataSize == 0)
-                                {
-                                    intialOffset += 16;
-                                    continue;
-                                }
+                                //if (fpkStructure.EntryDataOffset == 0 && fpkStructure.EntryDataSize == 0)
+                                //{
+                                //    intialOffset += 16;
+                                //    continue;
+                                //}
 
                                 fpkStructure.EntryExtnChars = mainBinReader.ReadChars(4);
                                 Array.Reverse(fpkStructure.EntryExtnChars);
