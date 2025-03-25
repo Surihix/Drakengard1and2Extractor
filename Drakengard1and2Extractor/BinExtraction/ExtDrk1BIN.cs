@@ -21,9 +21,6 @@ namespace Drakengard1and2Extractor.BinExtraction
                 SharedMethods.IfFileDirExistsDel(extractDir, SharedMethods.DelSwitch.directory);
                 Directory.CreateDirectory(extractDir);
 
-                var mainBinName = Path.GetFileName(mainBinFile);
-                var isImageBinFile = mainBinName == "image.bin" || mainBinName == "IMAGE.BIN";
-
                 var fpkStructure = new SharedStructures.FPK();
                 var filesExtractedDict = new Dictionary<string, string>();
 
@@ -48,6 +45,7 @@ namespace Drakengard1and2Extractor.BinExtraction
                             fpkStructure.FPKbinName = fpkStructure.FallBackName;
                         }
 
+                        var isImageBinFile = fpkStructure.FPKbinName == "image.bin";
                         var subBinFile = Path.Combine(extractDir, fpkStructure.FPKbinName);
 
                         SharedMethods.IfFileDirExistsDel(subBinFile, SharedMethods.DelSwitch.file);
@@ -58,7 +56,7 @@ namespace Drakengard1and2Extractor.BinExtraction
                             mainBinStream.CopyStreamTo(binStream, fpkStructure.FPKbinDataSize, false);
 
 
-                            uint intialOffset = 132;
+                            uint intialOffset = isImageBinFile ? (uint)164 : 132;
                             var fname = "FILE_";
                             var fileExtn = string.Empty;
                             var fileExtnFixed = string.Empty;

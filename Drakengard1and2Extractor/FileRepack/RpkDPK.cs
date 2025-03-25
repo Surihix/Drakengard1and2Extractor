@@ -27,13 +27,13 @@ namespace Drakengard1and2Extractor.FileRepack
                     var unpackedFilesInDir = Directory.GetFiles(unpackedDpkDir, "*.*", SearchOption.TopDirectoryOnly);
                     var unpackedFilesDict = SharedMethods.GetFilesInDirForRepack(unpackedFilesInDir, dpkStructure.EntryCount);
 
-                    var fileOrderDict = new Dictionary<uint, (string, string, byte[], uint)>();
-                    string currentKey;
-                    string currentFile;
-                    uint currentFileSize;
-
                     if (unpackedFilesDict.Keys.Count >= dpkStructure.EntryCount)
                     {
+                        var fileOrderDict = new Dictionary<uint, (string, string, byte[], uint)>();
+                        string currentKey;
+                        string currentFile;
+                        uint currentFileSize;
+
                         for (int e = 1; e < dpkStructure.EntryCount + 1; e++)
                         {
                             dpkStructure.EntryNameMD5Hash = dpkReader.ReadBytes(dpkStructure.EntryNameMD5Hash.Length);
@@ -134,6 +134,8 @@ namespace Drakengard1and2Extractor.FileRepack
                                     {
                                         newDpkHeaderWriter.Write(entriesPacked[key]);
                                     }
+
+                                    newDpkHeaderWriter.BaseStream.PadNull(dpkStructure.DPKDataOffset - newDpkHeaderWriter.BaseStream.Position);
 
                                     SharedMethods.IfFileDirExistsDel(dpkFile + ".new", SharedMethods.DelSwitch.file);
 
