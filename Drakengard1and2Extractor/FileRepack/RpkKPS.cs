@@ -135,7 +135,12 @@ namespace Drakengard1and2Extractor.FileRepack
                     if (hasRepacked)
                     {
                         SharedMethods.IfFileDirExistsDel(outKpsFile + ".old", SharedMethods.DelSwitch.file);
-                        File.Move(outKpsFile, outKpsFile + ".old");
+
+                        if (File.Exists(outKpsFile))
+                        {
+                            File.Move(outKpsFile, outKpsFile + ".old");
+                        }
+                        
                         File.Move(outKpsFile + ".new", outKpsFile);
 
                         LoggingMethods.LogMessage(SharedMethods.NewLineChara);
