@@ -183,7 +183,7 @@ namespace Drakengard1and2Extractor.FileExtraction
 
         private static byte[] GetNonStringByteInHex(Encoding encodingToUse, byte b)
         {
-            return encodingToUse.GetBytes("#" + b.ToString("X2") + "# ");
+            return encodingToUse.GetBytes("#" + b.ToString("X2") + "#");
         }
 
 

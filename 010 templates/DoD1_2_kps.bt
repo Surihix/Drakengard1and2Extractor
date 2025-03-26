@@ -3,59 +3,45 @@
 //
 //      File: DoD1_2_kps.bt
 //   Authors: Surihix
-//   Version: 1.0
+//   Version: 1.1
 //   Purpose: Parse Drakengard 1 & 2 kps text files
 //  Category: Drakengard 1 & 2 kps files
 // File Mask: *.kps
 //  ID Bytes: 4B 50 53 5F
 //   History: 
 //   1.0   2024-03-21 Surihix: Initial version
+//   1.1   2024-03-26 Surihix: Re arranged offsets
 //-----------------------------------------------------
 
 LittleEndian();
 
+typedef struct LINEINFO
+{
+    uint lineOffset<bgcolor=cDkGreen>;
+
+    local int64 currentPos = FTell();
+    FSeek(lineOffset);
+
+    string line<comment="line begins from here. parse in ansi or shift-jis encoding", bgcolor=cLtGreen>;
+
+    FSeek(currentPos);
+}LineInfo;
+
+
 struct FILE
 {
-    char kpsHeader[4]<bgcolor=cDkGreen>;
-    char dateVersion[11]<bgcolor=cDkGreen>;
-    char reserved[5]<bgcolor=cBlack>;
-    uint offsetTable<bgcolor=cDkGreen>;
+    char kpsMagic[4]<bgcolor=cDkGreen>;
+    char dateVersion[12]<bgcolor=cDkGreen>;
+    uint reserved<bgcolor=cBlack>;
+    uint headerSize<bgcolor=cDkGreen>;
     uint linesCount<bgcolor=cDkGreen>;
 
-    local uint bytesTillTable = offsetTable - FTell();
-    char reserved2[bytesTillTable]<bgcolor=cBlack>;
+    local uint bytesTillOffsetTable = headerSize - FTell();
+    ubyte reserved2[bytesTillOffsetTable]<bgcolor=cBlack>;
 
-    local int l = 0;
-    local ulong fileLength = FileSize();
-    local ulong nextPos = 0;
-    local uint lineSize;
-
-    for (l = 0; l < linesCount; l++)
+    struct LINEINFOGRP
     {
-        struct LINEDATA
-        {
-            uint lineOffset<bgcolor=cDkGreen>;
-            nextPos = FTell();
-
-            if (l == linesCount - 1)
-            {
-                lineSize = fileLength - lineOffset;
-            }
-            else
-            {
-               uint nextOffsetTmp<hidden=true>;
-               lineSize = nextOffsetTmp - lineOffset;
-            }
- 
-            FSeek(lineOffset);      
-            char line[lineSize]<bgcolor=cLtGreen>;
-
-            if (l != linesCount)
-            {
-               FSeek(nextPos);
-            }
-
-        }lineData<name="Line Data">;
-    }
+        LineInfo lineInfo[linesCount]<name="Line Info", optimize=false>;
+    }LineInfoGroup<name="Line Info group", open=false>;
 
 }file<name="KPS file", open=true>;
