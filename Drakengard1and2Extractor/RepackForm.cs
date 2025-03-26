@@ -330,6 +330,7 @@ namespace Drakengard1and2Extractor.FileRepack
         {
             BinRepackGroupBox.Enabled = isEnabled;
             FileRpkGrp.Enabled = isEnabled;
+            RepackStatusDelBtn.Enabled = isEnabled;
         }
 
 
