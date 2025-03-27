@@ -64,7 +64,7 @@ namespace Drakengard1and2Extractor
 
                                 if (foundHeader == "fpk")
                                 {
-                                    FileFPK.ExtractFPK(fpkFile, generateLstPaths, false);
+                                    ExtFPK.ExtractFPK(fpkFile, generateLstPaths, false);
                                     LoggingMethods.LogMessage("Extracted " + Path.GetFileName(fpkFile));
                                 }
                             }
@@ -122,7 +122,7 @@ namespace Drakengard1and2Extractor
 
                                 if (foundHeader == "dpk")
                                 {
-                                    FileDPK.ExtractDPK(dpkFile, false);
+                                    ExtDPK.ExtractDPK(dpkFile, false);
                                     LoggingMethods.LogMessage("Extracted " + Path.GetFileName(dpkFile));
                                 }
                             }
@@ -184,7 +184,7 @@ namespace Drakengard1and2Extractor
 
                                 if (foundHeader == "KPS_")
                                 {
-                                    FileKPS.ExtractKPS(kpsFile, shiftJISParse, false);
+                                    ExtKPS.ExtractKPS(kpsFile, shiftJISParse, false);
                                     LoggingMethods.LogMessage("Extracted " + Path.GetFileName(kpsFile));
                                 }
                             }

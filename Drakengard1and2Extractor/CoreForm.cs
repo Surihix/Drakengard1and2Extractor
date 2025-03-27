@@ -1,4 +1,5 @@
 ﻿using Drakengard1and2Extractor.BinExtraction;
+using Drakengard1and2Extractor.FileRepack;
 using Drakengard1and2Extractor.FileExtraction;
 using Drakengard1and2Extractor.ImageConversion;
 using Drakengard1and2Extractor.Support;
@@ -83,7 +84,7 @@ namespace Drakengard1and2Extractor
                                 try
                                 {
                                     LoggingMethods.LogMessage("Extracting files from " + Path.GetFileName(mbinFile) + "....");
-                                    Drk1BIN.ExtractBin(mbinFile, generateLstPaths);
+                                    ExtDrk1BIN.ExtractBin(mbinFile, generateLstPaths);
                                 }
                                 finally
                                 {
@@ -123,7 +124,7 @@ namespace Drakengard1and2Extractor
                                 try
                                 {
                                     LoggingMethods.LogMessage("Extracting files from " + Path.GetFileName(mbinFile) + "....");
-                                    Drk2BIN.ExtractBin(mbinFile);
+                                    ExtDrk2BIN.ExtractBin(mbinFile);
                                 }
                                 finally
                                 {
@@ -159,7 +160,6 @@ namespace Drakengard1and2Extractor
         private void ExtFpkBtn_MouseHover(object sender, EventArgs e)
         {
             FPKtoolTip.Show("Extract a .fpk file.", ExtFpkBtn);
-
         }
         private void ExtFpkBtn_Click(object sender, EventArgs e)
         {
@@ -191,7 +191,7 @@ namespace Drakengard1and2Extractor
                             try
                             {
                                 LoggingMethods.LogMessage("Extracting files from " + Path.GetFileName(fpkFile) + "....");
-                                FileFPK.ExtractFPK(fpkFile, generateLstPaths, true);
+                                ExtFPK.ExtractFPK(fpkFile, generateLstPaths, true);
                             }
                             finally
                             {
@@ -251,7 +251,7 @@ namespace Drakengard1and2Extractor
                             try
                             {
                                 LoggingMethods.LogMessage("Extracting files from " + Path.GetFileName(dpkFile) + "....");
-                                FileDPK.ExtractDPK(dpkFile, true);
+                                ExtDPK.ExtractDPK(dpkFile, true);
                             }
                             finally
                             {
@@ -315,7 +315,7 @@ namespace Drakengard1and2Extractor
                             try
                             {
                                 LoggingMethods.LogMessage("Extracting " + Path.GetFileName(kpsFile) + "....");
-                                FileKPS.ExtractKPS(kpsFile, shiftJISParse, true);
+                                ExtKPS.ExtractKPS(kpsFile, shiftJISParse, true);
                             }
                             finally
                             {
@@ -344,6 +344,17 @@ namespace Drakengard1and2Extractor
                 LoggingMethods.LogMessage(SharedMethods.NewLineChara);
                 LoggingMethods.LogException("Exception: " + ex);
             }
+        }
+
+
+        private void RpkToolsBtn_MouseHover(object sender, EventArgs e)
+        {
+            RpkToolsToolTip.Show("Open Repack tools window (experimental)", RpkToolsBtn);
+        }
+        private void RpkToolsBtn_Click(object sender, EventArgs e)
+        {
+            var repackToolsForm = new RepackForm();
+            repackToolsForm.ShowDialog();
         }
 
 
@@ -524,6 +535,7 @@ namespace Drakengard1and2Extractor
             ExtFpkBtn.Enabled = isEnabled;
             ExtDpkBtn.Enabled = isEnabled;
             ExtKpsBtn.Enabled = isEnabled;
+            RpkToolsBtn.Enabled = isEnabled;
             BatchModeBtn.Enabled = isEnabled;
             ConvertZIMBtn.Enabled = isEnabled;
             ConvertSPK0Btn.Enabled = isEnabled;

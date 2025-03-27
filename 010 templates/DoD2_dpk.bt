@@ -1,47 +1,50 @@
-//---------------------------------------------------
+//--------------------------------------------------------------
 //--- 010 Editor v12.0.1 Binary Template
 //
 //      File: DoD2_dpk.bt
 //   Authors: Surihix
-//   Version: 1.0
+//   Version: 1.1
 //   Purpose: Parse Drakengard 2's .dpk files
 //  Category: Drakengard 2 dpk files
 // File Mask: *.dpk
 //  ID Bytes: 64 70 6B
 //   History: 
 //   1.0   2024-03-15 Surihix: Initial version
-//---------------------------------------------------
+//   1.1   2025-03-24 Surihix: Re arranged and added offsets
+//--------------------------------------------------------------
 
 LittleEndian();
+
+typedef struct ENTRY
+{
+    ubyte entryNameHash[16]<comment="md5 hash of filename", bgcolor=cDkGreen>;
+    uint entryDataSize<bgcolor=cDkGreen>;
+    uint entryDataSize2<bgcolor=cDkGreen, comment="repeated">;
+    uint entryStart<bgcolor=cDkGreen>;
+    ubyte reserved[4]<bgcolor=cBlack>;
+    
+    local uint p = FTell();
+    FSeek(entryStart);
+
+    ubyte entryData[entryDataSize]<bgcolor=cLtGreen>;
+    FSeek(p);
+}Entry;
+
 
 struct FILE
 {
     char magic[4]<bgcolor=cDkGreen>;
-    char dpkHeaderData[8]<bgcolor=cDkGreen>;
-    
-    uint unk1<hidden=true, bgcolor=cRed>;
+    Assert(magic == "dpk\0");
 
-    uint entriesCount<bgcolor=cDkGreen>;
+    uint dpkHeaderSize<bgcolor=cDkGreen>;
+    uint someFlag<comment="some sort of flag, always 1", bgcolor=cLtRed>;
+    uint dpkDataStart<bgcolor=cDkGreen>;
+    uint entryCount<bgcolor=cDkGreen>;
+    ubyte reserved[12]<bgcolor=cBlack>;
 
-    char reserved[12]<bgcolor=cBlack>;
-
-    local uint p = FTell();
-    local int e = 0;
-
-    for (e = 0; e < entriesCount; e++) 
-    {
-        struct ENTRY
-        {
-            char entryHash[16]<name="entryHash??", bgcolor=cLtRed>;
-            uint entryDataSize<bgcolor=cDkGreen>;
-            uint entryDataSize2<bgcolor=cDkGreen, comment="repeated">;
-            uint entryStart<bgcolor=cDkGreen>;
-            char reserved[4]<bgcolor=cBlack>;
-            p = FTell();
-            FSeek(entryStart);
-            char entryData[entryDataSize]<bgcolor=cLtGreen>;
-            FSeek(p);
-        }entry<name="Entry">;
-    }
+    struct ENTRYTABLE
+    {   
+        Entry entry[entryCount]<name="Entry", optimize=false>;
+    }EntryTable<name="Entry Table">;
 
 }dpkFile<open=true, name="DPK file">;

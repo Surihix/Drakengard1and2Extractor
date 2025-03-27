@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
 
@@ -204,6 +205,56 @@ namespace Drakengard1and2Extractor.Support
             }
 
             return realExtn;
+        }
+
+
+        public static Dictionary<string, string> GetFilesInDirForRepack(string[] unpackedFilesInDir, uint processLimit)
+        {
+            var filesInDirDict = new Dictionary<string, string>();
+            
+            var filesAdded = 0;
+            string currentKey;
+            int fileCounter = 1;
+
+            while (true)
+            {
+                if (filesAdded == processLimit)
+                {
+                    break;
+                }
+
+                currentKey = $"FILE_{fileCounter}";
+                fileCounter++;
+
+                foreach (var fileInDir in unpackedFilesInDir)
+                {
+                    if (currentKey == Path.GetFileNameWithoutExtension(fileInDir))
+                    {
+                        filesInDirDict.Add(currentKey, fileInDir);
+                        filesAdded++;
+                        break;
+                    }
+                }
+            }
+
+            return filesInDirDict;
+        }
+
+
+        public static void PadFixedAmountOfBytes(ref long offset, uint padValue, Stream streamToPad)
+        {
+            if (offset % padValue != 0)
+            {
+                var remainder = offset % padValue;
+                var increaseBytes = padValue - remainder;
+                var newPos = offset + increaseBytes;
+                var nullBytesAmount = newPos - offset;
+
+                streamToPad.Seek(offset, SeekOrigin.Begin);
+                streamToPad.PadNull(nullBytesAmount);
+
+                offset = streamToPad.Position;
+            }
         }
     }
 }

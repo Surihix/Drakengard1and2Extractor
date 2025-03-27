@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace Drakengard1and2Extractor.FileExtraction
 {
-    internal class FileKPS
+    internal class ExtKPS
     {
         private static readonly byte[] _NewLineBytes = new byte[] { 0x0D, 0x0A };
 
@@ -22,6 +22,9 @@ namespace Drakengard1and2Extractor.FileExtraction
 
                 using (var kpsReader = new BinaryReader(File.Open(kpsFile, FileMode.Open, FileAccess.Read)))
                 {
+                    kpsReader.BaseStream.Position = 4;
+                    var kpsDateVersion = kpsReader.ReadStringTillNull();
+
                     kpsReader.BaseStream.Position = 20;
                     var linesOffsetTable = kpsReader.ReadUInt32();
                     var linesCount = kpsReader.ReadUInt32();
@@ -31,6 +34,8 @@ namespace Drakengard1and2Extractor.FileExtraction
                         using (var outTxtBinWriter = new BinaryWriter(outTxtStream))
                         {
                             outTxtBinWriter.Write(Encoding.UTF8.GetBytes($"Lines: {linesCount}"));
+                            outTxtBinWriter.Write(_NewLineBytes);
+                            outTxtBinWriter.Write(Encoding.UTF8.GetBytes($"Date and Version: {kpsDateVersion}"));
                             outTxtBinWriter.Write(_NewLineBytes);
                             outTxtBinWriter.Write(_NewLineBytes);
                             outTxtBinWriter.Write(_NewLineBytes);
@@ -178,7 +183,7 @@ namespace Drakengard1and2Extractor.FileExtraction
 
         private static byte[] GetNonStringByteInHex(Encoding encodingToUse, byte b)
         {
-            return encodingToUse.GetBytes("#" + b.ToString("X2") + "# ");
+            return encodingToUse.GetBytes("#" + b.ToString("X2") + "#");
         }
 
 

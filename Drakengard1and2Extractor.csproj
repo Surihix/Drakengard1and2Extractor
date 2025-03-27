@@ -127,7 +127,18 @@
     <Compile Include="Drakengard1and2Extractor\BatchForm.Designer.cs">
       <DependentUpon>BatchForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Drakengard1and2Extractor\FileExtraction\FileKPS.cs" />
+    <Compile Include="Drakengard1and2Extractor\BinRepack\RpkDrk2BIN.cs" />
+    <Compile Include="Drakengard1and2Extractor\BinRepack\RpkDrk1BIN.cs" />
+    <Compile Include="Drakengard1and2Extractor\FileExtraction\ExtKPS.cs" />
+    <Compile Include="Drakengard1and2Extractor\FileRepack\RpkDPK.cs" />
+    <Compile Include="Drakengard1and2Extractor\RepackForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Drakengard1and2Extractor\RepackForm.Designer.cs">
+      <DependentUpon>RepackForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Drakengard1and2Extractor\FileRepack\RpkFPK.cs" />
+    <Compile Include="Drakengard1and2Extractor\FileRepack\RpkKPS.cs" />
     <Compile Include="Drakengard1and2Extractor\ImageConversion\ImgSPK0.cs" />
     <Compile Include="Drakengard1and2Extractor\ImageConversion\ImgZIM.cs" />
     <Compile Include="Drakengard1and2Extractor\ImageConversion\ZIMForm.cs">
@@ -238,16 +249,16 @@
     <Compile Include="Drakengard1and2Extractor\Support\LoggingMethods.cs" />
     <Compile Include="Drakengard1and2Extractor\Support\Lz0Helpers\Minilz0Function.cs" />
     <Compile Include="Drakengard1and2Extractor\Support\Extensions\StreamExtension.cs" />
-    <Compile Include="Drakengard1and2Extractor\BinExtraction\Drk1BIN.cs" />
-    <Compile Include="Drakengard1and2Extractor\BinExtraction\Drk2BIN.cs" />
+    <Compile Include="Drakengard1and2Extractor\BinExtraction\ExtDrk1BIN.cs" />
+    <Compile Include="Drakengard1and2Extractor\BinExtraction\ExtDrk2BIN.cs" />
     <Compile Include="Drakengard1and2Extractor\ImageConversion\SPK0Form.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Drakengard1and2Extractor\ImageConversion\SPK0Form.Designer.cs">
       <DependentUpon>SPK0Form.cs</DependentUpon>
     </Compile>
-    <Compile Include="Drakengard1and2Extractor\FileExtraction\FileDPK.cs" />
-    <Compile Include="Drakengard1and2Extractor\FileExtraction\FileFPK.cs" />
+    <Compile Include="Drakengard1and2Extractor\FileExtraction\ExtDPK.cs" />
+    <Compile Include="Drakengard1and2Extractor\FileExtraction\ExtFPK.cs" />
     <Compile Include="Drakengard1and2Extractor\CoreForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -278,6 +289,9 @@
       <DependentUpon>ProgressDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Drakengard1and2Extractor\Libraries\Ookii.Dialogs.WinForms\Properties\Resources.resx" />
+    <EmbeddedResource Include="Drakengard1and2Extractor\RepackForm.resx">
+      <DependentUpon>RepackForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <SubType>Designer</SubType>

@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace Drakengard1and2Extractor.BinExtraction
 {
-    internal class Drk2BIN
+    internal class ExtDrk2BIN
     {
         private static readonly Dictionary<string, string> _BinExtnsDict = new Dictionary<string, string>()
         {

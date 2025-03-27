@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace Drakengard1and2Extractor.FileExtraction
 {
-    internal class FileFPK
+    internal class ExtFPK
     {
         public static void ExtractFPK(string fpkFile, bool generateLstPaths, bool isSingleFile)
         {

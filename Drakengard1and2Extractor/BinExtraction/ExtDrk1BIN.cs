@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace Drakengard1and2Extractor.BinExtraction
 {
-    internal class Drk1BIN
+    internal class ExtDrk1BIN
     {
         public static void ExtractBin(string mainBinFile, bool generateLstPaths)
         {
@@ -20,9 +20,6 @@ namespace Drakengard1and2Extractor.BinExtraction
                 var extractDir = Path.GetFullPath(mainBinFile) + "_extracted";
                 SharedMethods.IfFileDirExistsDel(extractDir, SharedMethods.DelSwitch.directory);
                 Directory.CreateDirectory(extractDir);
-
-                var mainBinName = Path.GetFileName(mainBinFile);
-                var isImageBinFile = mainBinName == "image.bin" || mainBinName == "IMAGE.BIN";
 
                 var fpkStructure = new SharedStructures.FPK();
                 var filesExtractedDict = new Dictionary<string, string>();
@@ -48,6 +45,7 @@ namespace Drakengard1and2Extractor.BinExtraction
                             fpkStructure.FPKbinName = fpkStructure.FallBackName;
                         }
 
+                        var isImageBinFile = fpkStructure.FPKbinName == "image.bin";
                         var subBinFile = Path.Combine(extractDir, fpkStructure.FPKbinName);
 
                         SharedMethods.IfFileDirExistsDel(subBinFile, SharedMethods.DelSwitch.file);
@@ -58,7 +56,7 @@ namespace Drakengard1and2Extractor.BinExtraction
                             mainBinStream.CopyStreamTo(binStream, fpkStructure.FPKbinDataSize, false);
 
 
-                            uint intialOffset = 132;
+                            uint intialOffset = isImageBinFile ? (uint)164 : 132;
                             var fname = "FILE_";
                             var fileExtn = string.Empty;
                             var fileExtnFixed = string.Empty;
@@ -71,11 +69,11 @@ namespace Drakengard1and2Extractor.BinExtraction
                                 fpkStructure.EntryDataOffset = mainBinReader.ReadUInt32();
                                 fpkStructure.EntryDataSize = mainBinReader.ReadUInt32();
 
-                                if (fpkStructure.EntryDataOffset == 0 && fpkStructure.EntryDataSize == 0)
-                                {
-                                    intialOffset += 16;
-                                    continue;
-                                }
+                                //if (fpkStructure.EntryDataOffset == 0 && fpkStructure.EntryDataSize == 0)
+                                //{
+                                //    intialOffset += 16;
+                                //    continue;
+                                //}
 
                                 fpkStructure.EntryExtnChars = mainBinReader.ReadChars(4);
                                 Array.Reverse(fpkStructure.EntryExtnChars);
