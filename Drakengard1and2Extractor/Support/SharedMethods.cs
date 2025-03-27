@@ -19,7 +19,7 @@ namespace Drakengard1and2Extractor.Support
         {
             if (!File.Exists("minilzo.dll"))
             {
-                AppMsgBox("Missing minilz0.dll file.\nPlease check if this dll file is present next to the exe file.", "Error", MessageBoxIcon.Error);               
+                AppMsgBox("Missing minilz0.dll file.\nPlease check if this dll file is present next to the exe file.", "Error", MessageBoxIcon.Error);
                 if (!isJustLaunched)
                 {
                     AppMsgBox("App will exit now", "Error", MessageBoxIcon.Error);
@@ -199,9 +199,41 @@ namespace Drakengard1and2Extractor.Support
                     realExtn = ".cef";
                     break;
             }
+
             if (foundExtn.StartsWith("bh"))
             {
                 realExtn = ".hi4";
+            }
+
+            if (realExtn == string.Empty && readerName.BaseStream.Length > 12)
+            {
+                readerName.BaseStream.Position = 0;
+                var magicID = readerName.ReadUInt32();
+
+                readerName.BaseStream.Position = 8;
+                var magicID2 = readerName.ReadUInt32();
+
+                if (magicID == 8 && magicID2 == 4294966996)
+                {
+                    realExtn = ".txtbin";
+                }
+            }
+
+            if (realExtn == string.Empty && readerName.BaseStream.Length > 0 && readerName.BaseStream.Length <= int.MaxValue)
+            {
+                readerName.BaseStream.Position = 0;
+                var fileData = readerName.ReadBytes((int)readerName.BaseStream.Length);
+
+                realExtn = ".txt";
+
+                foreach (var b in fileData)
+                {
+                    if (b == 0x00)
+                    {
+                        realExtn = string.Empty;
+                        break;
+                    }
+                }
             }
 
             return realExtn;
@@ -211,7 +243,7 @@ namespace Drakengard1and2Extractor.Support
         public static Dictionary<string, string> GetFilesInDirForRepack(string[] unpackedFilesInDir, uint processLimit)
         {
             var filesInDirDict = new Dictionary<string, string>();
-            
+
             var filesAdded = 0;
             string currentKey;
             int fileCounter = 1;
