@@ -114,6 +114,35 @@ in a folder.
 
 
 
+Repack tools:
+
+Warning: these functions are experimental and if you encounter any issues, please feel free to report about it in the github page by opening an issue.
+
+This option will open a seperate window by which you can repack the main BIN files, .fpk files, .dpk files and .kps files. 
+After you are done repacking these files, you can rebuild a new PS2 iso file with the modified BIN files. 
+
+To get you started on this process, you can roughly follow along this guide linked below and create your modified PS2 iso file:
+https://github.com/DoC-Research/Documentation/wiki/%5BGuide%5D-Rebuilding-Game-iso-with-modified-files
+
+Repacking notes:
+
+1. When repacking a .bin, .fpk and .dpk type files, you have to select the .bin, .fpk or .dpk file first and then select the unpacked folder for that selected file.
+
+2. Ensure that there aren't any similarly named files in the unpacked folder before repacking. 
+   For example, imagine there is a file called 'FILE_5.zim' in the unpacked folder and you have another file called 'FILE_5.bmp' in the same folder. the presence 
+   of this file will cause the repacking function to incorrectly pick it for repacking, when it should instead pick the .zim file. 
+   If you are finding it hard to keep track of the files, you can create a sub-folder inside the unpacked folder and keep the similarly named files inside it.
+   By doing so, the tool will not pick that file during the repacking process.
+   
+3. When repacking .kps files, you will be prompted to select the extracted text file and after selecting that, the repacking function will repack 
+   it to a .kps file.
+   
+4. After a repacking function is done, the original file will be backed up and be renamed with a .old file extension.
+ 
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+
 File Type (.zim) :
 
 This is the format used for image files from both the games.
