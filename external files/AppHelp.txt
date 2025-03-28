@@ -118,11 +118,13 @@ Repack tools:
 
 Warning: these functions are experimental and if you encounter any issues, please feel free to report about it in the github page by opening an issue.
 
-This option will open a seperate window by which you can repack the main BIN files, .fpk files, .dpk files and .kps files. 
-After you are done repacking these files, you can rebuild a new PS2 iso file with the modified BIN files. 
+This option will open a seperate window by which you can repack the main .bin files, .fpk files, .dpk files and .kps files. 
 
-To get you started on this process, you can roughly follow along this guide linked below and create your modified PS2 iso file:
+After you are done repacking these files, you have to build a new PS2 iso file with the modified files.
+
+You can roughly follow along this guide linked below and create your modified PS2 iso file:
 https://github.com/DoC-Research/Documentation/wiki/%5BGuide%5D-Rebuilding-Game-iso-with-modified-files
+
 
 Repacking notes:
 
