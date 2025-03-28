@@ -70,9 +70,11 @@
             // 
             this.BINFileExtGrp.Controls.Add(this.Drk2RadioButton);
             this.BINFileExtGrp.Controls.Add(this.Drk1RadioButton);
-            this.BINFileExtGrp.Location = new System.Drawing.Point(14, 31);
+            this.BINFileExtGrp.Location = new System.Drawing.Point(19, 38);
+            this.BINFileExtGrp.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.BINFileExtGrp.Name = "BINFileExtGrp";
-            this.BINFileExtGrp.Size = new System.Drawing.Size(140, 79);
+            this.BINFileExtGrp.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.BINFileExtGrp.Size = new System.Drawing.Size(187, 97);
             this.BINFileExtGrp.TabIndex = 0;
             this.BINFileExtGrp.TabStop = false;
             this.BINFileExtGrp.Text = "Game Selection :";
@@ -80,9 +82,10 @@
             // Drk2RadioButton
             // 
             this.Drk2RadioButton.AutoSize = true;
-            this.Drk2RadioButton.Location = new System.Drawing.Point(13, 45);
+            this.Drk2RadioButton.Location = new System.Drawing.Point(17, 55);
+            this.Drk2RadioButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Drk2RadioButton.Name = "Drk2RadioButton";
-            this.Drk2RadioButton.Size = new System.Drawing.Size(90, 17);
+            this.Drk2RadioButton.Size = new System.Drawing.Size(110, 20);
             this.Drk2RadioButton.TabIndex = 1;
             this.Drk2RadioButton.TabStop = true;
             this.Drk2RadioButton.Text = "Drakengard 2";
@@ -91,9 +94,10 @@
             // Drk1RadioButton
             // 
             this.Drk1RadioButton.AutoSize = true;
-            this.Drk1RadioButton.Location = new System.Drawing.Point(13, 22);
+            this.Drk1RadioButton.Location = new System.Drawing.Point(17, 27);
+            this.Drk1RadioButton.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Drk1RadioButton.Name = "Drk1RadioButton";
-            this.Drk1RadioButton.Size = new System.Drawing.Size(90, 17);
+            this.Drk1RadioButton.Size = new System.Drawing.Size(110, 20);
             this.Drk1RadioButton.TabIndex = 0;
             this.Drk1RadioButton.TabStop = true;
             this.Drk1RadioButton.Text = "Drakengard 1";
@@ -102,9 +106,10 @@
             // ExtBinBtn
             // 
             this.ExtBinBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ExtBinBtn.Location = new System.Drawing.Point(30, 128);
+            this.ExtBinBtn.Location = new System.Drawing.Point(40, 158);
+            this.ExtBinBtn.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.ExtBinBtn.Name = "ExtBinBtn";
-            this.ExtBinBtn.Size = new System.Drawing.Size(103, 39);
+            this.ExtBinBtn.Size = new System.Drawing.Size(137, 48);
             this.ExtBinBtn.TabIndex = 0;
             this.ExtBinBtn.Text = "Extract BIN";
             this.ExtBinBtn.UseVisualStyleBackColor = true;
@@ -116,18 +121,21 @@
             this.FileExtGrp.Controls.Add(this.ExtKpsBtn);
             this.FileExtGrp.Controls.Add(this.ExtDpkBtn);
             this.FileExtGrp.Controls.Add(this.ExtFpkBtn);
-            this.FileExtGrp.Location = new System.Drawing.Point(200, 142);
+            this.FileExtGrp.Location = new System.Drawing.Point(267, 175);
+            this.FileExtGrp.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.FileExtGrp.Name = "FileExtGrp";
-            this.FileExtGrp.Size = new System.Drawing.Size(168, 138);
+            this.FileExtGrp.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.FileExtGrp.Size = new System.Drawing.Size(224, 170);
             this.FileExtGrp.TabIndex = 1;
             this.FileExtGrp.TabStop = false;
             this.FileExtGrp.Text = "File Extraction :";
             // 
             // ExtKpsBtn
             // 
-            this.ExtKpsBtn.Location = new System.Drawing.Point(42, 90);
+            this.ExtKpsBtn.Location = new System.Drawing.Point(56, 111);
+            this.ExtKpsBtn.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.ExtKpsBtn.Name = "ExtKpsBtn";
-            this.ExtKpsBtn.Size = new System.Drawing.Size(84, 28);
+            this.ExtKpsBtn.Size = new System.Drawing.Size(112, 34);
             this.ExtKpsBtn.TabIndex = 3;
             this.ExtKpsBtn.Text = "Extract KPS";
             this.ExtKpsBtn.UseVisualStyleBackColor = true;
@@ -136,9 +144,10 @@
             // 
             // ExtDpkBtn
             // 
-            this.ExtDpkBtn.Location = new System.Drawing.Point(42, 56);
+            this.ExtDpkBtn.Location = new System.Drawing.Point(56, 69);
+            this.ExtDpkBtn.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.ExtDpkBtn.Name = "ExtDpkBtn";
-            this.ExtDpkBtn.Size = new System.Drawing.Size(84, 28);
+            this.ExtDpkBtn.Size = new System.Drawing.Size(112, 34);
             this.ExtDpkBtn.TabIndex = 1;
             this.ExtDpkBtn.Text = "Extract DPK";
             this.ExtDpkBtn.UseVisualStyleBackColor = true;
@@ -147,9 +156,10 @@
             // 
             // ExtFpkBtn
             // 
-            this.ExtFpkBtn.Location = new System.Drawing.Point(42, 22);
+            this.ExtFpkBtn.Location = new System.Drawing.Point(56, 27);
+            this.ExtFpkBtn.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.ExtFpkBtn.Name = "ExtFpkBtn";
-            this.ExtFpkBtn.Size = new System.Drawing.Size(84, 28);
+            this.ExtFpkBtn.Size = new System.Drawing.Size(112, 34);
             this.ExtFpkBtn.TabIndex = 0;
             this.ExtFpkBtn.Text = "Extract FPK";
             this.ExtFpkBtn.UseVisualStyleBackColor = true;
@@ -159,9 +169,10 @@
             // BatchModeBtn
             // 
             this.BatchModeBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.BatchModeBtn.Location = new System.Drawing.Point(242, 390);
+            this.BatchModeBtn.Location = new System.Drawing.Point(323, 480);
+            this.BatchModeBtn.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.BatchModeBtn.Name = "BatchModeBtn";
-            this.BatchModeBtn.Size = new System.Drawing.Size(91, 36);
+            this.BatchModeBtn.Size = new System.Drawing.Size(121, 44);
             this.BatchModeBtn.TabIndex = 2;
             this.BatchModeBtn.Text = "Batch Mode";
             this.BatchModeBtn.UseVisualStyleBackColor = true;
@@ -170,9 +181,10 @@
             // 
             // ConvertSPK0Btn
             // 
-            this.ConvertSPK0Btn.Location = new System.Drawing.Point(41, 64);
+            this.ConvertSPK0Btn.Location = new System.Drawing.Point(55, 79);
+            this.ConvertSPK0Btn.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.ConvertSPK0Btn.Name = "ConvertSPK0Btn";
-            this.ConvertSPK0Btn.Size = new System.Drawing.Size(84, 28);
+            this.ConvertSPK0Btn.Size = new System.Drawing.Size(112, 34);
             this.ConvertSPK0Btn.TabIndex = 1;
             this.ConvertSPK0Btn.Text = "Convert SPK0";
             this.ConvertSPK0Btn.UseVisualStyleBackColor = true;
@@ -181,9 +193,10 @@
             // 
             // ConvertZIMBtn
             // 
-            this.ConvertZIMBtn.Location = new System.Drawing.Point(40, 30);
+            this.ConvertZIMBtn.Location = new System.Drawing.Point(53, 37);
+            this.ConvertZIMBtn.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.ConvertZIMBtn.Name = "ConvertZIMBtn";
-            this.ConvertZIMBtn.Size = new System.Drawing.Size(84, 28);
+            this.ConvertZIMBtn.Size = new System.Drawing.Size(112, 34);
             this.ConvertZIMBtn.TabIndex = 0;
             this.ConvertZIMBtn.Text = "Convert ZIM";
             this.ConvertZIMBtn.UseVisualStyleBackColor = true;
@@ -194,9 +207,10 @@
             // 
             this.AboutlinkLabel.AutoSize = true;
             this.AboutlinkLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.AboutlinkLabel.Location = new System.Drawing.Point(14, 656);
+            this.AboutlinkLabel.Location = new System.Drawing.Point(19, 807);
+            this.AboutlinkLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.AboutlinkLabel.Name = "AboutlinkLabel";
-            this.AboutlinkLabel.Size = new System.Drawing.Size(38, 15);
+            this.AboutlinkLabel.Size = new System.Drawing.Size(46, 18);
             this.AboutlinkLabel.TabIndex = 6;
             this.AboutlinkLabel.TabStop = true;
             this.AboutlinkLabel.Text = "About";
@@ -206,9 +220,10 @@
             // 
             this.HelpLinkLabel.AutoSize = true;
             this.HelpLinkLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.HelpLinkLabel.Location = new System.Drawing.Point(335, 656);
+            this.HelpLinkLabel.Location = new System.Drawing.Point(447, 807);
+            this.HelpLinkLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.HelpLinkLabel.Name = "HelpLinkLabel";
-            this.HelpLinkLabel.Size = new System.Drawing.Size(33, 15);
+            this.HelpLinkLabel.Size = new System.Drawing.Size(38, 18);
             this.HelpLinkLabel.TabIndex = 8;
             this.HelpLinkLabel.TabStop = true;
             this.HelpLinkLabel.Text = "Help";
@@ -217,27 +232,30 @@
             // Versionlabel
             // 
             this.Versionlabel.AutoSize = true;
-            this.Versionlabel.Location = new System.Drawing.Point(176, 658);
+            this.Versionlabel.Location = new System.Drawing.Point(235, 810);
+            this.Versionlabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.Versionlabel.Name = "Versionlabel";
-            this.Versionlabel.Size = new System.Drawing.Size(28, 13);
+            this.Versionlabel.Size = new System.Drawing.Size(31, 16);
             this.Versionlabel.TabIndex = 7;
-            this.Versionlabel.Text = "v2.4";
+            this.Versionlabel.Text = "v2.5";
             // 
             // StatusLabel
             // 
             this.StatusLabel.AutoSize = true;
-            this.StatusLabel.Location = new System.Drawing.Point(14, 484);
+            this.StatusLabel.Location = new System.Drawing.Point(19, 596);
+            this.StatusLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.StatusLabel.Name = "StatusLabel";
-            this.StatusLabel.Size = new System.Drawing.Size(40, 13);
+            this.StatusLabel.Size = new System.Drawing.Size(47, 16);
             this.StatusLabel.TabIndex = 4;
             this.StatusLabel.Text = "Status:";
             // 
             // AppPictureBox
             // 
             this.AppPictureBox.Image = ((System.Drawing.Image)(resources.GetObject("AppPictureBox.Image")));
-            this.AppPictureBox.Location = new System.Drawing.Point(13, 13);
+            this.AppPictureBox.Location = new System.Drawing.Point(17, 16);
+            this.AppPictureBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.AppPictureBox.Name = "AppPictureBox";
-            this.AppPictureBox.Size = new System.Drawing.Size(356, 107);
+            this.AppPictureBox.Size = new System.Drawing.Size(475, 132);
             this.AppPictureBox.TabIndex = 1;
             this.AppPictureBox.TabStop = false;
             // 
@@ -245,9 +263,11 @@
             // 
             this.ImgConvtGroupBox.Controls.Add(this.ConvertZIMBtn);
             this.ImgConvtGroupBox.Controls.Add(this.ConvertSPK0Btn);
-            this.ImgConvtGroupBox.Location = new System.Drawing.Point(17, 341);
+            this.ImgConvtGroupBox.Location = new System.Drawing.Point(23, 420);
+            this.ImgConvtGroupBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.ImgConvtGroupBox.Name = "ImgConvtGroupBox";
-            this.ImgConvtGroupBox.Size = new System.Drawing.Size(167, 115);
+            this.ImgConvtGroupBox.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.ImgConvtGroupBox.Size = new System.Drawing.Size(223, 142);
             this.ImgConvtGroupBox.TabIndex = 3;
             this.ImgConvtGroupBox.TabStop = false;
             this.ImgConvtGroupBox.Text = "Image Conversion :";
@@ -256,9 +276,11 @@
             // 
             this.BinExtractionGroupBox.Controls.Add(this.ExtBinBtn);
             this.BinExtractionGroupBox.Controls.Add(this.BINFileExtGrp);
-            this.BinExtractionGroupBox.Location = new System.Drawing.Point(17, 142);
+            this.BinExtractionGroupBox.Location = new System.Drawing.Point(23, 175);
+            this.BinExtractionGroupBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.BinExtractionGroupBox.Name = "BinExtractionGroupBox";
-            this.BinExtractionGroupBox.Size = new System.Drawing.Size(168, 184);
+            this.BinExtractionGroupBox.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.BinExtractionGroupBox.Size = new System.Drawing.Size(224, 226);
             this.BinExtractionGroupBox.TabIndex = 2;
             this.BinExtractionGroupBox.TabStop = false;
             this.BinExtractionGroupBox.Text = "BIN Extraction :";
@@ -266,19 +288,21 @@
             // StatusTextBox
             // 
             this.StatusTextBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.StatusTextBox.Location = new System.Drawing.Point(13, 501);
+            this.StatusTextBox.Location = new System.Drawing.Point(17, 617);
+            this.StatusTextBox.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.StatusTextBox.Multiline = true;
             this.StatusTextBox.Name = "StatusTextBox";
             this.StatusTextBox.ReadOnly = true;
             this.StatusTextBox.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.StatusTextBox.Size = new System.Drawing.Size(356, 95);
+            this.StatusTextBox.Size = new System.Drawing.Size(474, 116);
             this.StatusTextBox.TabIndex = 9;
             // 
             // StatusDelBtn
             // 
-            this.StatusDelBtn.Location = new System.Drawing.Point(153, 614);
+            this.StatusDelBtn.Location = new System.Drawing.Point(204, 756);
+            this.StatusDelBtn.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.StatusDelBtn.Name = "StatusDelBtn";
-            this.StatusDelBtn.Size = new System.Drawing.Size(75, 23);
+            this.StatusDelBtn.Size = new System.Drawing.Size(100, 28);
             this.StatusDelBtn.TabIndex = 10;
             this.StatusDelBtn.Text = "Clear Status";
             this.StatusDelBtn.UseVisualStyleBackColor = true;
@@ -287,9 +311,10 @@
             // RpkToolsBtn
             // 
             this.RpkToolsBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.RpkToolsBtn.Location = new System.Drawing.Point(229, 312);
+            this.RpkToolsBtn.Location = new System.Drawing.Point(305, 384);
+            this.RpkToolsBtn.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.RpkToolsBtn.Name = "RpkToolsBtn";
-            this.RpkToolsBtn.Size = new System.Drawing.Size(115, 36);
+            this.RpkToolsBtn.Size = new System.Drawing.Size(153, 44);
             this.RpkToolsBtn.TabIndex = 12;
             this.RpkToolsBtn.Text = "Repack tools";
             this.RpkToolsBtn.UseVisualStyleBackColor = true;
@@ -298,9 +323,9 @@
             // 
             // CoreForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(381, 683);
+            this.ClientSize = new System.Drawing.Size(508, 841);
             this.Controls.Add(this.RpkToolsBtn);
             this.Controls.Add(this.StatusDelBtn);
             this.Controls.Add(this.BatchModeBtn);
@@ -315,6 +340,7 @@
             this.Controls.Add(this.AppPictureBox);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.MaximizeBox = false;
             this.Name = "CoreForm";
             this.Text = "Drakengard 1 & 2 - File Extractor";
