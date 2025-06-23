@@ -3,93 +3,141 @@
 //
 //      File: DoD1_2_zim.bt
 //   Authors: Surihix
-//   Version: 1.0
+//   Version: 1.1
 //   Purpose: Parse Drakengard 1 & 2's .zim image files
 //  Category: zim files
 // File Mask: *.zim
 //  ID Bytes: 77 5A 49 4D 64
 //   History: 
 //   1.0   2024-03-14 Surihix: Initial version
+//   1.1   2025-06-24 Surihix: Rearranged all structs
 //---------------------------------------------------------
 
 LittleEndian();
 
+typedef struct HEADER
+{
+    char magic[5]<bgcolor=cDkGreen>;
+    Assert(magic == "wZIMd");
+
+    ubyte reserved[3]<bgcolor=cBlack>;
+    uint32 unkVal<bgcolor=cRed>;
+    uint32 unkVal2<bgcolor=cRed>;
+    uint32 pqrsPixelDataInfoChunkOffset<bgcolor=cDkGreen>;
+    uint32 pqrsPaletteDataInfoChunkOffset<bgcolor=cDkGreen>;
+    uint32 flagAndOffsetTableOffset<bgcolor=cDkGreen>;
+    ubyte reserved2[4]<bgcolor=cBlack>;
+}Header;
+
+
+typedef struct PQRSPIXELDATAINFOCHUNK
+{
+    uint32 pqrsPixelSectionOffset<bgcolor=0xbf6b6c>;
+    ubyte reserved[4]<bgcolor=cBlack>;
+    uint32 unkVal<bgcolor=cRed>;
+    uint16 imgWidth<bgcolor=0xbf6b6c>;
+    uint16 imgHeight<bgcolor=0xbf6b6c>;
+    ubyte reserved2[4]<bgcolor=cBlack>;
+    uint32 pixelDataSize<bgcolor=0xbf6b6c>;
+    uint32 unkVal2<bgcolor=cRed>;
+    uint32 unkVal3<bgcolor=cRed>;
+    uint32 unkVal4<bgcolor=cRed>;
+    ubyte reserved3[4]<bgcolor=cBlack>;
+}PQRSPixelDataInfoChunk;
+
+
+typedef struct PQRSPALETTEDATAINFOCHUNK
+{
+    uint32 pqrsPaletteSectionOffset<bgcolor=0xbf6b6c>;
+    uint32 paletteDataSize<bgcolor=0xbf6b6c>;
+    ubyte reserved[2]<bgcolor=cBlack>;
+    ubyte bppFlag<bgcolor=0xbf6b6c, comment="48 = 8bit image & 64 = 4bit image">;
+    ubyte unkFlag<bgcolor=cRed>;
+    uint32 unkVal<bgcolor=cRed>;
+    ubyte reserved2[40]<bgcolor=cBlack>;
+}PQRSPaletteDataInfoChunk;
+
+
+typedef struct FLAGOFFSETTABLE
+{
+    ubyte reserved[3]<bgcolor=cBlack>;
+    ubyte pqrsSectionFlag1<bgcolor=cDkGreen>;
+    uint32 pqrsPixelSectionOffset<bgcolor=cDkGreen>;
+    ubyte reserved2[11]<bgcolor=cBlack>;
+    ubyte pqrsSectionFlag2<bgcolor=cDkGreen>;
+    uint32 pqrsPaletteSectionOffset<bgcolor=cDkGreen>;
+    ubyte reserved3[11]<bgcolor=cBlack>;    
+    ubyte pqrsSectionFlag3<bgcolor=cDkGreen, comment="repeated">;
+    uint32 pqrsPixelSectionOffset2<bgcolor=cDkGreen, comment="repeated">;
+    ubyte reserved4[11]<bgcolor=cBlack>;
+    ubyte pqrsSectionFlag4<bgcolor=cDkGreen, comment="repeated">;
+    uint32 pqrsPaletteSectionOffset3<bgcolor=cDkGreen, comment="repeated">;
+    ubyte reserved5[8]<bgcolor=cBlack>;
+}FlagOffsetTable;
+
+
 typedef struct PQRSHeader
 {
-    char pqrsData1[36]<bgcolor=cPurple>;
-    char unkData1[4]<hidden=true, bgcolor=cDkPurple>;
-    char pqrsData2[56]<bgcolor=cPurple>;
-    uint dataWidth<bgcolor=cLtPurple>;
-    uint dataHeight<bgcolor=cLtPurple>;
-    char pqrsData3[24]<hidden=true, bgcolor=cPurple>;
-    char unkData2[2]<hidden=true, bgcolor=cDkPurple>;
-    char pqrsData4[10]<bgcolor=cPurple>;
-    char unkData5[2]<hidden=true, bgcolor=cDkPurple>;
-    char pqrsData5[2]<bgcolor=cPurple>;
-    char unkData6[2]<hidden=true, bgcolor=cDkPurple>;
-    char pqrsData6[14]<bgcolor=cPurple>;  
+    ubyte unkPQRSdata[96]<bgcolor=cRed>;
+    uint32 dataWidth<bgcolor=0x6213a2>;
+    uint32 dataHeight<bgcolor=0x6213a2>;
+    ubyte unkPQRSdata2[56]<bgcolor=cRed>;
 }pqrsHeader;
 
 
 struct FILE
 {
+    Header header<name="Header", open=true>;
 
-    char magic[5]<bgcolor=cDkGreen>;
-    char reserved[3]<bgcolor=cBlack>;
+    // PQRS Pixel DataInfo Chunk
+    if (FTell() != header.pqrsPixelDataInfoChunkOffset)
+    {
+       local int paddingSize = header.pqrsPixelDataInfoChunkOffset - FTell();
+       ubyte paddingTillPixelDataInfoChunk[paddingSize]<bgcolor=cBlack>;
+    }
     
-    uint unk1<hidden=true, bgcolor=cRed>;
-    uint unk2<hidden=true, bgcolor=cRed>;
-    uint unk3<hidden=true, bgcolor=cRed>;
-    uint unk4<hidden=true, bgcolor=cRed>;
-    uint unk5<hidden=true, bgcolor=cRed>;
-    uint unk6<hidden=true, bgcolor=cRed>;
-    uint unk7<hidden=true, bgcolor=cRed>;
-    
-    char reserved2[4]<bgcolor=cBlack>;
-    
-    char unk8[4]<hidden=true, bgcolor=cRed>;
-    
-    ushort imgWidth<bgcolor=cDkGreen>;
-    ushort imgHeight<bgcolor=cDkGreen>;
-    char reserved3[4]<hidden=true, bgcolor=cBlack>;
-    uint pixelDataSize<bgcolor=cDkGreen>;
-    
-    char unk9[4]<hidden=true, bgcolor=cRed>;
-    char unk10[4]<hidden=true, bgcolor=cRed>;
-    char unk11[4]<hidden=true, bgcolor=cRed>;
-    
-    char reserved4[4]<hidden=true, bgcolor=cBlack>;
-    uint pqrsPaletteSectionOffset<bgcolor=cDkGreen>;
-    uint paletteDataSize<bgcolor=cDkGreen>;
-    
-    char reserved5[2]<hidden=true, bgcolor=cBlack>;
-    ubyte bppFlag<comment="48 = 8bit image & 64 = 4bit image", bgcolor=cDkGreen>;
-    
-    char unk12[5]<hidden=true, bgcolor=cRed>;
-    
-    char reserved6[43]<hidden=true, bgcolor=cBlack>;
-    
-    ubyte pqrsSectionFlag1<bgcolor=cDkGreen>;
-    uint pqrsPixelSectionOffset<bgcolor=cDkGreen>;
-    char reserved7[11]<hidden=true, bgcolor=cBlack>;
-    
-    ubyte pqrsSectionFlag2<bgcolor=cDkGreen>;
-    uint pqrsPaletteSectionOffset2<bgcolor=cDkGreen, comment="repeated">;
-    char reserved8[11]<hidden=true, bgcolor=cBlack>;
-    
-    ubyte pqrsSectionFlag3<bgcolor=cDkGreen>;
-    uint pqrsPixelSectionOffset2<bgcolor=cDkGreen, comment="repeated">;
-    char reserved9[11]<hidden=true, bgcolor=cBlack>;
-    
-    ubyte pqrsSectionFlag4<bgcolor=cDkGreen>;
-    uint pqrsPaletteSectionOffset3<bgcolor=cDkGreen, comment="repeated">;
-    char reserved10[8]<hidden=true, bgcolor=cBlack>;
+    PQRSPixelDataInfoChunk pqrsPixelDataInfoChunk<name="PQRS Pixel DataInfo Chunk">;
+
+
+    // PQRS Palette DataInfo Chunk
+    if (FTell() != header.pqrsPaletteDataInfoChunkOffset)
+    {
+       local int paddingSize = header.pqrsPaletteDataInfoChunkOffset - FTell();
+       ubyte paddingTillPalettaDataInfoChunk[paddingSize]<bgcolor=cBlack>;
+    }
+
+    PQRSPaletteDataInfoChunk pqrsPaletteDataInfoChunk<name="PQRS Palette DataInfo Chunk">;
+
+
+    // FlagOffsetTable
+    if (FTell() != header.flagAndOffsetTableOffset)
+    {
+       local int paddingSize = header.flagAndOffsetTableOffset - FTell();
+       ubyte paddingTillFlagAndOffsetTable[paddingSize]<bgcolor=cBlack>;
+    }
+
+    FlagOffsetTable flagOffsetTable<name="FlagOffsetTable">;
+
+
+    // PQRS Pixel Section
+    if (FTell() != flagOffsetTable.pqrsPixelSectionOffset)
+    {
+       local int paddingSize = flagOffsetTable.pqrsPixelSectionOffset - FTell();
+       ubyte paddingTillPQRSPixelSection[paddingSize]<bgcolor=cBlack>;
+    }   
     
     pqrsHeader pqrsPixelSection<name="PQRS Pixel Section">;
-    char pixelData[pixelDataSize]<bgcolor=cLtGreen>;
+    ubyte pixelData[pqrsPixelDataInfoChunk.pixelDataSize]<bgcolor=cLtGreen>;
     
-    FSeek(pqrsPaletteSectionOffset);
+
+    // PQRS Palette Section
+    if (FTell() != flagOffsetTable.pqrsPaletteSectionOffset)
+    {
+       local int paddingSize = flagOffsetTable.pqrsPaletteSectionOffset - FTell();
+       ubyte paddingTillPQRSPaletteSection[paddingSize]<bgcolor=cBlack>;
+    }
+
     pqrsHeader pqrsPaletteSection<name="PQRS Palette Section">;
-    char paletteData[paletteDataSize]<bgcolor=cLtGreen, comment="bppFlag 48 = swizzled palette data">;
+    ubyte paletteData[pqrsPaletteDataInfoChunk.paletteDataSize]<bgcolor=cLtGreen, comment="bppFlag 48 = swizzled palette data">;
 
 }zimFile<open=true, name="ZIM file">;
