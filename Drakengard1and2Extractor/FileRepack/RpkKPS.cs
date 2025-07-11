@@ -76,6 +76,10 @@ namespace Drakengard1and2Extractor.FileRepack
                                             {
                                                 currentLineData = Encoding.Convert(Encoding.UTF8, _ShiftJISEncoding, currentLineData);
                                             }
+                                            else
+                                            {
+                                                currentLineData = Encoding.Convert(Encoding.UTF8, _ANSIEncoding, currentLineData);
+                                            }
 
                                             currentLineLength = currentLineData.Length;
 
@@ -140,7 +144,7 @@ namespace Drakengard1and2Extractor.FileRepack
                         {
                             File.Move(outKpsFile, outKpsFile + ".old");
                         }
-                        
+
                         File.Move(outKpsFile + ".new", outKpsFile);
 
                         LoggingMethods.LogMessage(SharedMethods.NewLineChara);
