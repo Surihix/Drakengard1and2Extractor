@@ -221,7 +221,7 @@
             this.Versionlabel.Name = "Versionlabel";
             this.Versionlabel.Size = new System.Drawing.Size(28, 13);
             this.Versionlabel.TabIndex = 7;
-            this.Versionlabel.Text = "v2.6";
+            this.Versionlabel.Text = "v2.7";
             // 
             // StatusLabel
             // 

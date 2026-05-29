@@ -260,7 +260,15 @@ namespace Drakengard1and2Extractor.Support
 
                 foreach (var fileInDir in unpackedFilesInDir)
                 {
-                    if (currentKey == Path.GetFileNameWithoutExtension(fileInDir))
+                    var currentFileName = Path.GetFileNameWithoutExtension(fileInDir);
+                    var currentFileNameSplit = currentFileName.Split('.');
+
+                    if (currentFileNameSplit.Length > 1)
+                    {
+                        currentFileName = currentFileNameSplit[0];
+                    }
+
+                    if (currentKey == currentFileName)
                     {
                         filesInDirDict.Add(currentKey, fileInDir);
                         filesAdded++;

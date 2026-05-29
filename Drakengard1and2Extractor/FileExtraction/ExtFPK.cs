@@ -88,9 +88,16 @@ namespace Drakengard1and2Extractor.FileExtraction
 
                                     tmpExtn = string.Empty;
 
-                                    using (BinaryReader outFileReader = new BinaryReader(outFileStream))
+                                    if (fileExtnFixed == ".lst" || fileExtnFixed == ".csv")
                                     {
-                                        tmpExtn = SharedMethods.GetFileHeader(outFileReader);
+                                        tmpExtn = fileExtnFixed;
+                                    }
+                                    else
+                                    {
+                                        using (BinaryReader outFileReader = new BinaryReader(outFileStream))
+                                        {
+                                            tmpExtn = SharedMethods.GetFileHeader(outFileReader);
+                                        }
                                     }
 
                                     if (tmpExtn == "")
